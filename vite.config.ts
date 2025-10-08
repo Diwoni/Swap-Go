@@ -1,16 +1,18 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { fileURLToPath } from "node:url";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
+import tailwindcss from '@tailwindcss/vite';
 
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
   plugins: [
     react({
-      jsxRuntime: "automatic",
+      jsxRuntime: 'automatic',
     }),
+    tailwindcss(),
   ],
   server: {
-    host: "localhost",
+    host: 'localhost',
     port: 3000,
   },
   preview: {
@@ -18,7 +20,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
 });

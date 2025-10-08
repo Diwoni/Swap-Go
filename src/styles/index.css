@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+/* tailwind import + 글로벌 스타일 정의 */
+/* @layer base 글로벌 스타일 import */
+@import './base.css';
+
+/* 필요하면 컴포넌트 레이어, 유틸리티 레이어 import */
+@import './components.css';
+@import './utilities.css';
