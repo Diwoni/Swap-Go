@@ -1,0 +1,23 @@
+# root = true: 이 파일이 프로젝트의 최상위 .editorconfig 파일임을 나타냄
+# (하위 디렉터리에는 이 설정이 자동으로 상속되지 않음)
+root = true
+
+# [*]: 모든 파일에 대한 기본 설정을 적용
+[*]
+    # indent_style = space: 공백 문자로 들여쓰기를 설정
+    indent_style = space
+
+    # indent_size = 2: 들여쓰기 크기를 2로 설정
+    indent_size = 2
+
+    # end_of_line = lf: 파일의 끝에 LF(Line Feed)를 사용하여 줄 바꿈을 설정
+    end_of_line = lf
+
+    # charset = utf-8: 파일의 문자 인코딩을 UTF-8로 설정
+    charset = utf-8
+
+    # trim_trailing_whitespace = false: 줄 끝의 공백을 자동으로 제거하지 않도록 설정
+    trim_trailing_whitespace = false
+
+    # insert_final_newline = false: 파일 끝에 새로운 줄을 자동으로 추가하지 않도록 설정
+    insert_final_newline = false
