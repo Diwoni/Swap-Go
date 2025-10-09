@@ -1,5 +1,5 @@
 function App() {
-  return <>Hello world</>;
+  return <p>커뮤니티</p>;
 }
 
 export default App;
