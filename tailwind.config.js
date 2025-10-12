@@ -1,8 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 
 export default {
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}', // 이 부분이 꼭 필요합니다!
+  ],
   theme: {
     extend: {
+      maxWidth: {
+        container: '1400px',
+      },
       fontFamily: {
         sans: ['GMarketSans', 'sans-serif'],
       },
