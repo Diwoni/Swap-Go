@@ -1,22 +1,20 @@
 /** @type {import('tailwindcss').Config} */
 
 export default {
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}', // 이 부분이 꼭 필요합니다!
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       maxWidth: {
         container: '1400px',
       },
       fontFamily: {
-        sans: ['GMarketSans', 'sans-serif'],
+        sans: ['Pretendard', 'sans-serif'],
       },
       colors: {
         primary: {
           50: '#BABFFF',
           100: '#6B76FF',
+          200: '#4856FF',
         },
         secondary: {
           50: '#C7BEFF',

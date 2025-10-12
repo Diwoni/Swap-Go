@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply inline-flex h-[60px] items-center justify-center
+    rounded-2xl text-base font-medium transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-primary-100 text-white hover:bg-primary-200 px-4;
+  }
+
+  .btn-sm {
+    @apply w-[100px]  text-base;
+  }
+
+  .btn-md {
+    @apply w-[120px] text-lg;
+  }
+
+  .btn-lg {
+    @apply w-[280px] text-lg;
+  }
+
+  .btn-xl {
+    @apply w-[430px] text-lg;
+  }
+}

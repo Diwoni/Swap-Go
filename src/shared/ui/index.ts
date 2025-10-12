@@ -1,3 +1,5 @@
 export * from './Header';
 export * from './PageLayout';
-export * from './button';
+export * from './ProtectedNavButton';
+export * from './SearchBar';
+export * from './LocationBar';

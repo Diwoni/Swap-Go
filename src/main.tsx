@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import '@/styles/index.css';
+
 import { Providers } from './app/providers';
 import React from 'react';
 
