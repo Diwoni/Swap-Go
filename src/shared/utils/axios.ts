@@ -102,6 +102,10 @@ api.interceptors.response.use(
           {},
           { withCredentials: true }
         );
+        // 타입 가드
+        if (!data || !data.accessToken) {
+          throw new Error('토큰 갱신 실패: 유효하지 않은 응답');
+        }
         tokenManager.setAccessToken(data.accessToken);
         processQueue(null, data.accessToken);
 

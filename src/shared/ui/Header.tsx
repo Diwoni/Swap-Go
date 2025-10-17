@@ -3,7 +3,7 @@ import { CiChat2, CiUser } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 import { ProtectedNavButton } from './ProtectedNavButton';
 import { useModal } from '@/shared/hooks/useModal';
-import { LoginModal } from '@/features/login/ui/LoginModal';
+import { LoginModal } from '@/features/auth/ui';
 
 const Header: React.FC = () => {
   const loginModal = useModal();

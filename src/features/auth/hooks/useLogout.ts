@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authService } from '../api/authService';
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
+import { handleAPIError } from '@/shared/utils/errorHandler';
 
 export const useLogout = () => {
   const queryClient = useQueryClient();
@@ -11,6 +12,10 @@ export const useLogout = () => {
       tokenManager.clearAccessToken();
       queryClient.setQueryData(['auth', 'user'], null);
       queryClient.clear();
+    },
+    onError: (error) => {
+      const message = handleAPIError(error);
+      console.error('로그아웃에 실패하였습니다 : ', message);
     },
   });
 };
