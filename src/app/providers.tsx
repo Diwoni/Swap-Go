@@ -1,6 +1,7 @@
 import { BrowserRouter, useRoutes } from 'react-router-dom';
 import { routes } from './router/routes';
 import { Suspense } from 'react';
+import { AuthProvider } from '@/features/auth/contexts/AuthContext';
 
 // App은 라우팅만 하는 역할
 function AppRoutes() {
@@ -13,7 +14,9 @@ function AppRoutes() {
 export function Providers() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

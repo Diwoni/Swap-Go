@@ -1,7 +1,7 @@
 class TokenManager {
   private accessToken: string | null = null;
 
-  setAccessToken(token: string | null): void {
+  setAccessToken(token: string): void {
     this.accessToken = token;
   }
 
@@ -14,7 +14,7 @@ class TokenManager {
   }
 
   hasAccessToken(): boolean {
-    return this.accessToken != null;
+    return this.accessToken !== null && this.accessToken.length > 0;
   }
 
   debugToken(): void {
