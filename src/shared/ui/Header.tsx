@@ -2,11 +2,10 @@ import React from 'react';
 import { CiChat2, CiUser } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 import { ProtectedNavButton } from './ProtectedNavButton';
-import { useModal } from '@/shared/hooks/useModal';
-import { LoginModal } from '@/features/auth/ui';
+import { useModals } from '../context/ModalContext';
 
 const Header: React.FC = () => {
-  const loginModal = useModal();
+  const { loginModal } = useModals();
 
   return (
     <>
@@ -42,7 +41,6 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header>
-      {loginModal.isModalOpen && <LoginModal modal={loginModal} />}
     </>
   );
 };

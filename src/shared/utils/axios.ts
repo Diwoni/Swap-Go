@@ -73,11 +73,11 @@ const processQueue = (
 
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
+
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
     };
-
     if (
       error.response?.status === ERROR_STATUS.UNAUTHORIZED &&
       !originalRequest._retry
@@ -102,7 +102,7 @@ api.interceptors.response.use(
           {},
           { withCredentials: true }
         );
-        // 타입 가드
+
         if (!data || !data.accessToken) {
           throw new Error('토큰 갱신 실패: 유효하지 않은 응답');
         }

@@ -1,17 +1,15 @@
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { useModals } from '../context/ModalContext';
 
 export const useProtectedNavigation = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-
-  const openModal = () => {
-    console.log('모달 열림');
-  };
+  const { loginModal } = useModals();
 
   const goTo = (path: string) => {
     if (isAuthenticated) navigate(path);
-    else openModal();
+    else loginModal.openModal();
   };
 
   return { goTo };

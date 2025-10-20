@@ -24,5 +24,4 @@ class TokenManager {
   }
 }
 
-// 싱글톤 패턴
 export const tokenManager = new TokenManager();

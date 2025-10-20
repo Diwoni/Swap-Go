@@ -1,19 +1,16 @@
-import { useModal } from '@/shared/hooks/useModal';
+import { useModals } from '@/shared/context/ModalContext';
 import { ModalPortal } from '@/shared/ui/ModalPortal';
 
-type LoginModalProps = {
-  modal: ReturnType<typeof useModal>;
-};
-
-export const LoginModal = ({ modal }: LoginModalProps) => {
-  if (!modal.isModalOpen) return null;
+export const LoginModal = () => {
+  const { loginModal } = useModals();
+  if (!loginModal.isModalOpen) return null;
 
   return (
     <ModalPortal>
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         <div
           className="absolute inset-0 bg-gray-950/40"
-          onClick={modal.closeModal}
+          onClick={loginModal.closeModal}
         />
         <div
           className="relative bg-white p-6 rounded-lg shadow-xl max-w-md w-full z-10"
