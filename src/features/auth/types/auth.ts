@@ -13,7 +13,7 @@ export type Address = {
 };
 
 export type LoginRequest = {
-  id: string;
+  email: string;
   password: string;
 };
 

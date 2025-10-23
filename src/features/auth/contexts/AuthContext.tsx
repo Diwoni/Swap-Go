@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useEffect, useState } from 'react';
 import { AuthContextValue } from '../types/auth';
 import { useQuery } from '@tanstack/react-query';
-import { authService } from '../api/authService';
+import { authService } from '../api/auth.api';
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
 
 /** 인증 관련 컨텍스트 생성 */

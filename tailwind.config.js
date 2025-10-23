@@ -14,7 +14,7 @@ export default {
         primary: {
           50: '#BABFFF',
           100: '#6B76FF',
-          200: '#4856FF',
+          200: '#4954DB',
         },
         secondary: {
           50: '#C7BEFF',
@@ -23,7 +23,8 @@ export default {
         black: {
           50: '#D9D9D9',
           100: '#A1A1A1',
-          200: '#272643',
+          150: '#272643',
+          200: '#181829',
         },
         kakao: '#FEE500',
         error: '#FF0000',

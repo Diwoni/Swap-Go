@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { authService } from '../api/authService';
+import { authService } from '../api/auth.api';
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
 import { LoginResponse } from '../types/auth';
 import { handleAPIError } from '@/shared/utils/errorHandler';
 
-export const useLogin = () => {
+export const useLoginMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
