@@ -1,6 +1,10 @@
 import { BrowserRouter, useRoutes } from 'react-router-dom';
 import { routes } from './router/routes';
 import { Suspense } from 'react';
+import { AuthProvider } from '@/features/auth/contexts/AuthProvider';
+import { ModalProvider } from '@/shared/context/ModalProvider';
+import { LoginModal } from '@/features/auth/ui';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // App은 라우팅만 하는 역할
 function AppRoutes() {
@@ -11,9 +15,18 @@ function AppRoutes() {
 
 // 앱 전체에 필요한 providers 집합 (queryClient, 컨텍스트 등)
 export function Providers() {
+  const queryClient = new QueryClient();
+
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <QueryClientProvider client={queryClient}>
+        <ModalProvider>
+          <AuthProvider>
+            <AppRoutes />
+            <LoginModal />
+          </AuthProvider>
+        </ModalProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   );
 }

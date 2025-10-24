@@ -71,7 +71,7 @@ export const SearchBar = ({
         />
       </div>
       {/* 검색 버튼 */}
-      <button onClick={doSearch} className="ml-2 btn btn-primary btn-md">
+      <button onClick={doSearch} className="ml-2 btn btn-primary btn-sm">
         검색
       </button>
     </div>
