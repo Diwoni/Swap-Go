@@ -1,9 +1,9 @@
-import { useModals } from '@/shared/context/ModalContext';
 import { Modal } from '@/shared/ui';
 import { LoginForm } from './LoginForm';
+import { useModalContext } from '@/shared/hooks';
 
 export const LoginModal = () => {
-  const { loginModal } = useModals();
+  const { loginModal } = useModalContext();
 
   return (
     <Modal

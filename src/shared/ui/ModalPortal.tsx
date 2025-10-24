@@ -15,6 +15,6 @@ export const ModalPortal = ({ children }: ModalPortalProps) => {
 
   if (!mounted) return null;
 
-  const modalRoot = document.getElementById('modal-root') || document.body;
+  const modalRoot = document.getElementById('modal-root') ?? document.body;
   return createPortal(children, modalRoot);
 };

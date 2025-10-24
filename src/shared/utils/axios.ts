@@ -56,7 +56,7 @@ type RefreshResponse = {
 };
 
 let isRefreshing = false;
-let failedQueue: QueueItem[] = [];
+const failedQueue: QueueItem[] = [];
 
 const processQueue = (
   error: Error | null,
@@ -69,6 +69,8 @@ const processQueue = (
       promise.resolve(token);
     }
   });
+
+  failedQueue.length = 0;
 };
 
 api.interceptors.response.use(
@@ -90,7 +92,7 @@ api.interceptors.response.use(
             originalRequest.headers.Authorization = `Bearer ${token}`;
             return api(originalRequest);
           })
-          .catch((err) => Promise.reject(err));
+          .catch((err: Error) => Promise.reject(err));
       }
 
       originalRequest._retry = true;
@@ -103,7 +105,7 @@ api.interceptors.response.use(
           { withCredentials: true }
         );
 
-        if (!data || !data.accessToken) {
+        if (!data?.accessToken) {
           throw new Error('토큰 갱신 실패: 유효하지 않은 응답');
         }
         tokenManager.setAccessToken(data.accessToken);
@@ -118,7 +120,11 @@ api.interceptors.response.use(
         if (typeof window !== 'undefined') {
           window.location.href = '/login';
         }
-        return Promise.reject(refreshError);
+        return Promise.reject(
+          refreshError instanceof Error
+            ? refreshError
+            : new Error('토큰 갱신 중 알 수 없는 오류 발생')
+        );
       } finally {
         isRefreshing = false;
       }

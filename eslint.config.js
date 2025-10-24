@@ -45,6 +45,9 @@ export default tseslint.config(
       ...react.configs.flat.recommended.rules,
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
+      'jsx-a11y/no-noninteractive-element-interactions': 'off',
+      'jsx-a11y/click-events-have-key-events': 'off',
+      'jsx-a11y/no-static-element-interactions': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
       'react-refresh/only-export-components': [

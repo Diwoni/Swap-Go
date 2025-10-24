@@ -20,16 +20,16 @@ export function handleAPIError(error: unknown): string {
     // 상태 코드별 처리
     switch (statusCode) {
       case 401:
-        return apiError?.message || '로그인이 필요합니다.';
+        return apiError?.message ?? '로그인이 필요합니다.';
       case 403:
-        return apiError?.message || '접근 권한이 없습니다.';
+        return apiError?.message ?? '접근 권한이 없습니다.';
       case 404:
-        return apiError?.message || '요청한 리소스를 찾을 수 없습니다.';
+        return apiError?.message ?? '요청한 리소스를 찾을 수 없습니다.';
       case 422:
-        return apiError?.message || '입력값을 확인해주세요.';
+        return apiError?.message ?? '입력값을 확인해주세요.';
       case 500:
       default:
-        return apiError?.message || '서버 오류가 발생했습니다.';
+        return apiError?.message ?? '서버 오류가 발생했습니다.';
     }
   }
 

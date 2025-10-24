@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLoginMutation } from '../hooks/useLoginMutation';
-import { useModals } from '@/shared/context/ModalContext';
 import { LoginFormData, loginSchema } from '../types/login.schema';
+import { useModalContext } from '@/shared/hooks';
 
 export const useLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { loginModal } = useModals();
+  const { loginModal } = useModalContext();
   const { mutate: login, isPending } = useLoginMutation();
 
   const {
@@ -23,7 +23,7 @@ export const useLoginForm = () => {
     setShowPassword(!showPassword);
   };
 
-  const onSubmit = (data: LoginFormData) => {
+  const submitLogin = (data: LoginFormData) => {
     console.log(data);
     login(data, {
       onSuccess: () => {
@@ -31,11 +31,15 @@ export const useLoginForm = () => {
       },
     });
   };
+  // void 로 명시적 처리 (lint)
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    void handleSubmit(submitLogin);
+  };
 
   return {
     // Form state
     register,
-    handleSubmit,
     errors,
 
     // Password visibility

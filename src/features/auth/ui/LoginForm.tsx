@@ -4,7 +4,6 @@ import { useLoginForm } from '../hooks';
 export const LoginForm = () => {
   const {
     register,
-    handleSubmit,
     errors: formErrors,
     showPassword,
     toggleShowPassword,
@@ -13,7 +12,7 @@ export const LoginForm = () => {
   } = useLoginForm();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+    <form onSubmit={onSubmit} className="space-y-5">
       {/* 아이디 입력 */}
       <div>
         <label

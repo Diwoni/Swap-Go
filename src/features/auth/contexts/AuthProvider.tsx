@@ -1,13 +1,10 @@
-import { createContext, ReactNode, useEffect, useState } from 'react';
-import { AuthContextValue } from '../types/auth';
+import { ReactNode, useEffect, useState } from 'react';
+
 import { useQuery } from '@tanstack/react-query';
 import { authService } from '../api/auth.api';
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
-
-/** 인증 관련 컨텍스트 생성 */
-export const AuthContext = createContext<AuthContextValue | undefined>(
-  undefined
-);
+import { AuthContextValue } from '../types';
+import { AuthContext } from './auth.context';
 
 /** 컨텍스트로 제공할 함수 및 데이터들 정의 (Provider) */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {

@@ -2,10 +2,10 @@ import React from 'react';
 import { CiChat2, CiUser } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 import { ProtectedNavButton } from './ProtectedNavButton';
-import { useModals } from '../context/ModalContext';
+import { useModalContext } from '../hooks';
 
 const Header: React.FC = () => {
-  const { loginModal } = useModals();
+  const { loginModal } = useModalContext();
 
   return (
     <>

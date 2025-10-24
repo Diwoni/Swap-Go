@@ -29,11 +29,13 @@ export const Modal = ({
         <div
           className="absolute inset-0 bg-gray-950/40"
           onClick={closeModal}
+          role="presentation"
           aria-hidden="true"
         />
         <div
           className={`relative bg-white rounded-lg shadow-xl z-10 ${className}`}
           onClick={(e) => e.stopPropagation()}
+          role="dialog"
           aria-modal="true"
         >
           {children}
