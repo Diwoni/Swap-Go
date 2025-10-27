@@ -6,6 +6,7 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
+    "types": ["vite/client", "google.maps"],
     "paths": {
       "@/*": ["src/*"]
     }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLoginMutation } from '../hooks/useLoginMutation';
-import { LoginFormData, loginSchema } from '../types/login.schema';
+import { LoginFormData, loginSchema } from '../types/auth.schema';
 import { useModalContext } from '@/shared/hooks';
 
 export const useLoginForm = () => {

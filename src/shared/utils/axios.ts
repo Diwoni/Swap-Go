@@ -50,11 +50,6 @@ type QueueItem = {
   reject: (reason?: unknown) => void;
 };
 
-type RefreshResponse = {
-  refreshToken: string | null;
-  accessToken: string | null;
-};
-
 let isRefreshing = false;
 const failedQueue: QueueItem[] = [];
 
@@ -71,6 +66,11 @@ const processQueue = (
   });
 
   failedQueue.length = 0;
+};
+
+type RefreshResponse = {
+  refreshToken: string | null;
+  accessToken: string | null;
 };
 
 api.interceptors.response.use(

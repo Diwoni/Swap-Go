@@ -30,7 +30,9 @@ const Header: React.FC = () => {
             <button className="cursor-pointer" onClick={loginModal.openModal}>
               로그인
             </button>
-            <button className="cursor-pointer">회원가입</button>
+            <button className="cursor-pointer">
+              <Link to="/signup">회원가입</Link>
+            </button>
             <ProtectedNavButton path="/chat" className="flex gap-1">
               <CiChat2 className="w-6 h-6" />
               <span>채팅하기</span>

@@ -1,7 +1,6 @@
 export type User = {
-  id: string;
-  password: string;
   email: string;
+  password: string;
   name: string;
   address: Address;
 };
@@ -20,6 +19,18 @@ export type LoginRequest = {
 export type LoginResponse = {
   accessToken: string;
   user: User;
+};
+
+export type SignupRequest = {
+  email: string;
+  password: string;
+  name: string;
+  // Todo : address 추가
+};
+
+export type SignupResponse = {
+  accessToken: string;
+  // user: User;
 };
 
 export type AuthContextValue = {

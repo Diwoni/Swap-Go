@@ -1,7 +1,6 @@
 import { BrowserRouter, useRoutes } from 'react-router-dom';
 import { routes } from './router/routes';
 import { Suspense } from 'react';
-import { AuthProvider } from '@/features/auth/contexts/AuthProvider';
 import { ModalProvider } from '@/shared/context/ModalProvider';
 import { LoginModal } from '@/features/auth/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -21,10 +20,8 @@ export function Providers() {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <ModalProvider>
-          <AuthProvider>
-            <AppRoutes />
-            <LoginModal />
-          </AuthProvider>
+          <AppRoutes />
+          <LoginModal />
         </ModalProvider>
       </QueryClientProvider>
     </BrowserRouter>
