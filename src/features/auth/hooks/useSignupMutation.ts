@@ -9,7 +9,7 @@ export const useSignupMutation = () => {
     mutationFn: authService.signup,
     onSuccess: (data: SignupResponse) => {
       tokenManager.setAccessToken(data.accessToken);
-      queryClient.invalidateQueries({ queryKey: ['auth', 'user'] });
+      queryClient.setQueryData(['auth', 'user'], data.user);
     },
   });
 };

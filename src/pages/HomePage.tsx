@@ -20,7 +20,9 @@ const HomePage = () => {
               교환학생 라이프 올인원 플랫폼
             </p>
             <p className="text-2xl font-semibold">나누고 빌리고, 함께 떠나는</p>
-            <p className="text-4xl font-extrabold text-primary-100">Swap&Go</p>
+            <p className="font-maplestory text-4xl font-extrabold text-primary-100">
+              Swap&Go
+            </p>
           </div>
           <img src="/main.svg" alt="logo" className="w-[470px] h-[318px]" />
         </div>
@@ -31,7 +33,9 @@ const HomePage = () => {
       {/* 보라색 섹션 */}
       <div className="flex flex-col items-center w-screen bg-primary-50 h-[500px] py-8 gap-8">
         <div className="flex gap-2">
-          <span className="text-3xl font-black text-primary-100">Swap&Go</span>
+          <span className="font-maplestory text-3xl font-black text-primary-100">
+            Swap&Go
+          </span>
           <span className="text-3xl font-semibold text-white">
             에서 시작해요!
           </span>

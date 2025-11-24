@@ -22,7 +22,7 @@ export const signupSchema = z.object({
       '비밀번호는 소문자, 숫자, 특수문자(@$!%*?&#)를 모두 포함해야 합니다'
     ),
 
-  name: z
+  username: z
     .string()
     .min(1, '이름을 입력해주세요')
     .min(2, '이름은 최소 2자 이상이어야 합니다')

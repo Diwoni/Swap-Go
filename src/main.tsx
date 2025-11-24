@@ -3,24 +3,34 @@ import '@/styles/index.css';
 
 import { Providers } from './app/providers';
 import React from 'react';
-
-// 개발 환경에서만 MSW 활성화
-async function enableMocking() {
-  if (import.meta.env.DEV) {
-    const { worker } = await import('./mocks/browser');
-
-    return worker.start({
-      onUnhandledRequest: 'bypass', // 매칭되지 않는 요청은 그냥 통과
-    });
-  }
-}
+import { startMockServer } from './mocks/browser';
 
 const root = createRoot(document.getElementById('root')!);
 
-enableMocking().then(() => {
+startMockServer().then(() => {
   root.render(
     <React.StrictMode>
       <Providers />
     </React.StrictMode>
   );
 });
+
+// ⭐ 자동 로그인 함수
+// async function initAuth() {
+//   try {
+//     console.log('🔄 자동 로그인 시도 중...');
+
+//     // refreshToken으로 accessToken 재발급
+//     const { accessToken } = await authService.refreshToken();
+//     // → POST /auth/refresh
+//     // → Cookie: refreshToken=abc123... (자동 첨부)
+
+//     // 새 토큰 저장
+//     tokenManager.setAccessToken(accessToken);
+
+//     console.log('✅ 자동 로그인 성공!');
+//   } catch (error) {
+//     console.log('❌ 자동 로그인 실패 (refreshToken 없거나 만료)');
+//     tokenManager.clearAccessToken();
+//   }
+// }

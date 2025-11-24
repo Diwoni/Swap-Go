@@ -8,7 +8,8 @@ export default {
         container: '1400px',
       },
       fontFamily: {
-        sans: ['Pretendard', 'sans-serif'],
+        sans: ['Tmoney', 'sans-serif'],
+        maplestory: ['Maplestory', 'sans-serif'],
       },
       colors: {
         primary: {

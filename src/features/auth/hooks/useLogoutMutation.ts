@@ -3,7 +3,7 @@ import { authService } from '../api/auth.api';
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
 import { handleAPIError } from '@/shared/utils/errorHandler';
 
-export const useLogout = () => {
+export const useLogoutMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

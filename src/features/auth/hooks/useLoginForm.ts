@@ -1,9 +1,9 @@
+import { useModalContext } from '@/shared/hooks';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useLoginMutation } from '../hooks/useLoginMutation';
-import { LoginFormData, loginSchema } from '../types/auth.schema';
-import { useModalContext } from '@/shared/hooks';
+import { LoginFormData, loginSchema } from '../types';
+import { useLoginMutation } from './useLoginMutation';
 
 export const useLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,25 +31,16 @@ export const useLoginForm = () => {
       },
     });
   };
-  // void 로 명시적 처리 (lint)
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    void handleSubmit(submitLogin);
-  };
+
+  // ✅ handleSubmit을 직접 반환
+  const onSubmit = handleSubmit(submitLogin);
 
   return {
-    // Form state
     register,
     errors,
-
-    // Password visibility
     showPassword,
     toggleShowPassword,
-
-    // Loading state
     isPending,
-
-    // Submit handler
-    onSubmit,
+    onSubmit, // 이미 이벤트 핸들러 함수
   };
 };

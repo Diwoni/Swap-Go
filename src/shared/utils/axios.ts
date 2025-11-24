@@ -117,9 +117,6 @@ api.interceptors.response.use(
         processQueue(refreshError as Error, null);
         tokenManager.clearAccessToken();
 
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
-        }
         return Promise.reject(
           refreshError instanceof Error
             ? refreshError
