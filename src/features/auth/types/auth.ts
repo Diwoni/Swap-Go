@@ -26,11 +26,11 @@ export type LoginResponse = {
 
 // 회원가입 api 요청
 export type SignupRequest = {
+  username: string;
   email: string;
   password: string;
-  username: string;
   // Todo : address
-  // Todo : 이메일 인증토큰
+  verificationToken: string;
 };
 
 // 회원가입 api 응답
