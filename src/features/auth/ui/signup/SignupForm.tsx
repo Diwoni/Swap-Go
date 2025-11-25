@@ -1,14 +1,15 @@
 import { useForm } from 'react-hook-form';
-import { SignupFormData, signupSchema } from '../types';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSignupMutation } from '../hooks/useSignupMutation';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+
+import { formatTime } from '@/shared/utils/formatTime';
 import {
+  useSignupMutation,
   useSendEmailCodeMutation,
   useVerifyEmailCode,
-} from '../hooks/useEmailMutation';
-import { formatTime } from '@/shared/utils/formatTime';
+} from '../../hooks';
+import { SignupFormData, signupSchema } from '../../types';
 
 export const SignupForm = () => {
   const { mutate: signup } = useSignupMutation();
@@ -115,7 +116,6 @@ export const SignupForm = () => {
       alert('이메일 인증을 완료해주세요.');
       return;
     }
-    // console.log(signupRequest);
     signup(signupRequest, {
       onSuccess: () => {
         navigate('/');

@@ -1,3 +1,2 @@
-export * from './LoginModal';
-export * from './LoginForm';
-export * from './SignupForm';
+export * from './login';
+export * from './signup';

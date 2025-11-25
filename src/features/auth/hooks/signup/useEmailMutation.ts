@@ -2,15 +2,15 @@ import { useMutation } from '@tanstack/react-query';
 import {
   sendEmailVerificationCode,
   verifyEmailCode,
-} from '../api/email.certification.api';
+} from '../../api/email.api';
+import { AxiosError } from 'axios';
+import { handleAPIError } from '@/shared/utils/errorHandler';
 import {
   SendEmailCodeRequest,
   SendEmailCodeResponse,
   VerifyEmailCodeRepuest,
   VerifyEmailCodeResponse,
-} from '../types';
-import { AxiosError } from 'axios';
-import { handleAPIError } from '@/shared/utils/errorHandler';
+} from '../../types';
 
 export const useSendEmailCodeMutation = () => {
   return useMutation({
