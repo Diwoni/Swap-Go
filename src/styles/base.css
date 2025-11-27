@@ -1,7 +1,10 @@
 @layer base {
-  html,
+  html {
+    font-family: 'Pretendard', 'font-sans', sans-serif;
+  }
+  ,
   body {
-    @apply min-h-screen bg-white font-sans;
+    @apply min-h-screen bg-white;
     margin: 0;
     padding: 0;
   }
