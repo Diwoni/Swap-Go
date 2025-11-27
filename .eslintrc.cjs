@@ -9,15 +9,10 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: true,
+    project: ['./tsconfig.app.json', './tsconfig.node.json'], // 🔥 여기 수정
+    tsconfigRootDir: __dirname, // 🔥 추가
   },
-  plugins: [
-    '@typescript-eslint',
-    'react',
-    'react-hooks',
-    'import',
-    'simple-import-sort', // import 자동 정렬
-  ],
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import', 'simple-import-sort'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -27,7 +22,7 @@ module.exports = {
   ],
   rules: {
     // TypeScript
-    '@typescript-eslint/no-explicit-any': 'warn', // 조금 덜 엄격
+    '@typescript-eslint/no-explicit-any': 'warn',
     '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/consistent-type-imports': 'error',
 
