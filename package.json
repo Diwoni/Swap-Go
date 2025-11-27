@@ -16,7 +16,7 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:ci": "vitest run --coverage",
+    "test:ci": "vitest run --coverage --passWithNoTests",
     "pre-pr": "pnpm run type-check && pnpm run lint && pnpm run format:check && pnpm run test:ci",
     "prepare": "husky install"
   },

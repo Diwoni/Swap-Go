@@ -193,8 +193,8 @@ jobs:
               issue_number: context.issue.number,
             });
 
-            const botComment = comments.find(comment => 
-              comment.user.type === 'Bot' && 
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
               comment.body.includes('CI Results')
             );
 
