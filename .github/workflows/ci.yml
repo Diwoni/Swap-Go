@@ -9,6 +9,12 @@ on:
   push:
     branches: [Main, Develop]
 
+permissions: # ← 이 부분 추가!
+  contents: read
+  pull-requests: write
+  issues: write
+  checks: write
+
 # ============================================
 # 동시 실행 제어
 # - 같은 PR에서 새 커밋이 push되면 이전 실행 취소
