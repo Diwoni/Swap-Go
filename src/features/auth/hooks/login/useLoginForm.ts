@@ -1,7 +1,9 @@
-import { useModalContext } from '@/shared/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+import { useModalContext } from '@/shared/hooks';
+
 import { LoginFormData, loginSchema } from '../../types';
 import { useLoginMutation } from './useLoginMutation';
 
@@ -24,7 +26,7 @@ export const useLoginForm = () => {
   };
 
   const submitLogin = (data: LoginFormData) => {
-    console.log(data);
+    // console.log(data);
     login(data, {
       onSuccess: () => {
         loginModal.closeModal();
@@ -32,8 +34,10 @@ export const useLoginForm = () => {
     });
   };
 
-  // ✅ handleSubmit을 직접 반환
-  const onSubmit = handleSubmit(submitLogin);
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    void handleSubmit(submitLogin)(e);
+  };
 
   return {
     register,

@@ -5,7 +5,9 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+
 import { API_CONFIG, ERROR_STATUS } from '@/shared/libs/constants';
+
 import { tokenManager } from '../libs/auth/tokenManager';
 
 const createInstance = (config?: AxiosRequestConfig): AxiosInstance => {
@@ -53,10 +55,7 @@ type QueueItem = {
 let isRefreshing = false;
 const failedQueue: QueueItem[] = [];
 
-const processQueue = (
-  error: Error | null,
-  token: string | null = null
-): void => {
+const processQueue = (error: Error | null, token: string | null = null): void => {
   failedQueue.forEach((promise) => {
     if (error) {
       promise.reject(error);
@@ -80,10 +79,7 @@ api.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
     };
-    if (
-      error.response?.status === ERROR_STATUS.UNAUTHORIZED &&
-      !originalRequest._retry
-    ) {
+    if (error.response?.status === ERROR_STATUS.UNAUTHORIZED && !originalRequest._retry) {
       if (isRefreshing) {
         return new Promise<string>((resolve, reject) => {
           failedQueue.push({ resolve, reject });

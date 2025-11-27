@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    // 필수 확장
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+
+    // TypeScript
+    "ms-vscode.vscode-typescript-next",
+
+    // 유틸리티
+    "usernamehw.errorlens",
+    "streetsidesoftware.code-spell-checker",
+    "eamodio.gitlens",
+
+    // Tailwind CSS
+    "bradlc.vscode-tailwindcss",
+
+    // 기타 유용한 확장
+    "formulahendry.auto-rename-tag",
+    "dsznajder.es7-react-js-snippets",
+    "christian-kohler.path-intellisense"
+  ]
+}

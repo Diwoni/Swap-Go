@@ -1,4 +1,5 @@
 import { ReactNode, useEffect } from 'react';
+
 import { ModalPortal } from './ModalPortal';
 type ModalProps = {
   isModalOpen: boolean;
@@ -7,12 +8,7 @@ type ModalProps = {
   className?: string;
 };
 
-export const Modal = ({
-  isModalOpen,
-  closeModal,
-  children,
-  className = '',
-}: ModalProps) => {
+export const Modal = ({ isModalOpen, closeModal, children, className = '' }: ModalProps) => {
   useEffect(() => {
     const pressEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') closeModal();

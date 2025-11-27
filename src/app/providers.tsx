@@ -1,11 +1,12 @@
-// src/app/providers/index.tsx (또는 Providers.tsx)
-import { BrowserRouter, useRoutes } from 'react-router-dom';
-import { routes } from './router/routes';
-import { Suspense } from 'react';
-import { ModalProvider } from '@/shared/context/ModalProvider';
-import { LoginModal } from '@/features/auth/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Suspense } from 'react';
+import { BrowserRouter, useRoutes } from 'react-router-dom';
+
 import { useAuthInit } from '@/features/auth/hooks/useAuthInit';
+import { LoginModal } from '@/features/auth/ui';
+import { ModalProvider } from '@/shared/context/ModalProvider';
+
+import { routes } from './router/routes';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,7 +32,7 @@ function AppRoutes() {
 
 // 앱 초기화 + 라우팅
 function AppContent() {
-  // 🎯 앱 초기화 (Access Token 복구)
+  // 앱 초기화 (Access Token 복구)
   const { isInitialized } = useAuthInit();
 
   // 초기화 전에는 로딩 표시

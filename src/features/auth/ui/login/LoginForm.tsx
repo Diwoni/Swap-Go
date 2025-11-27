@@ -1,4 +1,5 @@
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+
 import { useLoginForm } from '../../hooks';
 
 export const LoginForm = () => {
@@ -15,10 +16,7 @@ export const LoginForm = () => {
     <form onSubmit={onSubmit} className="space-y-5">
       {/* 아이디 입력 */}
       <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
           아이디
         </label>
         <input
@@ -40,18 +38,13 @@ export const LoginForm = () => {
           `}
         />
         {formErrors.email && (
-          <p className="mt-2 text-sm text-red-600">
-            {formErrors.email.message}
-          </p>
+          <p className="mt-2 text-sm text-red-600">{formErrors.email.message}</p>
         )}
       </div>
 
       {/* 비밀번호 입력 */}
       <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
           비밀번호
         </label>
         <div className="relative">
@@ -86,9 +79,7 @@ export const LoginForm = () => {
           </button>
         </div>
         {formErrors.password && (
-          <p className="mt-2 text-sm text-red-600">
-            {formErrors.password.message}
-          </p>
+          <p className="mt-2 text-sm text-red-600">{formErrors.password.message}</p>
         )}
       </div>
       <div className="flex flex-col gap-2">
@@ -118,10 +109,7 @@ export const LoginForm = () => {
         </button>
 
         {/* 회원가입 */}
-        <button
-          type="button"
-          className="btn btn-primary btn-lg bg-black-150 hover:bg-black-200"
-        >
+        <button type="button" className="btn btn-primary btn-lg bg-black-150 hover:bg-black-200">
           회원가입
         </button>
       </div>

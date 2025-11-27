@@ -1,17 +1,12 @@
 import { api } from '@/shared/utils/axios';
-import {
-  LoginRequest,
-  LoginResponse,
-  SignupRequest,
-  SignupResponse,
-  User,
-} from '../types/auth';
+
+import { LoginRequest, LoginResponse, SignupRequest, SignupResponse, User } from '../types/auth';
 
 /** auth 관련 api 호출함수를 객체로 담은 함수 */
 export const authService = {
   login: async (credentials: LoginRequest): Promise<LoginResponse> => {
-    const { data } = await api.post<LoginResponse>('/auth/login', credentials);
-    return data;
+    const response = await api.post<LoginResponse>('/auth/login', credentials);
+    return response.data;
   },
 
   logout: async (): Promise<void> => {
@@ -20,17 +15,17 @@ export const authService = {
 
   // 회원가입 api
   signup: async (signupFormData: SignupRequest): Promise<SignupResponse> => {
-    const { data } = await api.post('/auth/signup', signupFormData);
-    return data;
+    const response = await api.post<SignupResponse>('/auth/signup', signupFormData);
+    return response.data;
   },
 
   getMe: async (): Promise<User> => {
-    const { data } = await api.get<User>('/users/me');
-    return data;
+    const response = await api.get<User>('/users/me');
+    return response.data;
   },
 
   refreshToken: async (): Promise<{ accessToken: string }> => {
-    const { data } = await api.post<{ accessToken: string }>('/auth/refresh');
-    return data;
+    const response = await api.post<{ accessToken: string }>('/auth/refresh');
+    return response.data;
   },
 };

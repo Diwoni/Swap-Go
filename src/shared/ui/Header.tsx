@@ -1,9 +1,11 @@
 import React from 'react';
 import { CiChat2, CiUser } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
-import { ProtectedNavButton } from './ProtectedNavButton';
-import { useModalContext } from '../hooks';
+
 import { useAuth, useLogoutMutation } from '@/features/auth/hooks';
+
+import { useModalContext } from '../hooks';
+import { ProtectedNavButton } from './ProtectedNavButton';
 
 const Header: React.FC = () => {
   const { loginModal } = useModalContext();
@@ -17,6 +19,7 @@ const Header: React.FC = () => {
           <span className="font-maplestory xl:pl-8 pl-4 text-2xl font-black text-primary-100">
             Swap&Go
           </span>
+
           <nav className="xl:w-[800px] xl:pl-[200px] w-[550px] pl-[50px]">
             <ul className="flex gap-20 text-lg">
               <li>
