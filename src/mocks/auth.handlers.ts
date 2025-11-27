@@ -1,6 +1,7 @@
 // src/mocks/handlers/auth.handlers.ts
 
 import { http, HttpResponse } from 'msw';
+
 import type {
   LoginRequest,
   LoginResponse,
@@ -10,7 +11,7 @@ import type {
 } from '@/features/auth/types/auth';
 
 // ==================== 설정 ====================
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
 const ACCESS_TOKEN_EXPIRY = 15 * 60 * 1000; // 15분
 const REFRESH_TOKEN_EXPIRY = 7 * 24 * 60 * 60 * 1000; // 7일
 const EMAIL_CODE_EXPIRY = 5 * 60 * 1000; // 5분
@@ -97,7 +98,7 @@ const verifyToken = (token: string): TokenPayload | null => {
  * Authorization 헤더에서 토큰 추출
  */
 const extractTokenFromHeader = (authHeader: string | null): string | null => {
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!authHeader?.startsWith('Bearer ')) {
     return null;
   }
   return authHeader.substring(7);
@@ -108,8 +109,8 @@ const extractTokenFromHeader = (authHeader: string | null): string | null => {
  */
 const extractRefreshToken = (cookieHeader: string | null): string | null => {
   if (!cookieHeader) return null;
-  const match = cookieHeader.match(/refreshToken=([^;]+)/);
-  return match ? match[1] : null;
+  const match = /refreshToken=([^;]+)/.exec(cookieHeader);
+  return match?.[1] ?? null;
 };
 
 /**
@@ -154,25 +155,16 @@ export const authHandlers = [
 
     // 1. 유효성 검사
     if (!email) {
-      return HttpResponse.json(
-        { message: '이메일을 입력해주세요.' },
-        { status: 400 }
-      );
+      return HttpResponse.json({ message: '이메일을 입력해주세요.' }, { status: 400 });
     }
 
     if (!isValidEmail(email)) {
-      return HttpResponse.json(
-        { message: '올바른 이메일 형식이 아닙니다.' },
-        { status: 400 }
-      );
+      return HttpResponse.json({ message: '올바른 이메일 형식이 아닙니다.' }, { status: 400 });
     }
 
     // 2. 이메일 중복 체크 (users Map 기반)
     if (users.has(email)) {
-      return HttpResponse.json(
-        { message: '이미 가입된 이메일입니다.' },
-        { status: 400 }
-      );
+      return HttpResponse.json({ message: '이미 가입된 이메일입니다.' }, { status: 400 });
     }
 
     // 3. 인증 코드 생성
@@ -211,19 +203,13 @@ export const authHandlers = [
 
     // 1. 유효성 검사
     if (!email || !code) {
-      return HttpResponse.json(
-        { message: '이메일과 인증번호를 입력해주세요.' },
-        { status: 400 }
-      );
+      return HttpResponse.json({ message: '이메일과 인증번호를 입력해주세요.' }, { status: 400 });
     }
 
     // 2. 저장된 인증 코드 확인
     const storedCode = verificationCodes.get(email);
     if (!storedCode) {
-      return HttpResponse.json(
-        { message: '인증번호를 먼저 발송해주세요.' },
-        { status: 400 }
-      );
+      return HttpResponse.json({ message: '인증번호를 먼저 발송해주세요.' }, { status: 400 });
     }
 
     // 3. 만료 시간 체크
@@ -237,10 +223,7 @@ export const authHandlers = [
 
     // 4. 인증 코드 일치 확인
     if (storedCode.code !== code) {
-      return HttpResponse.json(
-        { message: '인증번호가 일치하지 않습니다.' },
-        { status: 400 }
-      );
+      return HttpResponse.json({ message: '인증번호가 일치하지 않습니다.' }, { status: 400 });
     }
 
     // 5. 인증 완료 처리
@@ -267,150 +250,126 @@ export const authHandlers = [
    * 회원가입
    * POST /auth/signup (또는 /api/auth/signup)
    */
-  http.post<never, SignupRequest>(
-    `${BASE_URL}/auth/signup`,
-    async ({ request }) => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+  http.post<never, SignupRequest>(`${BASE_URL}/auth/signup`, async ({ request }) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const body = await request.json();
-      const { email, password, username, verificationToken } = body;
+    const body = await request.json();
+    const { email, password, username } = body;
 
-      // 1. 필수 항목 검사
-      if (!email || !password || !username) {
-        return HttpResponse.json(
-          { message: '필수 항목을 모두 입력해주세요.' },
-          { status: 400 }
-        );
-      }
-
-      // 2. 이메일 형식 검증
-      if (!isValidEmail(email)) {
-        return HttpResponse.json(
-          { message: '올바른 이메일 형식이 아닙니다.' },
-          { status: 400 }
-        );
-      }
-
-      // 3. 이메일 중복 체크
-      if (users.has(email)) {
-        return HttpResponse.json(
-          { message: '이미 사용 중인 이메일입니다.' },
-          { status: 409 }
-        );
-      }
-
-      // 4. 이메일 인증 여부 확인 (필수)
-      const storedCode = verificationCodes.get(email);
-      if (!storedCode || !storedCode.isVerified) {
-        return HttpResponse.json(
-          { message: '이메일 인증을 완료해주세요.' },
-          { status: 400 }
-        );
-      }
-
-      // 5. 비밀번호 길이 검증
-      if (password.length < 8) {
-        return HttpResponse.json(
-          { message: '비밀번호는 8자 이상이어야 합니다.' },
-          { status: 400 }
-        );
-      }
-
-      // 6. 사용자 생성
-      const newUser: StoredUser = {
-        email,
-        password,
-        username,
-        address: {
-          country: 'South Korea',
-          region: 'Seoul',
-        },
-      };
-      users.set(email, newUser);
-
-      // 7. 인증 코드 삭제 (회원가입 완료 후)
-      verificationCodes.delete(email);
-
-      // 8. 토큰 생성
-      const accessToken = generateToken(email, ACCESS_TOKEN_EXPIRY);
-      const refreshToken = generateToken(email, REFRESH_TOKEN_EXPIRY);
-
-      const refreshPayload = verifyToken(refreshToken);
-      if (refreshPayload) {
-        refreshTokens.set(refreshToken, refreshPayload);
-      }
-
-      console.log(`🎉 [MSW] 회원가입 성공: ${email} (${username})`);
-
-      // 9. 응답
-      const response: SignupResponse = {
-        accessToken,
-        user: createUserResponse(newUser),
-      };
-
-      return HttpResponse.json(response, {
-        status: 201,
-        headers: {
-          'Set-Cookie': `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${REFRESH_TOKEN_EXPIRY / 1000}; Path=/`,
-        },
-      });
+    // 1. 필수 항목 검사
+    if (!email || !password || !username) {
+      return HttpResponse.json({ message: '필수 항목을 모두 입력해주세요.' }, { status: 400 });
     }
-  ),
+
+    // 2. 이메일 형식 검증
+    if (!isValidEmail(email)) {
+      return HttpResponse.json({ message: '올바른 이메일 형식이 아닙니다.' }, { status: 400 });
+    }
+
+    // 3. 이메일 중복 체크
+    if (users.has(email)) {
+      return HttpResponse.json({ message: '이미 사용 중인 이메일입니다.' }, { status: 409 });
+    }
+
+    // 4. 이메일 인증 여부 확인 (필수)
+    const storedCode = verificationCodes.get(email);
+    if (!storedCode?.isVerified) {
+      return HttpResponse.json({ message: '이메일 인증을 완료해주세요.' }, { status: 400 });
+    }
+
+    // 5. 비밀번호 길이 검증
+    if (password.length < 8) {
+      return HttpResponse.json({ message: '비밀번호는 8자 이상이어야 합니다.' }, { status: 400 });
+    }
+
+    // 6. 사용자 생성
+    const newUser: StoredUser = {
+      email,
+      password,
+      username,
+      address: {
+        country: 'South Korea',
+        region: 'Seoul',
+      },
+    };
+    users.set(email, newUser);
+
+    // 7. 인증 코드 삭제 (회원가입 완료 후)
+    verificationCodes.delete(email);
+
+    // 8. 토큰 생성
+    const accessToken = generateToken(email, ACCESS_TOKEN_EXPIRY);
+    const refreshToken = generateToken(email, REFRESH_TOKEN_EXPIRY);
+
+    const refreshPayload = verifyToken(refreshToken);
+    if (refreshPayload) {
+      refreshTokens.set(refreshToken, refreshPayload);
+    }
+
+    console.log(`🎉 [MSW] 회원가입 성공: ${email} (${username})`);
+
+    // 9. 응답
+    const response: SignupResponse = {
+      accessToken,
+      user: createUserResponse(newUser),
+    };
+
+    return HttpResponse.json(response, {
+      status: 201,
+      headers: {
+        'Set-Cookie': `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${REFRESH_TOKEN_EXPIRY / 1000}; Path=/`,
+      },
+    });
+  }),
 
   /**
    * 로그인
    * POST /auth/login
    */
-  http.post<never, LoginRequest>(
-    `${BASE_URL}/auth/login`,
-    async ({ request }) => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+  http.post<never, LoginRequest>(`${BASE_URL}/auth/login`, async ({ request }) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-      const body = await request.json();
-      const { email, password } = body;
+    const body = await request.json();
+    const { email, password } = body;
 
-      // 1. 필수 항목 검사
-      if (!email || !password) {
-        return HttpResponse.json(
-          { message: '이메일과 비밀번호를 입력해주세요.' },
-          { status: 400 }
-        );
-      }
-
-      // 2. 사용자 확인
-      const user = users.get(email);
-      if (!user || user.password !== password) {
-        return HttpResponse.json(
-          { message: '이메일 또는 비밀번호가 올바르지 않습니다.' },
-          { status: 401 }
-        );
-      }
-
-      // 3. 토큰 생성
-      const accessToken = generateToken(email, ACCESS_TOKEN_EXPIRY);
-      const refreshToken = generateToken(email, REFRESH_TOKEN_EXPIRY);
-
-      const refreshPayload = verifyToken(refreshToken);
-      if (refreshPayload) {
-        refreshTokens.set(refreshToken, refreshPayload);
-      }
-
-      console.log(`✅ [MSW] 로그인 성공: ${email}`);
-
-      // 4. 응답
-      const response: LoginResponse = {
-        accessToken,
-        user: createUserResponse(user),
-      };
-
-      return HttpResponse.json(response, {
-        status: 200,
-        headers: {
-          'Set-Cookie': `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${REFRESH_TOKEN_EXPIRY / 1000}; Path=/`,
-        },
-      });
+    // 1. 필수 항목 검사
+    if (!email || !password) {
+      return HttpResponse.json({ message: '이메일과 비밀번호를 입력해주세요.' }, { status: 400 });
     }
-  ),
+
+    // 2. 사용자 확인
+    const user = users.get(email);
+    if (user?.password !== password) {
+      return HttpResponse.json(
+        { message: '이메일 또는 비밀번호가 올바르지 않습니다.' },
+        { status: 401 }
+      );
+    }
+
+    // 3. 토큰 생성
+    const accessToken = generateToken(email, ACCESS_TOKEN_EXPIRY);
+    const refreshToken = generateToken(email, REFRESH_TOKEN_EXPIRY);
+
+    const refreshPayload = verifyToken(refreshToken);
+    if (refreshPayload) {
+      refreshTokens.set(refreshToken, refreshPayload);
+    }
+
+    console.log(`✅ [MSW] 로그인 성공: ${email}`);
+
+    // 4. 응답
+    const response: LoginResponse = {
+      accessToken,
+      user: createUserResponse(user),
+    };
+
+    return HttpResponse.json(response, {
+      status: 200,
+      headers: {
+        'Set-Cookie': `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${REFRESH_TOKEN_EXPIRY / 1000}; Path=/`,
+      },
+    });
+  }),
 
   /**
    * 로그아웃
@@ -430,8 +389,7 @@ export const authHandlers = [
       {
         status: 200,
         headers: {
-          'Set-Cookie':
-            'refreshToken=; HttpOnly; Secure; SameSite=Strict; Max-Age=0; Path=/',
+          'Set-Cookie': 'refreshToken=; HttpOnly; Secure; SameSite=Strict; Max-Age=0; Path=/',
         },
       }
     );
@@ -446,18 +404,12 @@ export const authHandlers = [
     const refreshToken = extractRefreshToken(cookieHeader);
 
     if (!refreshToken) {
-      return HttpResponse.json(
-        { message: '리프레시 토큰이 없습니다.' },
-        { status: 401 }
-      );
+      return HttpResponse.json({ message: '리프레시 토큰이 없습니다.' }, { status: 401 });
     }
 
     const payload = verifyToken(refreshToken);
     if (!payload || !refreshTokens.has(refreshToken)) {
-      return HttpResponse.json(
-        { message: '유효하지 않은 리프레시 토큰입니다.' },
-        { status: 401 }
-      );
+      return HttpResponse.json({ message: '유효하지 않은 리프레시 토큰입니다.' }, { status: 401 });
     }
 
     const newAccessToken = generateToken(payload.email, ACCESS_TOKEN_EXPIRY);
@@ -483,28 +435,19 @@ export const authHandlers = [
 
     if (!token) {
       console.error('❌ [MSW /users/me] 토큰 없음');
-      return HttpResponse.json(
-        { message: '인증 토큰이 필요합니다.' },
-        { status: 401 }
-      );
+      return HttpResponse.json({ message: '인증 토큰이 필요합니다.' }, { status: 401 });
     }
 
     const payload = verifyToken(token);
     if (!payload) {
       console.error('❌ [MSW /users/me] 토큰 검증 실패');
-      return HttpResponse.json(
-        { message: '유효하지 않거나 만료된 토큰입니다.' },
-        { status: 401 }
-      );
+      return HttpResponse.json({ message: '유효하지 않거나 만료된 토큰입니다.' }, { status: 401 });
     }
 
     const user = users.get(payload.email);
     if (!user) {
       console.error('❌ [MSW /users/me] 사용자 없음:', payload.email);
-      return HttpResponse.json(
-        { message: '사용자를 찾을 수 없습니다.' },
-        { status: 404 }
-      );
+      return HttpResponse.json({ message: '사용자를 찾을 수 없습니다.' }, { status: 404 });
     }
 
     console.log(`✅ [MSW /users/me] 사용자 정보 조회 성공: ${user.email}`);
@@ -586,8 +529,3 @@ export const mswDevtools = {
     console.log('🗑️ 모든 데이터 초기화 (테스트 유저 제외)');
   },
 };
-
-// 개발 환경에서만 전역 노출
-if (process.env.NODE_ENV === 'development') {
-  (window as any).mswDevtools = mswDevtools;
-}

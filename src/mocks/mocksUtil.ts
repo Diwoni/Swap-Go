@@ -16,14 +16,20 @@ type StoredUser = {
   };
 };
 
+type TokenPayload = {
+  email: string;
+  iat: number;
+  exp: number;
+};
+
 // Note: 실제 핸들러에서 사용하는 users, refreshTokens Map을 외부에서 접근 가능하도록 export 필요
 // 이 파일은 핸들러 파일과 같은 users, refreshTokens를 공유해야 합니다.
 
 export class MockServerUtils {
   private users: Map<string, StoredUser>;
-  private refreshTokens: Map<string, any>;
+  private refreshTokens: Map<string, TokenPayload>;
 
-  constructor(users: Map<string, StoredUser>, refreshTokens: Map<string, any>) {
+  constructor(users: Map<string, StoredUser>, refreshTokens: Map<string, TokenPayload>) {
     this.users = users;
     this.refreshTokens = refreshTokens;
   }
@@ -41,8 +47,8 @@ export class MockServerUtils {
       password: user.password,
       username: user.username,
       address: {
-        country: user.address?.country || 'South Korea',
-        region: user.address?.region || 'Seoul',
+        country: user.address?.country ?? 'South Korea',
+        region: user.address?.region ?? 'Seoul',
         street: user.address?.street,
       },
     };
@@ -149,10 +155,7 @@ export class MockServerUtils {
   /**
    * 사용자 정보 업데이트
    */
-  updateUser(
-    email: string,
-    updates: Partial<Omit<StoredUser, 'email'>>
-  ): boolean {
+  updateUser(email: string, updates: Partial<Omit<StoredUser, 'email'>>): boolean {
     const user = this.users.get(email);
     if (!user) return false;
 
@@ -170,24 +173,19 @@ export class MockServerUtils {
 // 개발 환경에서 window 객체에 유틸리티 노출
 export const exposeUtilsToWindow = (
   users: Map<string, StoredUser>,
-  refreshTokens: Map<string, any>
+  refreshTokens: Map<string, TokenPayload>
 ): void => {
   if (import.meta.env.DEV && typeof window !== 'undefined') {
     const utils = new MockServerUtils(users, refreshTokens);
-    (window as any).mockUtils = utils;
+    (globalThis as { mockUtils?: MockServerUtils }).mockUtils = utils;
 
-    console.log(
-      '%c🔧 Mock Server Utils',
-      'color: #4CAF50; font-size: 14px; font-weight: bold;'
-    );
+    console.log('%c🔧 Mock Server Utils', 'color: #4CAF50; font-size: 14px; font-weight: bold;');
     console.log('콘솔에서 mockUtils를 사용할 수 있습니다:');
     console.log('- mockUtils.getServerStatus()    // 서버 상태 확인');
     console.log('- mockUtils.addTestUser({...})   // 테스트 사용자 추가');
     console.log('- mockUtils.getAllUsers()        // 모든 사용자 조회');
     console.log('- mockUtils.clearRefreshTokens() // 모든 토큰 무효화');
-    console.log(
-      '- mockUtils.seedUsers(10)        // 10명의 테스트 사용자 생성'
-    );
+    console.log('- mockUtils.seedUsers(10)        // 10명의 테스트 사용자 생성');
   }
 };
 

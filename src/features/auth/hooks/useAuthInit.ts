@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { authService } from '../api';
+import { useEffect, useState } from 'react';
+
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
+
+import { authService } from '../api';
 
 // 앱 초기화 시 인증 복구
 // 새로고침 시 Refresh Token으로 Access Token 재발급
@@ -24,6 +26,7 @@ export const useAuthInit = () => {
         console.log('✅ 자동 로그인 성공');
       } catch (error) {
         console.log('❌ 자동 로그인 실패 (로그아웃 상태)');
+        console.error(error);
         tokenManager.clearAccessToken();
       } finally {
         setIsInitialized(true);

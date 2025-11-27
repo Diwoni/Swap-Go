@@ -1,5 +1,6 @@
 import { setupWorker } from 'msw/browser';
-import { authHandlers, users, refreshTokens } from './auth.handlers';
+
+import { authHandlers, refreshTokens, users } from './auth.handlers';
 import { exposeUtilsToWindow } from './mocksUtil';
 
 // MSW 워커 생성

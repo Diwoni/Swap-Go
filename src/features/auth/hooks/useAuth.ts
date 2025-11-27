@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { authService } from '../api';
+
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
+
+import { authService } from '../api';
 import { User } from '../types';
 
 export const useAuth = () => {

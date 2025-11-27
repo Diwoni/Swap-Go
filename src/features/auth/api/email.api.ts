@@ -1,4 +1,5 @@
 import { api } from '@/shared/utils/axios';
+
 import {
   SendEmailCodeRequest,
   SendEmailCodeResponse,
@@ -12,9 +13,6 @@ export const sendEmailVerificationCode = async (data: SendEmailCodeRequest) => {
 };
 
 export const verifyEmailCode = async (data: VerifyEmailCodeRepuest) => {
-  const response = await api.post<VerifyEmailCodeResponse>(
-    '/auth/email-confirm',
-    data
-  );
+  const response = await api.post<VerifyEmailCodeResponse>('/auth/email-confirm', data);
   return response.data;
 };

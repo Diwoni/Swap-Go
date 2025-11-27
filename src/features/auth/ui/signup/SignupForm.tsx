@@ -1,14 +1,11 @@
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import { formatTime } from '@/shared/utils/formatTime';
-import {
-  useSignupMutation,
-  useSendEmailCodeMutation,
-  useVerifyEmailCode,
-} from '../../hooks';
+
+import { useSendEmailCodeMutation, useSignupMutation, useVerifyEmailCode } from '../../hooks';
 import { SignupFormData, signupSchema } from '../../types';
 
 export const SignupForm = () => {
@@ -80,13 +77,13 @@ export const SignupForm = () => {
     if (remainingTime > 0) {
       alert(`${formatTime(remainingTime)} 후에 재발송할 수 있습니다.`);
       return;
-      sendEmailCode();
     }
+    sendEmailCode();
   };
 
   /** 인증번호 확인 함수 */
   const verifyCode = () => {
-    if (!verificationCode || verificationCode.length !== 6) {
+    if (verificationCode?.length !== 6) {
       alert('6자리 인증번호를 입력해주세요.');
       return;
     }
@@ -110,7 +107,7 @@ export const SignupForm = () => {
       username: data.username,
       password: data.password,
       email: data.email,
-      verificationToken: verificationToken || 'verified',
+      verificationToken: verificationToken ?? 'verified',
     };
     if (!isVerified) {
       alert('이메일 인증을 완료해주세요.');
@@ -124,9 +121,7 @@ export const SignupForm = () => {
   };
 
   // 비밀번호 확인용 상태
-  const [passwordMatchError, setPasswordMatchError] = useState<string | null>(
-    null
-  );
+  const [passwordMatchError, setPasswordMatchError] = useState<string | null>(null);
 
   const password = watch('password'); // 비밀번호 필드의 값 구독
 
@@ -139,14 +134,16 @@ export const SignupForm = () => {
     }
   };
 
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    void handleSubmit(submitSignup)(e);
+  };
+
   return (
-    <form onSubmit={handleSubmit(submitSignup)}>
+    <form onSubmit={onSubmit}>
       {/* 이메일 입력 */}
       <div className="mt-8 flex flex-col">
-        <label
-          htmlFor="email"
-          className="block text-lg font-semibold text-gray-700 mb-2"
-        >
+        <label htmlFor="email" className="block text-lg font-semibold text-gray-700 mb-2">
           이메일
         </label>
         <div className="flex w-[430px] justify-between">
@@ -168,9 +165,7 @@ export const SignupForm = () => {
             인증번호 발송
           </button>
         </div>
-        {errors.email && (
-          <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
-        )}
+        {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>}
       </div>
 
       {/* 인증번호 */}
@@ -185,30 +180,19 @@ export const SignupForm = () => {
             className="input w-[210px]"
           />
           {remainingTime > 0 && (
-            <p className="text-sm text-gray-600 mt-1">
-              남은 시간: {formatTime(remainingTime)}
-            </p>
+            <p className="text-sm text-gray-600 mt-1">남은 시간: {formatTime(remainingTime)}</p>
           )}
-          <button
-            onClick={verifyCode}
-            className="btn btn-primary w-[100px] rounded-[10px]"
-          >
+          <button onClick={verifyCode} className="btn btn-primary w-[100px] rounded-[10px]">
             인증확인
           </button>
-          <button
-            onClick={resendEmailCode}
-            className="btn btn-primary w-[100px] rounded-[10px]"
-          >
+          <button onClick={resendEmailCode} className="btn btn-primary w-[100px] rounded-[10px]">
             재발송
           </button>
         </div>
       )}
       {/* 비밀번호 */}
       <div className="flex flex-col mt-3">
-        <label
-          htmlFor="password"
-          className="block text-lg font-semibold text-gray-700 mb-2"
-        >
+        <label htmlFor="password" className="block text-lg font-semibold text-gray-700 mb-2">
           비밀번호
         </label>
         <input
@@ -226,16 +210,11 @@ export const SignupForm = () => {
             onBlur={handleConfirmPasswordBlur}
           />
         </div>
-        {passwordMatchError && (
-          <p className="mt-1 text-sm text-red-600">{passwordMatchError}</p>
-        )}
+        {passwordMatchError && <p className="mt-1 text-sm text-red-600">{passwordMatchError}</p>}
       </div>
       {/* 이름 */}
       <div className="flex flex-col mt-3">
-        <label
-          htmlFor="username"
-          className="block text-lg font-semibold text-gray-700 mb-2"
-        >
+        <label htmlFor="username" className="block text-lg font-semibold text-gray-700 mb-2">
           이름
         </label>
         <input
@@ -249,10 +228,7 @@ export const SignupForm = () => {
 
       {/* 주소 Todo : 구글맵 api 연동 */}
       <div className="flex flex-col mt-3">
-        <label
-          htmlFor="address"
-          className="block text-lg font-semibold text-gray-700 mb-2"
-        >
+        <label htmlFor="address" className="block text-lg font-semibold text-gray-700 mb-2">
           주소
         </label>
         <input className="input" />

@@ -1,10 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
-import {
-  sendEmailVerificationCode,
-  verifyEmailCode,
-} from '../../api/email.api';
 import { AxiosError } from 'axios';
+
 import { handleAPIError } from '@/shared/utils/errorHandler';
+
+import { sendEmailVerificationCode, verifyEmailCode } from '../../api/email.api';
 import {
   SendEmailCodeRequest,
   SendEmailCodeResponse,
