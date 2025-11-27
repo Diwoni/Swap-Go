@@ -6,5 +6,4 @@ import App from '@/App';
 
 const root = createRoot(document.getElementById('root')!);
 
-console.log('husky test');
 root.render(<App />);
