@@ -1,0 +1,23 @@
+# .eslintignore 파일 생성
+cat > .eslintignore << 'EOF'
+# 빌드 결과물
+dist
+build
+coverage
+.next
+
+# 의존성
+node_modules
+
+# 설정 파일 (TypeScript project 설정이 필요한 파일들)
+*.config.js
+*.config.ts
+*.config.cjs
+vite-env.d.ts
+
+# Husky
+.husky
+
+# 기타
+public
+EOF
