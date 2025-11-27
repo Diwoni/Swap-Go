@@ -1,8 +1,9 @@
-import { createRoot } from 'react-dom/client';
 import '@/styles/index.css';
 
-import { Providers } from './app/providers';
 import React from 'react';
+import { createRoot } from 'react-dom/client';
+
+import { Providers } from './app/providers';
 
 const root = createRoot(document.getElementById('root')!);
 

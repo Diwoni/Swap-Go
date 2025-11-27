@@ -1,5 +1,7 @@
-import { useAuthContext } from '@/features/auth/hooks/useAuthContext';
 import { useNavigate } from 'react-router-dom';
+
+import { useAuthContext } from '@/features/auth/hooks/useAuthContext';
+
 import { useModalContext } from './useModalContext';
 
 export const useProtectedNavigation = () => {

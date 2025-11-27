@@ -1,8 +1,10 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
-import { ROUTE_PATH } from './path';
-import PageLayout from '@/shared/ui/PageLayout';
+
 import SignupPage from '@/pages/SignupPage';
+import PageLayout from '@/shared/ui/PageLayout';
+
+import { ROUTE_PATH } from './path';
 
 const HomePage = lazy(() => import('@/pages/HomePage'));
 

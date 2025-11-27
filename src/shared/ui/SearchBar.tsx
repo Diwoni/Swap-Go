@@ -1,4 +1,5 @@
 import { IoIosArrowDown } from 'react-icons/io';
+
 import { useSearchBar } from '../hooks/useSearchBar';
 import { LocationBar } from './LocationBar';
 

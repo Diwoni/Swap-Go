@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+
 import { useModal } from '../hooks/useModal';
 
 export type ModalContextType = {

@@ -1,9 +1,11 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+
+import { useModalContext } from '@/shared/hooks';
+
 import { useLoginMutation } from '../hooks/useLoginMutation';
 import { LoginFormData, loginSchema } from '../types/login.schema';
-import { useModalContext } from '@/shared/hooks';
 
 export const useLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);

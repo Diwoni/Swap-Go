@@ -1,8 +1,9 @@
 import React from 'react';
 import { CiChat2, CiUser } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
-import { ProtectedNavButton } from './ProtectedNavButton';
+
 import { useModalContext } from '../hooks';
+import { ProtectedNavButton } from './ProtectedNavButton';
 
 const Header: React.FC = () => {
   const { loginModal } = useModalContext();
@@ -11,9 +12,7 @@ const Header: React.FC = () => {
     <>
       <header className="fixed top-0 left-0 w-full bg-white shadow z-50">
         <div className="flex flex-row items-center justify-between max-w-[1400px] mx-auto h-[80px]">
-          <span className="xl:pl-8 pl-4 text-2xl font-black text-primary-100">
-            Swap & Go
-          </span>
+          <span className="xl:pl-8 pl-4 text-2xl font-black text-primary-100">Swap & Go</span>
           <nav className="xl:w-[800px] xl:pl-[200px] w-[550px] pl-[50px]">
             <ul className="flex gap-20">
               <li>

@@ -12,7 +12,7 @@ type Props = {
 
 export const useSearchBar = ({ categories, onSearch }: Props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [selectedCategory, setSelectedCategory] = useState<string>(categories[0] ?? '');
   const [searchValue, setSearchValue] = useState('');
 
   const toggleDropdown = () => {

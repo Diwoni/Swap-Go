@@ -1,8 +1,9 @@
+import { useQuery } from '@tanstack/react-query';
 import { ReactNode, useEffect, useState } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
-import { authService } from '../api/auth.api';
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
+
+import { authService } from '../api/auth.api';
 import { AuthContextValue } from '../types';
 import { AuthContext } from './auth.context';
 

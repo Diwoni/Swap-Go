@@ -1,4 +1,5 @@
 import { api } from '@/shared/utils/axios';
+
 import { LoginRequest, LoginResponse, User } from '../types/auth';
 
 /** auth 관련 api 호출함수를 객체로 담은 함수 */
