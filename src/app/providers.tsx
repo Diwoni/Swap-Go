@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Suspense } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { BrowserRouter, useRoutes } from 'react-router-dom';
 
 import { useAuthInit } from '@/features/auth/hooks/useAuthInit';
@@ -62,6 +63,7 @@ export function Providers() {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <ModalProvider>
+          <Toaster />
           <AppContent />
         </ModalProvider>
       </QueryClientProvider>

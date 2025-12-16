@@ -7,9 +7,9 @@ export type SendEmailCodeResponse = {
   expireIn: number;
 };
 
-export type VerifyEmailCodeRepuest = {
+export type VerifyEmailCodeRequest = {
   email: string;
-  code: string;
+  verificationCode: string;
 };
 
 export type VerifyEmailCodeResponse = {

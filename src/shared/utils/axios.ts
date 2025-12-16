@@ -15,7 +15,7 @@ const createInstance = (config?: AxiosRequestConfig): AxiosInstance => {
     baseURL: API_CONFIG.BASE_URL,
     timeout: API_CONFIG.TIMEOUT,
     headers: {
-      Accept: 'application.json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     withCredentials: true,

@@ -1,146 +1,50 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import { formatTime } from '@/shared/utils/formatTime';
 
-import { useSendEmailCodeMutation, useSignupMutation, useVerifyEmailCode } from '../../hooks';
+import { useEmailVerification, usePasswordMatch, useSignupSubmit } from '../../hooks';
 import { SignupFormData, signupSchema } from '../../types';
 
 export const SignupForm = () => {
-  const { mutate: signup } = useSignupMutation();
-  const navigate = useNavigate();
+  const form = useForm<SignupFormData>({ resolver: zodResolver(signupSchema), mode: 'onBlur' });
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
     watch,
-  } = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema),
-    mode: 'onBlur',
-  });
-  // ===== 이메일 인증 관련 상태 =====
-  const [verificationCode, setVerificationCode] = useState('');
-  const [isCodeSent, setIsCodeSent] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(0);
-  const [verificationToken, setVerificationToken] = useState<string | null>('');
-  const { mutate: sendVerificationCode } = useSendEmailCodeMutation();
-  const { mutate: verifyEmailCode } = useVerifyEmailCode();
+    formState: { errors },
+  } = form;
 
-  // 이메일 필드 값 구독
   const email = watch('email');
+  const password = watch('password');
 
-  /** 이메일 인증번호 발송 코드 */
-  const sendEmailCode = () => {
-    if (!email) {
-      alert('이메일을 입력해주세요.');
-      return;
-    }
-    // 이메일 유효성 검사
-    sendVerificationCode(
-      { email },
-      {
-        onSuccess: () => {
-          setIsCodeSent(true);
-          setIsVerified(false);
-          setVerificationCode('');
-          setRemainingTime(300);
-          alert('인증번호가 발송되었습니다.');
-        },
-      }
-    );
-  };
+  const {
+    isCodeSent,
+    isVerified,
+    remainingTime,
+    verificationCode,
+    setVerificationCode,
+    verificationToken,
+    sendCode,
+    verifyCode,
+    resendCode,
+  } = useEmailVerification(email);
 
-  /** 타이머 */
-  useEffect(() => {
-    if (remainingTime <= 0) {
-      setIsCodeSent(false);
-      return;
-    }
+  const { passwordMatchError, validatePasswordMatch } = usePasswordMatch();
+  const { submit } = useSignupSubmit();
 
-    const timer = setInterval(() => {
-      setRemainingTime((prev) => {
-        if (prev <= 1) {
-          setIsCodeSent(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [remainingTime]);
-
-  /** 인증번호 재발송 함수 */
-  const resendEmailCode = () => {
-    if (remainingTime > 0) {
-      alert(`${formatTime(remainingTime)} 후에 재발송할 수 있습니다.`);
-      return;
-    }
-    sendEmailCode();
-  };
-
-  /** 인증번호 확인 함수 */
-  const verifyCode = () => {
-    if (verificationCode?.length !== 6) {
-      alert('6자리 인증번호를 입력해주세요.');
-      return;
-    }
-    verifyEmailCode(
-      { email, code: verificationCode },
-      {
-        onSuccess: (data) => {
-          const token = data.verificationToken;
-          setIsVerified(true);
-          setVerificationToken(token);
-          setRemainingTime(0);
-          alert('이메일 인증이 완료되었습니다.');
-        },
-      }
-    );
-  };
-
-  /** 회원가입 제출 함수 */
-  const submitSignup = (data: SignupFormData) => {
-    const signupRequest = {
-      username: data.username,
-      password: data.password,
-      email: data.email,
-      verificationToken: verificationToken ?? 'verified',
-    };
+  // 회원가입 폼 제출
+  const onSubmit = (data: SignupFormData) => {
     if (!isVerified) {
-      alert('이메일 인증을 완료해주세요.');
-      return;
+      return toast.error('이메일 인증을 완료해주세요.');
     }
-    signup(signupRequest, {
-      onSuccess: () => {
-        navigate('/');
-      },
-    });
-  };
-
-  // 비밀번호 확인용 상태
-  const [passwordMatchError, setPasswordMatchError] = useState<string | null>(null);
-
-  const password = watch('password'); // 비밀번호 필드의 값 구독
-
-  const handleConfirmPasswordBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const confirmPassword = e.target.value;
-    if (password !== confirmPassword) {
-      setPasswordMatchError('비밀번호가 일치하지 않습니다.');
-    } else {
-      setPasswordMatchError(null);
-    }
-  };
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    void handleSubmit(submitSignup)(e);
+    submit({ ...data, verificationToken: verificationToken });
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
       {/* 이메일 입력 */}
       <div className="mt-8 flex flex-col">
         <label htmlFor="email" className="block text-lg font-semibold text-gray-700 mb-2">
@@ -152,18 +56,24 @@ export const SignupForm = () => {
             id="email"
             type="text"
             placeholder="jgw117@naver.com"
-            className={`input w-[280px] ${
+            className={`input w-[300px] ${
               errors.email
                 ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                 : 'border-black-100 focus:border-blue-500 focus:ring-blue-500'
             }`}
           />
-          <button
-            onClick={sendEmailCode}
-            className="btn btn-primary btn-sm w-[140px] rounded-[10px]"
-          >
-            인증번호 발송
-          </button>
+          {isCodeSent ? (
+            <button onClick={resendCode} className="btn btn-primary btn-sm rounded-[10px]">
+              재발송
+            </button>
+          ) : (
+            <button
+              onClick={sendCode}
+              className="btn btn-primary btn-sm rounded-[10px] disabled:bg-gray-300"
+            >
+              인증하기
+            </button>
+          )}
         </div>
         {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>}
       </div>
@@ -171,22 +81,22 @@ export const SignupForm = () => {
       {/* 인증번호 */}
       {isCodeSent && !isVerified && (
         <div className="flex justify-between mt-3">
-          <input
-            value={verificationCode}
-            onChange={(e) => {
-              setVerificationCode(e.target.value);
-            }}
-            placeholder="인증번호를 입력하세요"
-            className="input w-[210px]"
-          />
-          {remainingTime > 0 && (
-            <p className="text-sm text-gray-600 mt-1">남은 시간: {formatTime(remainingTime)}</p>
-          )}
-          <button onClick={verifyCode} className="btn btn-primary w-[100px] rounded-[10px]">
+          <div className="relative w-[300px]">
+            <input
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
+              placeholder="인증번호를 입력하세요"
+              className="input w-full pr-14"
+            />
+
+            {remainingTime > 0 && (
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-red-500">
+                {formatTime(remainingTime)}
+              </span>
+            )}
+          </div>
+          <button onClick={verifyCode} className="btn btn-primary btn-sm rounded-[10px]">
             인증확인
-          </button>
-          <button onClick={resendEmailCode} className="btn btn-primary w-[100px] rounded-[10px]">
-            재발송
           </button>
         </div>
       )}
@@ -207,7 +117,7 @@ export const SignupForm = () => {
             className="input"
             type="password"
             placeholder="비밀번호를 다시 입력해주세요."
-            onBlur={handleConfirmPasswordBlur}
+            onBlur={(e) => validatePasswordMatch(password, e.target.value)}
           />
         </div>
         {passwordMatchError && <p className="mt-1 text-sm text-red-600">{passwordMatchError}</p>}
@@ -226,12 +136,57 @@ export const SignupForm = () => {
         />
       </div>
 
-      {/* 주소 Todo : 구글맵 api 연동 */}
+      {/* 주소: country / region / street (street 선택사항) */}
       <div className="flex flex-col mt-3">
         <label htmlFor="address" className="block text-lg font-semibold text-gray-700 mb-2">
           주소
         </label>
-        <input className="input" />
+        <div className="flex flex-col gap-2">
+          <div>
+            <label htmlFor="address.country" className="block text-sm font-medium text-gray-700">
+              국가
+            </label>
+            <input
+              id="address.country"
+              className="input"
+              {...register('address.country')}
+              placeholder="국가 (예: South Korea)"
+            />
+            {errors.address?.country?.message && (
+              <p className="mt-1 text-sm text-red-600">{errors.address.country?.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="address.region" className="block text-sm font-medium text-gray-700">
+              지역(시/도)
+            </label>
+            <input
+              id="address.region"
+              className="input"
+              {...register('address.region')}
+              placeholder="지역 (예: Seoul)"
+            />
+            {errors.address?.region?.message && (
+              <p className="mt-1 text-sm text-red-600">{errors.address.region?.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="address.street" className="block text-sm font-medium text-gray-700">
+              상세주소 (선택)
+            </label>
+            <input
+              id="address.street"
+              className="input"
+              {...register('address.street')}
+              placeholder="도로명/건물명 등 (선택)"
+            />
+            {errors.address?.street?.message && (
+              <p className="mt-1 text-sm text-red-600">{errors.address.street?.message}</p>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* 회원가입 버튼 */}

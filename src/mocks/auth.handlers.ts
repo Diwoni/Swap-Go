@@ -2,16 +2,12 @@
 
 import { http, HttpResponse } from 'msw';
 
-import type {
-  LoginRequest,
-  LoginResponse,
-  SignupRequest,
-  SignupResponse,
-  User,
-} from '@/features/auth/types/auth';
+import type { LoginRequest, LoginResponse, SignupRequest, User } from '@/features/auth/types/auth';
+
+import { API_CONFIG } from '../shared/libs/constants';
 
 // ==================== 설정 ====================
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+const BASE_URL = API_CONFIG.BASE_URL;
 const ACCESS_TOKEN_EXPIRY = 15 * 60 * 1000; // 15분
 const REFRESH_TOKEN_EXPIRY = 7 * 24 * 60 * 60 * 1000; // 7일
 const EMAIL_CODE_EXPIRY = 5 * 60 * 1000; // 5분
@@ -35,7 +31,7 @@ type TokenPayload = {
 };
 
 interface VerificationCode {
-  code: string;
+  verificationCode: string;
   email: string;
   expiresAt: number;
   isVerified: boolean;
@@ -168,18 +164,18 @@ export const authHandlers = [
     }
 
     // 3. 인증 코드 생성
-    const code = generateVerificationCode();
+    const verificationCode = generateVerificationCode();
     const expiresAt = Date.now() + EMAIL_CODE_EXPIRY;
 
     verificationCodes.set(email, {
-      code,
+      verificationCode,
       email,
       expiresAt,
       isVerified: false,
     });
 
     console.log(
-      `📧 [MSW] 인증 코드 발송: ${email} → ${code} (만료: ${new Date(expiresAt).toLocaleTimeString()})`
+      `📧 [MSW] 인증 코드 발송: ${email} → ${verificationCode} (만료: ${new Date(expiresAt).toLocaleTimeString()})`
     );
 
     return HttpResponse.json(
@@ -198,11 +194,11 @@ export const authHandlers = [
   http.post(`${BASE_URL}/auth/email-confirm`, async ({ request }) => {
     await new Promise((resolve) => setTimeout(resolve, 300));
 
-    const body = (await request.json()) as { email: string; code: string };
-    const { email, code } = body;
+    const body = (await request.json()) as { email: string; verificationCode: string };
+    const { email, verificationCode } = body;
 
     // 1. 유효성 검사
-    if (!email || !code) {
+    if (!email || !verificationCode) {
       return HttpResponse.json({ message: '이메일과 인증번호를 입력해주세요.' }, { status: 400 });
     }
 
@@ -222,7 +218,7 @@ export const authHandlers = [
     }
 
     // 4. 인증 코드 일치 확인
-    if (storedCode.code !== code) {
+    if (storedCode.verificationCode !== verificationCode) {
       return HttpResponse.json({ message: '인증번호가 일치하지 않습니다.' }, { status: 400 });
     }
 
@@ -248,13 +244,13 @@ export const authHandlers = [
 
   /**
    * 회원가입
-   * POST /auth/signup (또는 /api/auth/signup)
+   * POST /auth/signup
    */
   http.post<never, SignupRequest>(`${BASE_URL}/auth/signup`, async ({ request }) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     const body = await request.json();
-    const { email, password, username } = body;
+    const { email, password, username, address } = body;
 
     // 1. 필수 항목 검사
     if (!email || !password || !username) {
@@ -287,7 +283,7 @@ export const authHandlers = [
       email,
       password,
       username,
-      address: {
+      address: address || {
         country: 'South Korea',
         region: 'Seoul',
       },
@@ -297,29 +293,10 @@ export const authHandlers = [
     // 7. 인증 코드 삭제 (회원가입 완료 후)
     verificationCodes.delete(email);
 
-    // 8. 토큰 생성
-    const accessToken = generateToken(email, ACCESS_TOKEN_EXPIRY);
-    const refreshToken = generateToken(email, REFRESH_TOKEN_EXPIRY);
-
-    const refreshPayload = verifyToken(refreshToken);
-    if (refreshPayload) {
-      refreshTokens.set(refreshToken, refreshPayload);
-    }
-
     console.log(`🎉 [MSW] 회원가입 성공: ${email} (${username})`);
 
-    // 9. 응답
-    const response: SignupResponse = {
-      accessToken,
-      user: createUserResponse(newUser),
-    };
-
-    return HttpResponse.json(response, {
-      status: 201,
-      headers: {
-        'Set-Cookie': `refreshToken=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${REFRESH_TOKEN_EXPIRY / 1000}; Path=/`,
-      },
-    });
+    // 8. 응답 (토큰 없이 message만)
+    return HttpResponse.json({ message: '회원가입이 성공적으로 완료되었습니다.' }, { status: 200 });
   }),
 
   /**
@@ -465,7 +442,7 @@ export const mswDevtools = {
     console.table(
       Array.from(verificationCodes.entries()).map(([email, data]) => ({
         email,
-        code: data.code,
+        code: data.verificationCode,
         expiresAt: new Date(data.expiresAt).toLocaleTimeString(),
         isVerified: data.isVerified,
         expired: isCodeExpired(data.expiresAt),
@@ -483,9 +460,9 @@ export const mswDevtools = {
       return null;
     }
     console.log(
-      `📧 ${email}: ${code.code} (만료: ${isCodeExpired(code.expiresAt) ? 'YES' : 'NO'})`
+      `📧 ${email}: ${code.verificationCode} (만료: ${isCodeExpired(code.expiresAt) ? 'YES' : 'NO'})`
     );
-    return code.code;
+    return code.verificationCode;
   },
 
   /**
@@ -504,14 +481,14 @@ export const mswDevtools = {
   /**
    * 인증 코드 강제 설정
    */
-  setCode: (email: string, code: string) => {
+  setCode: (email: string, verificationCode: string) => {
     verificationCodes.set(email, {
-      code,
+      verificationCode,
       email,
       expiresAt: Date.now() + EMAIL_CODE_EXPIRY,
       isVerified: false,
     });
-    console.log(`✅ 인증 코드 설정: ${email} → ${code}`);
+    console.log(`✅ 인증 코드 설정: ${email} → ${verificationCode}`);
   },
 
   /**

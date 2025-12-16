@@ -8,16 +8,19 @@ export const worker = setupWorker(...authHandlers);
 
 // 개발 환경에서만 MSW 시작
 export const startMockServer = async () => {
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+  // localhost가 아니면 MSW 비활성화 && baseURL?.includes('localhost'
   if (import.meta.env.DEV) {
     await worker.start({
-      onUnhandledRequest: 'bypass', // 핸들러가 없는 요청은 실제 API로 전달
+      onUnhandledRequest: 'bypass',
       serviceWorker: {
         url: '/mockServiceWorker.js',
       },
     });
     console.log('🔶 MSW Mock Server started');
-
-    // 디버깅 유틸리티 노출
     exposeUtilsToWindow(users, refreshTokens);
+  } else {
+    console.log('🌐 Real API Mode:', baseURL);
   }
 };

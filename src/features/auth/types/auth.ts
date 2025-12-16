@@ -29,14 +29,17 @@ export type SignupRequest = {
   username: string;
   email: string;
   password: string;
-  // Todo : address
+  address: {
+    country: string;
+    region: string;
+    street?: string;
+  };
   verificationToken: string;
 };
 
 // 회원가입 api 응답
 export type SignupResponse = {
-  accessToken: string;
-  user: User;
+  message: string;
 };
 
 export type AuthContextValue = {
