@@ -10,7 +10,7 @@
     "typescript",
     "typescriptreact"
   ],
-  
+
   // ============================================
   // 저장 시 자동 수정 (핵심!)
   // - ESLint로 코드 품질 자동 수정
@@ -20,7 +20,7 @@
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
-  
+
   // ============================================
   // Prettier 설정
   // - 저장 시 자동 포맷팅
@@ -28,7 +28,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
-  
+
   // 파일 타입별 포맷터 지정
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -54,7 +54,7 @@
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  
+
   // ============================================
   // TypeScript 설정
   // - 프로젝트의 TypeScript 버전 사용
@@ -63,7 +63,7 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.importModuleSpecifier": "relative",
   "typescript.updateImportsOnFileMove.enabled": "always",
-  
+
   // ============================================
   // 에디터 설정
   // ============================================
@@ -74,7 +74,7 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": true,
   "editor.suggestSelection": "first",
-  
+
   // ============================================
   // 파일 설정
   // - 줄바꿈 통일 (LF)
@@ -86,7 +86,7 @@
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
   "files.trimFinalNewlines": true,
-  
+
   // 제외 파일
   "files.exclude": {
     "**/.git": true,
@@ -96,7 +96,7 @@
     "**/build": true,
     "**/.next": true
   },
-  
+
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
@@ -105,14 +105,14 @@
     "**/coverage": true,
     "**/pnpm-lock.yaml": true
   },
-  
+
   // ============================================
   // Git 설정
   // ============================================
   "git.autofetch": true,
   "git.confirmSync": false,
   "git.enableSmartCommit": true,
-  
+
   // ============================================
   // 기타 유용한 설정
   // ============================================
@@ -124,7 +124,7 @@
     "typescript": "typescriptreact"
   },
   "javascript.updateImportsOnFileMove.enabled": "always",
-  
+
   // Tailwind CSS IntelliSense
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],

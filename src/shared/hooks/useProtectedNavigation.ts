@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useAuthContext } from '@/features/auth/hooks/useAuthContext';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 import { useModalContext } from './useModalContext';
 
 export const useProtectedNavigation = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated } = useAuth();
   const { loginModal } = useModalContext();
 
   const goTo = (path: string) => {

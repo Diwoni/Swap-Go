@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 
 import { useModalContext } from '@/shared/hooks';
 
-import { useLoginMutation } from '../hooks/useLoginMutation';
-import { LoginFormData, loginSchema } from '../types/login.schema';
+import { LoginFormData, loginSchema } from '../../types';
+import { useLoginMutation } from './useLoginMutation';
 
 export const useLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,32 +26,25 @@ export const useLoginForm = () => {
   };
 
   const submitLogin = (data: LoginFormData) => {
-    console.log(data);
+    // console.log(data);
     login(data, {
       onSuccess: () => {
         loginModal.closeModal();
       },
     });
   };
-  // void 로 명시적 처리 (lint)
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    void handleSubmit(submitLogin);
+    void handleSubmit(submitLogin)(e);
   };
 
   return {
-    // Form state
     register,
     errors,
-
-    // Password visibility
     showPassword,
     toggleShowPassword,
-
-    // Loading state
     isPending,
-
-    // Submit handler
-    onSubmit,
+    onSubmit, // 이미 이벤트 핸들러 함수
   };
 };

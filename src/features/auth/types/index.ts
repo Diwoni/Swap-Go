@@ -1,2 +1,3 @@
 export * from './auth';
-export * from './login.schema';
+export * from './auth.schema';
+export * from './email';

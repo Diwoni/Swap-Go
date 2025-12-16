@@ -17,16 +17,18 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:ci": "vitest run --coverage --passWithNoTests",
-    "pre-pr": "pnpm run type-check && pnpm run lint && pnpm run format:check && pnpm run test:ci",
+    "pre-pr": "pnpm run type-check && pnpm run lint && pnpm run format:check && pnpm run test:ci && pnpm run build",
     "prepare": "husky install"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@react-google-maps/api": "^2.20.7",
     "@tanstack/react-query": "^5.90.5",
     "axios": "^1.12.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.65.0",
+    "react-hot-toast": "^2.6.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.9.4",
     "zod": "^4.1.12"
@@ -34,7 +36,7 @@
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
-    "@tailwindcss/vite": "^4.1.14",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^22.14.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
@@ -53,7 +55,6 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-unused-imports": "^4.3.0",
-    "globals": "^15.15.0",
     "husky": "^8.0.3",
     "jsdom": "^25.0.1",
     "lint-staged": "^15.5.2",
@@ -72,6 +73,11 @@
     ],
     "*.{json,css,scss,md}": [
       "prettier --write"
+    ]
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
     ]
   }
 }

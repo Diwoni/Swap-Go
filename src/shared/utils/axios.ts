@@ -15,7 +15,7 @@ const createInstance = (config?: AxiosRequestConfig): AxiosInstance => {
     baseURL: API_CONFIG.BASE_URL,
     timeout: API_CONFIG.TIMEOUT,
     headers: {
-      Accept: 'application.json',
+      Accept: 'application/json',
       'Content-Type': 'application/json',
     },
     withCredentials: true,
@@ -52,11 +52,6 @@ type QueueItem = {
   reject: (reason?: unknown) => void;
 };
 
-type RefreshResponse = {
-  refreshToken: string | null;
-  accessToken: string | null;
-};
-
 let isRefreshing = false;
 const failedQueue: QueueItem[] = [];
 
@@ -70,6 +65,11 @@ const processQueue = (error: Error | null, token: string | null = null): void =>
   });
 
   failedQueue.length = 0;
+};
+
+type RefreshResponse = {
+  refreshToken: string | null;
+  accessToken: string | null;
 };
 
 api.interceptors.response.use(
@@ -113,9 +113,6 @@ api.interceptors.response.use(
         processQueue(refreshError as Error, null);
         tokenManager.clearAccessToken();
 
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
-        }
         return Promise.reject(
           refreshError instanceof Error
             ? refreshError

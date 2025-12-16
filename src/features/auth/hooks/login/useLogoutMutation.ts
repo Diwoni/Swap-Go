@@ -3,9 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
 import { handleAPIError } from '@/shared/utils/errorHandler';
 
-import { authService } from '../api/auth.api';
+import { authService } from '../../api/auth.api';
 
-export const useLogout = () => {
+export const useLogoutMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

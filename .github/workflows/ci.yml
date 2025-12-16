@@ -166,6 +166,8 @@ jobs:
         run: pnpm run build
         env:
           NODE_ENV: production
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
 
       # 빌드 결과물 크기 체크 (선택사항)
       # - 번들 크기가 임계값 초과 시 경고
