@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { formatTime } from '@/shared/utils/formatTime';
 
 import { useModal } from '../../../../shared/hooks';
+import { AddressData } from '../../../../shared/utils/mapUtils';
 import { LocationPickerModal } from '../../../map/ui/LocationPickerModal';
 import { useEmailVerification, usePasswordMatch, useSignupSubmit } from '../../hooks';
 import { SignupFormData, signupSchema } from '../../types';
@@ -17,6 +18,7 @@ export const SignupForm = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = form;
 
@@ -37,6 +39,13 @@ export const SignupForm = () => {
 
   const { passwordMatchError, validatePasswordMatch } = usePasswordMatch();
   const { submit } = useSignupSubmit();
+
+  const handleLocationSelect = (data: AddressData) => {
+    // 폼 필드에 값 주입 (shouldValidate: true로 설정하면 즉시 유효성 검사 통과됨)
+    setValue('address.country', data.country, { shouldValidate: true });
+    setValue('address.region', data.region, { shouldValidate: true });
+    setValue('address.street', data.street, { shouldValidate: true });
+  };
 
   // 회원가입 폼 제출
   const onSubmit = (data: SignupFormData) => {
@@ -139,26 +148,25 @@ export const SignupForm = () => {
         />
       </div>
 
-      {/* 위치 선택 모달 트리거 */}
-      <div className="flex flex-col mt-3">
-        <label htmlFor="location" className="block text-lg font-semibold text-gray-700 mb-2">
-          위치 선택
-        </label>
-        <button
-          type="button"
-          onClick={mapModal.openModal}
-          className="btn btn-secondary btn-sm w-[150px]"
-        >
-          위치 설정하기
-        </button>
-      </div>
-      <LocationPickerModal isOpen={mapModal.isModalOpen} onClose={mapModal.closeModal} />
+      {/* 3. 모달 연결: onSelectLocation 핸들러 전달 */}
+      <LocationPickerModal
+        isOpen={mapModal.isModalOpen}
+        onClose={mapModal.closeModal}
+        onSelectLocation={handleLocationSelect}
+      />
 
       {/* 주소: country / region / street (street 선택사항) */}
       <div className="flex flex-col mt-3">
         <label htmlFor="address" className="block text-lg font-semibold text-gray-700 mb-2">
           주소
         </label>
+        <button
+          type="button"
+          onClick={mapModal.openModal}
+          className="btn btn-secondary btn-sm w-[150px]"
+        >
+          지도에서 찾기
+        </button>
         <div className="flex flex-col gap-2">
           <div>
             <label htmlFor="address.country" className="block text-sm font-medium text-gray-700">
@@ -169,6 +177,7 @@ export const SignupForm = () => {
               className="input"
               {...register('address.country')}
               placeholder="국가 (예: South Korea)"
+              readOnly
             />
             {errors.address?.country?.message && (
               <p className="mt-1 text-sm text-red-600">{errors.address.country?.message}</p>
@@ -184,6 +193,7 @@ export const SignupForm = () => {
               className="input"
               {...register('address.region')}
               placeholder="지역 (예: Seoul)"
+              readOnly
             />
             {errors.address?.region?.message && (
               <p className="mt-1 text-sm text-red-600">{errors.address.region?.message}</p>
@@ -199,6 +209,7 @@ export const SignupForm = () => {
               className="input"
               {...register('address.street')}
               placeholder="도로명/건물명 등 (선택)"
+              readOnly
             />
             {errors.address?.street?.message && (
               <p className="mt-1 text-sm text-red-600">{errors.address.street?.message}</p>
