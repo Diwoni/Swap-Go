@@ -4,11 +4,14 @@ import toast from 'react-hot-toast';
 
 import { formatTime } from '@/shared/utils/formatTime';
 
+import { useModal } from '../../../../shared/hooks';
+import { LocationPickerModal } from '../../../map/ui/LocationPickerModal';
 import { useEmailVerification, usePasswordMatch, useSignupSubmit } from '../../hooks';
 import { SignupFormData, signupSchema } from '../../types';
 
 export const SignupForm = () => {
   const form = useForm<SignupFormData>({ resolver: zodResolver(signupSchema), mode: 'onBlur' });
+  const mapModal = useModal();
 
   const {
     register,
@@ -135,6 +138,21 @@ export const SignupForm = () => {
           placeholder="이름을 입력해주세요"
         />
       </div>
+
+      {/* 위치 선택 모달 트리거 */}
+      <div className="flex flex-col mt-3">
+        <label htmlFor="location" className="block text-lg font-semibold text-gray-700 mb-2">
+          위치 선택
+        </label>
+        <button
+          type="button"
+          onClick={mapModal.openModal}
+          className="btn btn-secondary btn-sm w-[150px]"
+        >
+          위치 설정하기
+        </button>
+      </div>
+      <LocationPickerModal isOpen={mapModal.isModalOpen} onClose={mapModal.closeModal} />
 
       {/* 주소: country / region / street (street 선택사항) */}
       <div className="flex flex-col mt-3">
