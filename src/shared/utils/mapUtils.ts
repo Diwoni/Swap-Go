@@ -24,6 +24,9 @@ export const extractAddressComponents = (results: google.maps.GeocoderResult[]):
   let country = '';
   let region = '';
   let street = '';
+  let locality = '';
+  let sublocality = '';
+  let adminLevel1 = '';
 
   if (!components) {
     toast.error('주소 정보를 가져오지 못했습니다. 다시 시도해주세요.');
@@ -35,12 +38,21 @@ export const extractAddressComponents = (results: google.maps.GeocoderResult[]):
     if (types.includes('country')) {
       country = component.long_name;
     }
-    if (types.includes('administrative_area_level_1')) {
-      region = component.long_name;
-    }
     if (types.includes('route') || types.includes('street_address')) {
       street = component.long_name;
     }
+    // 행정 구역별 분리 저장
+    if (types.includes('locality')) {
+      locality = component.long_name;
+    }
+    if (types.includes('sublocality') || types.includes('sublocality_level_1')) {
+      sublocality = component.long_name;
+    }
+    if (types.includes('administrative_area_level_1')) {
+      adminLevel1 = component.long_name;
+    }
+
+    region = locality || sublocality || adminLevel1;
   });
 
   return {

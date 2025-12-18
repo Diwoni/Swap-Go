@@ -209,7 +209,6 @@ export const SignupForm = () => {
               className="input"
               {...register('address.street')}
               placeholder="도로명/건물명 등 (선택)"
-              readOnly
             />
             {errors.address?.street?.message && (
               <p className="mt-1 text-sm text-red-600">{errors.address.street?.message}</p>
