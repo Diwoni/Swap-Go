@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { useAuth, useLogoutMutation } from '@/features/auth/hooks';
 
+import { UnifiedSearchBar } from '../../widgets/SearchBar/ui/UnifiedSearchBar';
 import { useModalContext } from '../hooks';
 import { ProtectedNavButton } from './ProtectedNavButton';
 
@@ -54,6 +55,7 @@ const Header: React.FC = () => {
             </ProtectedNavButton>
           </div>
         </div>
+        <UnifiedSearchBar />
       </header>
     </>
   );
