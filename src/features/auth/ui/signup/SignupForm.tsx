@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { RiMapPin2Fill } from 'react-icons/ri';
 
 import { formatTime } from '@/shared/utils/formatTime';
 
@@ -157,16 +158,19 @@ export const SignupForm = () => {
 
       {/* 주소: country / region / street (street 선택사항) */}
       <div className="flex flex-col mt-3">
-        <label htmlFor="address" className="block text-lg font-semibold text-gray-700 mb-2">
-          주소
-        </label>
-        <button
-          type="button"
-          onClick={mapModal.openModal}
-          className="btn btn-secondary btn-sm w-[150px]"
-        >
-          지도에서 찾기
-        </button>
+        <div className="flex items-center justify-between">
+          <label htmlFor="address" className="block text-lg font-semibold text-gray-700 mb-2">
+            주소
+          </label>
+          <button
+            type="button"
+            onClick={mapModal.openModal}
+            className="btn btn-secondary btn-sm w-[150px] flex items-center gap-2 text-sm"
+          >
+            <RiMapPin2Fill color="#3b82f6" />
+            지도에서 찾기
+          </button>
+        </div>
         <div className="flex flex-col gap-2">
           <div>
             <label htmlFor="address.country" className="block text-sm font-medium text-gray-700">

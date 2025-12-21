@@ -1,6 +1,7 @@
 import { Autocomplete, GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import { RiMapPin2Fill } from 'react-icons/ri';
 
 import { Modal } from '../../../shared/ui';
 import { AddressData, extractAddressComponents } from '../../../shared/utils/mapUtils';
@@ -125,7 +126,9 @@ export const LocationPickerModal = ({
           options={{ disableDefaultUI: true, zoomControl: true }}
         >
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none pb-8">
-            <span className="text-4xl filter drop-shadow-md">📍</span>
+            <span className="text-4xl filter drop-shadow-md">
+              <RiMapPin2Fill color="#3b82f6" />
+            </span>
           </div>
         </GoogleMap>
       </div>
