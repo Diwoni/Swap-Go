@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
-import { BiCurrentLocation, BiMap } from 'react-icons/bi';
+import { useEffect, useRef, useState } from 'react';
+import { BiMap, BiTime } from 'react-icons/bi';
+import { IoMdCloseCircle } from 'react-icons/io';
 import usePlacesAutocomplete from 'use-places-autocomplete';
 
 import { DropdownItem } from './DropdownItem';
@@ -9,12 +10,6 @@ type Props = {
   isLoaded: boolean;
   onSelect: (address: string) => void;
 };
-
-const POPULAR_LOCATIONS = [
-  { id: 'p1', main: 'Warsaw', sub: 'Poland' },
-  { id: 'p2', main: 'Ulm', sub: 'Germany' },
-  { id: 'p3', main: 'Berlin', sub: 'Germany' },
-];
 
 export const LocationPart = ({ isLoaded, onSelect }: Props) => {
   const {
@@ -32,6 +27,24 @@ export const LocationPart = ({ isLoaded, onSelect }: Props) => {
     debounce: 300,
   });
 
+  const [recentLocations, setRecentLocations] = useState<string[]>([]);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('recent_locations');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setRecentLocations(parsed);
+        }
+      } catch (error) {
+        console.error('최근 검색어를 불러오는 도중 오류가 발생했습니다. :', error);
+      }
+    }
+  }, []);
+
   // 스크립트 로드 상태가 변할 때 훅 수동 초기화 (안전장치)
   useEffect(() => {
     if (isLoaded && !ready) {
@@ -45,25 +58,48 @@ export const LocationPart = ({ isLoaded, onSelect }: Props) => {
     onSelect(description);
   };
 
-  // 2. 드롭다운에 무엇을 보여줄지 결정하는 로직
+  useEffect(() => {
+    if (ready && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [ready]);
+
+  const clearInput = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setValue('', false);
+    clearSuggestions();
+    onSelect('');
+    inputRef.current?.focus();
+  };
+
   const renderDropdownContent = () => {
+    // A. 입력값이 없을 때 (초기 상태)
     if (value === '') {
+      // A-1. 최근 검색 기록이 없을 경우
+      if (recentLocations.length === 0) {
+        return (
+          <div className="py-6 text-center text-gray-400 text-sm">최근 검색한 지역이 없습니다.</div>
+        );
+      }
+
+      // A-2. 최근 검색 기록이 있을 경우
       return (
         <>
-          {POPULAR_LOCATIONS.map((loc) => (
+          {recentLocations.map((loc, index) => (
             <DropdownItem
-              key={loc.id}
-              title={loc.main}
-              description={loc.sub}
-              icon={<BiCurrentLocation className="text-gray-400" />} // 아이콘 예시
-              onClick={() => handleSelect(loc.main)}
+              // key는 유니크해야 하므로 index와 조합
+              key={`${loc}-${index}`}
+              title={loc}
+              description="최근 검색" // 부가 설명
+              icon={<BiTime className="text-gray-400" />} // 시계 아이콘 사용
+              onClick={() => handleSelect(loc)}
             />
           ))}
         </>
       );
     }
 
-    // B. 입력값이 있고 검색 결과가 성공적일 때 -> 'Google 검색 결과'
+    // B. 입력값이 있고 구글 검색 결과가 있을 때
     if (status === 'OK') {
       return data.map(({ place_id, structured_formatting }) => (
         <DropdownItem
@@ -87,13 +123,25 @@ export const LocationPart = ({ isLoaded, onSelect }: Props) => {
   return (
     <>
       {/* 입력창 */}
-      <input
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        disabled={!ready} // 스크립트 로드 전에는 입력 방지
-        placeholder={ready ? '지역 검색' : '구글 맵 준비중...'}
-        className="w-full text-[16px] text-gray-900 outline-none bg-transparent placeholder-gray-400"
-      />
+      <div className="relative w-full flex items-center">
+        <input
+          ref={inputRef}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          disabled={!ready}
+          placeholder={ready ? '위치 검색' : '위치 서비스 로딩 중...'}
+          className="w-full text-[16px] text-gray-900 outline-none bg-transparent placeholder-gray-400 pr-8"
+        />
+
+        {value && (
+          <button
+            onClick={clearInput}
+            className="absolute right-0 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <IoMdCloseCircle size={20} />
+          </button>
+        )}
+      </div>
 
       {/* 드롭다운: ready 상태라면(스크립트 로드 완료) 무조건 렌더링.
          내용물만 위 renderDropdownContent()로 분기 처리

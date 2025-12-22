@@ -1,11 +1,14 @@
+import { IoMdCloseCircle } from 'react-icons/io';
+
 type SearchSectionProps = {
   label: string;
   value: string | null;
   placeholder: string;
   isActive: boolean;
   onActivate: () => void;
-  renderInput?: () => React.ReactNode;
+  renderInput?: React.ReactNode;
   children?: React.ReactNode;
+  onClear?: () => void;
 };
 
 export const SearchSection = ({
@@ -16,6 +19,7 @@ export const SearchSection = ({
   onActivate,
   renderInput,
   children,
+  onClear,
 }: SearchSectionProps) => {
   return (
     <div
@@ -29,14 +33,27 @@ export const SearchSection = ({
       <span className="text-sm pt-[10px]">{label}</span>
 
       {isActive && renderInput ? (
-        <div className="w-full">{renderInput()}</div>
+        <div className="w-full">{renderInput}</div>
       ) : (
-        /* 비활성 상태거나 Input이 없으면 텍스트만 보여줌 */
-        <span
-          className={`text-[16px] truncate ${value ? 'text-gray-900 font-medium' : 'text-gray-400'}`}
-        >
-          {value ?? placeholder}
-        </span>
+        <div className="flex items-center justify-between w-full h-[24px]">
+          <span
+            className={`text-[16px] truncate pr-2 ${value ? 'text-gray-900 font-medium' : 'text-gray-400'}`}
+          >
+            {value?.length ? value : placeholder}
+          </span>
+
+          {isActive && value && onClear && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onClear();
+              }}
+              className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+            >
+              <IoMdCloseCircle size={20} />
+            </button>
+          )}
+        </div>
       )}
 
       {/* 활성화 상태일 때 드롭다운(children) 노출 */}

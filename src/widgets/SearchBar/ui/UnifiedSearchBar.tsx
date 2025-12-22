@@ -2,6 +2,7 @@ import { useJsApiLoader } from '@react-google-maps/api';
 import { useEffect, useRef, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 
+import { saveSearchHistoryToLocalStorage } from '../../../shared/utils/saveSearchHistoryToLocalStorage';
 import { CategoryPart } from './CategoryPart';
 import { KeywordPart } from './KeywordPart';
 import { LocationPart } from './LocationPart';
@@ -42,6 +43,9 @@ export const UnifiedSearchBar = () => {
 
   // TODO : 검색 시 로컬 스토리지에 위치, 키워드 저장 (for 최근 검색어)
   const handleSearch = () => {
+    const { location, keyword } = searchData;
+    saveSearchHistoryToLocalStorage('recent_locations', location);
+    saveSearchHistoryToLocalStorage('recent_keywords', keyword);
     setActiveSection(null);
     // TODO : 페이지 이동 (검색 필터 적용된 이동)
   };
@@ -61,7 +65,7 @@ export const UnifiedSearchBar = () => {
           placeholder="위치 검색"
           isActive={activeSection === 'LOCATION'}
           onActivate={() => setActiveSection('LOCATION')}
-          renderInput={() =>
+          renderInput={
             isLoaded ? (
               <LocationPart
                 isLoaded={isLoaded}
@@ -85,6 +89,7 @@ export const UnifiedSearchBar = () => {
           placeholder="카테고리 설정"
           isActive={activeSection === 'CATEGORY'}
           onActivate={() => setActiveSection('CATEGORY')}
+          onClear={() => setSearchData({ ...searchData, category: '' })}
         >
           {/* 카테고리는 Input이 없으므로 children으로 드롭다운만 전달 */}
           <CategoryPart
@@ -104,13 +109,15 @@ export const UnifiedSearchBar = () => {
           placeholder="물품 직접 검색"
           isActive={activeSection === 'KEYWORD'}
           onActivate={() => setActiveSection('KEYWORD')}
-          renderInput={() => (
+          renderInput={
             <KeywordPart
               value={searchData.keyword}
-              onChange={(val) => setSearchData({ ...searchData, keyword: val })}
+              onChange={(val) => {
+                setSearchData({ ...searchData, keyword: val });
+              }}
               onSearch={handleSearch}
             />
-          )}
+          }
         />
 
         {/* 검색 버튼 */}

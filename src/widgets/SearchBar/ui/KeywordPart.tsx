@@ -1,11 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BiTime } from 'react-icons/bi';
+import { IoMdCloseCircle } from 'react-icons/io';
 
 import { DropdownItem } from '../ui/DropdownItem';
 import { DropdownWrapper } from '../ui/DropdownWrapper';
-
-// TODO : 실제로는 로컬 스토리지에서 가져와야 함.
-const MOCK_RECENT_SEARCHES = ['맥북 프로', '아이폰 15', '캠핑 의자'];
 
 type Props = {
   value: string;
@@ -14,21 +12,51 @@ type Props = {
 };
 
 export const KeywordPart = ({ value, onChange, onSearch }: Props) => {
-  const [recentSearches] = useState<string[]>(MOCK_RECENT_SEARCHES);
+  const [recentKeywords, setRecentKeywords] = useState<string[]>([]);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('recent_keywords');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setRecentKeywords(parsed);
+        }
+      } catch (error) {
+        console.error('최근 검색어를 불러오는 도중 오류가 발생했습니다. :', error);
+      }
+    }
+  }, []);
 
   return (
     <>
-      <input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && onSearch()}
-        placeholder="물품명 검색"
-        className="w-full text-[16px] text-gray-900 outline-none bg-transparent placeholder-gray-400"
-      />
+      {/* 2. Input을 감싸는 div 추가 (relative positioning) */}
+      <div className="relative w-full flex items-center">
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && onSearch()}
+          placeholder="물품 직접 검색"
+          className="w-full text-[16px] text-gray-900 outline-none bg-transparent placeholder-gray-400 pr-8"
+        />
+
+        {/* 4. 값이 있을 때만 X 버튼 표시 */}
+        {value && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onChange('');
+            }}
+            className="absolute right-0 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+          >
+            <IoMdCloseCircle size={20} />
+          </button>
+        )}
+      </div>
 
       <DropdownWrapper title="최근 검색어">
-        {recentSearches.length > 0 ? (
-          recentSearches.map((item) => (
+        {recentKeywords.length > 0 ? (
+          recentKeywords.map((item) => (
             <DropdownItem
               key={item}
               title={item}
