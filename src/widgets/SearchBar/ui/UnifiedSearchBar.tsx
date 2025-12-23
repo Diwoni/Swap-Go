@@ -51,7 +51,7 @@ export const UnifiedSearchBar = () => {
   };
 
   return (
-    <div className="w-full max-w-[800px] mx-auto relative pt-10" ref={containerRef}>
+    <div className="w-full max-w-[800px] mx-auto relative mb-5" ref={containerRef}>
       {/* 메인 컨테이너 */}
       <div
         className={`flex items-center bg-white border border-black-200 rounded-3xl h-[66px] shadow-sm transition-all
