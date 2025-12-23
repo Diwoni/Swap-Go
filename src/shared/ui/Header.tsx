@@ -15,7 +15,6 @@ const Header: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const { mutate: logout } = useLogoutMutation();
 
-  // 모바일 메뉴 토글 함수
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (

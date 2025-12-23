@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
-import { handleAPIError } from '@/shared/utils/errorHandler';
 
+import { handleAPIError } from '../../../../shared/utils/errorHandler';
 import { authService } from '../../api/auth.api';
 import { LoginResponse } from '../../types/auth';
 
@@ -14,10 +15,12 @@ export const useLoginMutation = () => {
     onSuccess: (data: LoginResponse) => {
       tokenManager.setAccessToken(data.accessToken);
       queryClient.setQueryData(['auth', 'user'], data.user);
+      toast.success('로그인에 성공하였습니다.');
     },
     onError: (error) => {
       const message = handleAPIError(error);
-      console.error('로그인에 실패하였습니다 :', message);
+      toast.error('로그인에 실패하였습니다.');
+      console.error('에러 메세지 : ' + message);
     },
   });
 };

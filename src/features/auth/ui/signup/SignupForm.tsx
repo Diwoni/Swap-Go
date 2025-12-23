@@ -60,7 +60,7 @@ export const SignupForm = () => {
     <form onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
       {/* 이메일 입력 */}
       <div className="mt-8 flex flex-col">
-        <label htmlFor="email" className="block text-lg font-semibold text-gray-700 mb-2">
+        <label htmlFor="email" className="block text-base font-bold text-black-200 mb-2">
           이메일
         </label>
         <div className="flex w-[430px] justify-between">
@@ -115,7 +115,7 @@ export const SignupForm = () => {
       )}
       {/* 비밀번호 */}
       <div className="flex flex-col mt-3">
-        <label htmlFor="password" className="block text-lg font-semibold text-gray-700 mb-2">
+        <label htmlFor="password" className="block text-base font-bold text-black-200 mb-2">
           비밀번호
         </label>
         <input
@@ -137,7 +137,7 @@ export const SignupForm = () => {
       </div>
       {/* 이름 */}
       <div className="flex flex-col mt-3">
-        <label htmlFor="username" className="block text-lg font-semibold text-gray-700 mb-2">
+        <label htmlFor="username" className="block text-base font-bold text-black-200 mb-2">
           이름
         </label>
         <input
@@ -159,26 +159,26 @@ export const SignupForm = () => {
       {/* 주소: country / region / street (street 선택사항) */}
       <div className="flex flex-col mt-3">
         <div className="flex items-center justify-between">
-          <label htmlFor="address" className="block text-lg font-semibold text-gray-700 mb-2">
+          <label htmlFor="address" className="block text-base font-bold text-black-200 mb-2">
             주소
           </label>
           <button
             type="button"
             onClick={mapModal.openModal}
-            className="btn btn-secondary btn-sm w-[150px] flex items-center gap-2 text-sm"
+            className="btn bg-primary-50 hover:bg-primary-100 w-[150px] h-[40px] flex items-center gap-1 text-sm"
           >
-            <RiMapPin2Fill color="#3b82f6" />
+            <RiMapPin2Fill color="#778873" />
             지도에서 찾기
           </button>
         </div>
         <div className="flex flex-col gap-2">
           <div>
-            <label htmlFor="address.country" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="address.country" className="block text-sm font-medium text-black-150">
               국가
             </label>
             <input
               id="address.country"
-              className="input"
+              className="input bg-black-50"
               {...register('address.country')}
               placeholder="국가 (예: South Korea)"
               readOnly
@@ -194,7 +194,7 @@ export const SignupForm = () => {
             </label>
             <input
               id="address.region"
-              className="input"
+              className="input bg-black-50"
               {...register('address.region')}
               placeholder="지역 (예: Seoul)"
               readOnly
@@ -225,12 +225,6 @@ export const SignupForm = () => {
       <div className="mt-4 flex flex-col gap-2">
         <button type="submit" className="btn btn-primary btn-lg">
           회원가입
-        </button>
-        <button
-          type="button"
-          className="btn btn-lg btn-primary text-black-200 bg-kakao hover:bg-[#FDD835]"
-        >
-          <span>💬 카카오톡으로 로그인</span>
         </button>
       </div>
     </form>
