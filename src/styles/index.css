@@ -1,87 +1,60 @@
-@import 'tailwindcss';
-/* tailwind import + 글로벌 스타일 정의 */
-/* @layer base 글로벌 스타일 import */
-@import './base.css';
-
-/* 필요하면 컴포넌트 레이어, 유틸리티 레이어 import */
 @import './components.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-Thin.woff') format('woff');
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Pretendard ExtraLight */
-@font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-ExtraLight.woff') format('woff');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Pretendard Light */
-@font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Pretendard Regular */
-@font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-Regular.woff') format('woff');
+  font-family: 'Maplestory';
+  src: url('/fonts/Maplestory/MaplestoryLight.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* Pretendard Medium */
 @font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-Medium.woff') format('woff');
-  font-weight: 500;
+  font-family: 'Maplestory';
+  src: url('/fonts/Maplestory/MaplestoryBold.ttf') format('truetype');
+  font-weight: 700 800 900;
   font-style: normal;
   font-display: swap;
 }
 
-/* Pretendard SemiBold */
 @font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-SemiBold.woff') format('woff');
-  font-weight: 600;
+  font-family: 'Omu';
+  src: url('/fonts/Omu/Omu.ttf') format('truetype');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* Pretendard Bold */
 @font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-Bold.woff') format('woff');
-  font-weight: 700;
+  font-family: 'IMHyemin';
+  src: url('/fonts/IMHyemin/IM_Hyemin-Regular.otf') format('opentype');
+  font-weight: 400, 700;
   font-style: normal;
   font-display: swap;
 }
 
-/* Pretendard ExtraBold */
 @font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-ExtraBold.woff') format('woff');
-  font-weight: 800;
+  font-family: 'Yangjin';
+  src: url('/fonts/Yangjin/Yangjin.otf') format('opentype');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
-/* Pretendard Black */
-@font-face {
-  font-family: 'Pretendard';
-  src: url('/fonts/pretendard/Pretendard-Black.woff') format('woff');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0; /* 시작할 때 안 보이게 설정 */
+  animation: fadeInUp 0.8s ease-out forwards;
 }

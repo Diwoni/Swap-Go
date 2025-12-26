@@ -1,15 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 
 export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      maxWidth: {
+        container: '1400px',
+      },
       fontFamily: {
-        sans: ['GMarketSans', 'sans-serif'],
+        sans: ['IMHyemin', 'sans-serif'],
+        maplestory: ['Maplestory', 'sans-serif'],
+        omu: ['Omu', 'sans-serif'],
+        yangjin: ['Yangjin'],
       },
       colors: {
         primary: {
-          50: '#BABFFF',
-          100: '#6B76FF',
+          50: '#F1F3E0',
+          100: '#D2DCB6',
+          150: '#A1BC98',
+          200: '#778873',
         },
         secondary: {
           50: '#C7BEFF',
@@ -18,6 +27,7 @@ export default {
         black: {
           50: '#D9D9D9',
           100: '#A1A1A1',
+          150: '#717171',
           200: '#272643',
         },
         kakao: '#FEE500',
