@@ -10,6 +10,7 @@ export const LoginForm = () => {
     toggleShowPassword,
     isPending,
     onSubmit,
+    clickSignupButton,
   } = useLoginForm();
 
   return (
@@ -99,17 +100,12 @@ export const LoginForm = () => {
           {isPending ? '로그인 중...' : '로그인'}
         </button>
 
-        {/* 카카오톡으로 로그인 */}
+        {/* 회원가입 */}
         <button
           type="button"
-          className="btn btn-lg btn-primary text-black-200 bg-kakao hover:bg-[#FDD835]"
+          onClick={clickSignupButton}
+          className="btn btn-primary btn-lg bg-black-150 hover:bg-black-200"
         >
-          <span className="text-lg">💬</span>
-          카카오톡으로 로그인
-        </button>
-
-        {/* 회원가입 */}
-        <button type="button" className="btn btn-primary btn-lg bg-black-150 hover:bg-black-200">
           회원가입
         </button>
       </div>

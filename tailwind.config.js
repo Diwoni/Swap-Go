@@ -8,14 +8,17 @@ export default {
         container: '1400px',
       },
       fontFamily: {
-        sans: ['Omu', 'sans-serif'],
+        sans: ['IMHyemin', 'sans-serif'],
         maplestory: ['Maplestory', 'sans-serif'],
+        omu: ['Omu', 'sans-serif'],
+        yangjin: ['Yangjin'],
       },
       colors: {
         primary: {
-          50: '#BABFFF',
-          100: '#6B76FF',
-          200: '#4954DB',
+          50: '#F1F3E0',
+          100: '#D2DCB6',
+          150: '#A1BC98',
+          200: '#778873',
         },
         secondary: {
           50: '#C7BEFF',
@@ -24,8 +27,8 @@ export default {
         black: {
           50: '#D9D9D9',
           100: '#A1A1A1',
-          150: '#272643',
-          200: '#181829',
+          150: '#717171',
+          200: '#272643',
         },
         kakao: '#FEE500',
         error: '#FF0000',

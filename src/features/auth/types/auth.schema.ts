@@ -1,8 +1,16 @@
 import z from 'zod';
 
 export const loginSchema = z.object({
-  email: z.string().min(1, '이메일을 입력해주세요'),
-  password: z.string().min(1, '비밀번호를 입력해주세요'),
+  email: z.string().min(1, '이메일을 입력해주세요').email('올바른 이메일 형식이 아닙니다'),
+
+  password: z
+    .string()
+    .min(1, '비밀번호를 입력해주세요')
+    .min(8, '비밀번호는 8자 이상이어야 합니다.')
+    .regex(
+      /^[A-Za-z0-9`~!@#$%^&*()_+\-=[\]{};':"\\|,.<>?]+$/,
+      '영문, 숫자, 특수문자만 입력 가능합니다. (한글 불가)'
+    ),
 });
 
 export type LoginFormData = z.infer<typeof loginSchema>;
@@ -11,8 +19,8 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 export const addressSchema = z.object({
   // 클라이언트는 placeId 없이 country, region, street 만 보낼 수 있음.
   placeId: z.string().min(1).optional(),
-  country: z.string().min(1, '국가를 입력해주세요.').max(100),
-  region: z.string().min(1, '지역을 입력해주세요.').max(100),
+  country: z.string().min(1, '국가를 선택해주세요.').max(100),
+  region: z.string().min(1, '지역을 선택해주세요.').max(100),
   street: z.string().max(100).optional(),
 });
 

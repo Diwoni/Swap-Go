@@ -4,22 +4,6 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Tmoney';
-  src: url('/fonts/Tmoney/TmoneyRoundWindRegular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Tmoney';
-  src: url('/fonts/Tmoney/TmoneyRoundWindExtraBold.ttf') format('truetype');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'Maplestory';
   src: url('/fonts/Maplestory/MaplestoryLight.ttf') format('truetype');
   font-weight: 400;
@@ -41,4 +25,36 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+}
+
+@font-face {
+  font-family: 'IMHyemin';
+  src: url('/fonts/IMHyemin/IM_Hyemin-Regular.otf') format('opentype');
+  font-weight: 400, 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Yangjin';
+  src: url('/fonts/Yangjin/Yangjin.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  opacity: 0; /* 시작할 때 안 보이게 설정 */
+  animation: fadeInUp 0.8s ease-out forwards;
 }

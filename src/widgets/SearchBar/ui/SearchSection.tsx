@@ -30,7 +30,7 @@ export const SearchSection = ({
         onActivate();
       }}
     >
-      <span className="text-sm pt-[10px]">{label}</span>
+      <span className="text-sm font-bold pt-[10px]">{label}</span>
 
       {isActive && renderInput ? (
         <div className="w-full">{renderInput}</div>

@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import { useModalContext } from '@/shared/hooks';
 
@@ -11,6 +12,7 @@ export const useLoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { loginModal } = useModalContext();
   const { mutate: login, isPending } = useLoginMutation();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -39,12 +41,18 @@ export const useLoginForm = () => {
     void handleSubmit(submitLogin)(e);
   };
 
+  const clickSignupButton = () => {
+    navigate('/signup');
+    loginModal.closeModal();
+  };
+
   return {
     register,
     errors,
     showPassword,
     toggleShowPassword,
     isPending,
-    onSubmit, // 이미 이벤트 핸들러 함수
+    onSubmit,
+    clickSignupButton,
   };
 };
