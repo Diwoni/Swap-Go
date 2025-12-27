@@ -5,8 +5,6 @@ import toast from 'react-hot-toast';
 import { addFavorite, deleteFavorite } from '../api/favorites.api';
 
 export const useProductLike = (initialState: boolean, productId: number) => {
-  // const queryClient = useQueryClient();
-
   const [isLiked, setIsLiked] = useState(initialState);
 
   // 리스트가 새로고침되어 props 가 바뀌면 state 도 동기화
@@ -15,16 +13,9 @@ export const useProductLike = (initialState: boolean, productId: number) => {
   }, [initialState]);
 
   const { mutate } = useMutation({
-    mutationFn: async () => {
-      return isLiked ? await deleteFavorite(productId) : await addFavorite(productId);
+    mutationFn: async (isLikedState: boolean) => {
+      return isLikedState ? await deleteFavorite(productId) : await addFavorite(productId);
     },
-
-    // 굳이 리스트 서버 상태랑 동기화하고 재호출해야하나? UI만 업데이트해놓아도 괜찮을 듯
-    // onSuccess: () => {
-    //   if (queryKey) {
-    //     queryClient.invalidateQueries({ queryKey });
-    //   }
-    // },
 
     onError: () => {
       setIsLiked((prev) => !prev); // 다시 되돌리기
@@ -33,8 +24,12 @@ export const useProductLike = (initialState: boolean, productId: number) => {
   });
 
   const toggleLike = () => {
+    const currentStatus = isLiked;
+    // 낙관전 UI 업데이트
     setIsLiked((prev) => !prev);
-    mutate();
+
+    // API 요청 시에는 변하지 않은 클릭 시점의 상태를 전달
+    mutate(currentStatus);
   };
 
   return { isLiked, toggleLike };

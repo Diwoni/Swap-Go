@@ -28,7 +28,7 @@ export const ProductCard = ({
     <Link to={`/products/${id}`} className="block">
       <article className="w-[300px] h-[400px]">
         <div className="w-full h-[300px] border relative rounded-xl">
-          <img src={imageUrl} alt={title} className="w-full h-full object-cover" />
+          <img src={imageUrl} alt={title} className="w-full h-full object-cover rounded-lg" />
           <div className="absolute bottom-1 right-1">
             <LikeButton isLiked={isLiked} onToggle={toggleLike} />
           </div>

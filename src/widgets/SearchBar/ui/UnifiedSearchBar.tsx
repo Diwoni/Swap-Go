@@ -1,6 +1,7 @@
 import { useJsApiLoader } from '@react-google-maps/api';
 import { useEffect, useRef, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
+import { useNavigate } from 'react-router-dom';
 
 import { saveSearchHistoryToLocalStorage } from '../../../shared/utils/saveSearchHistoryToLocalStorage';
 import { CategoryPart } from './CategoryPart';
@@ -13,6 +14,8 @@ const libraries: ('places' | 'geometry' | 'drawing' | 'visualization')[] = ['pla
 type ActiveSection = 'LOCATION' | 'CATEGORY' | 'KEYWORD' | null;
 
 export const UnifiedSearchBar = () => {
+  const navigate = useNavigate();
+
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string,
@@ -21,7 +24,6 @@ export const UnifiedSearchBar = () => {
   });
   const [activeSection, setActiveSection] = useState<ActiveSection>(null);
 
-  // TODO : 넘겨줘야할 데이터들
   const [searchData, setSearchData] = useState({
     location: '',
     category: '',
@@ -41,13 +43,18 @@ export const UnifiedSearchBar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // TODO : 검색 시 로컬 스토리지에 위치, 키워드 저장 (for 최근 검색어)
   const handleSearch = () => {
-    const { location, keyword } = searchData;
-    saveSearchHistoryToLocalStorage('recent_locations', location);
-    saveSearchHistoryToLocalStorage('recent_keywords', keyword);
+    const { location, keyword, category } = searchData;
+
+    if (location) saveSearchHistoryToLocalStorage('recent_locations', location);
+    if (keyword) saveSearchHistoryToLocalStorage('recent_keywords', keyword);
+
+    const params = new URLSearchParams();
+    if (location) params.set('region', location);
+    if (category) params.set('category', category);
+    if (keyword) params.set('keyword', keyword);
     setActiveSection(null);
-    // TODO : 페이지 이동 (검색 필터 적용된 이동)
+    navigate(`/resale?${params.toString()}`);
   };
 
   return (
