@@ -4,11 +4,9 @@ import { useProductLike } from '../hooks/useProductLike';
 import { LikeButton } from './LikeButton';
 
 type ProductCardProps = {
-  type: string; // 중고거래인지 단기렌탈인지
   id: number;
   title: string;
   imageUrl: string;
-  deposit?: number;
   price: number;
   region: string;
   createdAt: string;
