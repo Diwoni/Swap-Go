@@ -1,5 +1,7 @@
 import { useResalePage } from '../features/product/hooks/useResalePage';
 import { ProductCard } from '../features/product/ui/ProductCard';
+import { ScrollToTopButton } from '../widgets/ui/ScrollToTopButton/ScrollToTopButton';
+import { FilterSidebar } from '../widgets/ui/Sidebar';
 
 const ResalePage = () => {
   const { products, region, isLoading, isFetchingNextPage, isEmpty, loadMoreRef } = useResalePage();
@@ -10,7 +12,7 @@ const ResalePage = () => {
 
   return (
     <div className="flex mt-[60px]">
-      <Sidebar />
+      <FilterSidebar />
 
       {/* 3. 데이터 유무에 따른 분기 처리 */}
       {isEmpty ? (
@@ -46,17 +48,15 @@ const ResalePage = () => {
           </div>
         </section>
       )}
+
+      <ScrollToTopButton />
     </div>
   );
 };
 
-const Sidebar = () => (
-  <section className="w-[280px] border shrink-0 hidden md:block">사이드 바</section>
-);
-
 const ResultHeader = ({ region }: { region?: string }) => (
   <div className="flex pb-4 text-lg font-medium">
-    <span className="text-blue-600 mr-1">{region ?? '전체'}</span>
+    <span className="text-primary-200 mr-1">{region ?? '전체'}</span>
     <span>에서의 검색결과</span>
   </div>
 );

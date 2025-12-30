@@ -10,12 +10,14 @@ export const useResalePage = () => {
   const region = searchParams.get('region') ?? undefined;
   const category = searchParams.get('category') ?? undefined;
   const keyword = searchParams.get('keyword') ?? undefined;
+  const priceRange = searchParams.get('priceRange') ?? undefined;
 
   // 데이터 패칭
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetResaleList({
     region,
     category,
     keyword,
+    priceRange,
   });
 
   // 무한 스크롤

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { CiMenuBurger, CiUser } from 'react-icons/ci'; // 햄버거 아이콘 추가
-import { IoMdClose } from 'react-icons/io'; // 닫기 아이콘 (설치 필요, 없으면 X 텍스트로 대체 가능)
+import { CiMenuBurger, CiUser } from 'react-icons/ci';
+import { IoMdClose } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 
 import { useAuth, useLogoutMutation } from '@/features/auth/hooks';
 
-import { UnifiedSearchBar } from '../../widgets/SearchBar/ui/UnifiedSearchBar';
+import { UnifiedSearchBar } from '../../widgets/ui/SearchBar';
 import { useModalContext } from '../hooks';
 import { ProtectedNavButton } from './ProtectedNavButton';
 
 const Header: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // 모바일 메뉴 상태
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { loginModal } = useModalContext();
   const { isAuthenticated } = useAuth();
   const { mutate: logout } = useLogoutMutation();
@@ -26,7 +26,6 @@ const Header: React.FC = () => {
             <Link to="/">Swap&Go</Link>
           </span>
 
-          {/* 2. 데스크탑용 중앙 메뉴 (lg 이상에서만 보임, 절대위치 중앙정렬) */}
           <nav className="hidden lg:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <ul className="flex gap-12 xl:gap-20 text-lg whitespace-nowrap font-medium text-gray-700">
               <li className="hover:text-black-200 hover:font-bold transition-colors">
@@ -41,7 +40,6 @@ const Header: React.FC = () => {
             </ul>
           </nav>
 
-          {/* 3. 데스크탑용 우측 버튼 (lg 이상에서만 보임) */}
           <div className="hidden lg:flex items-center gap-4 z-10">
             {isAuthenticated ? (
               <button
@@ -72,11 +70,10 @@ const Header: React.FC = () => {
             </ProtectedNavButton>
           </div>
 
-          {/* 4. 모바일/태블릿용 햄버거 버튼 (lg 미만에서만 보임) */}
+          {/* 4. lg 미만에서 보임 (햄버거 버튼) */}
           <div className="lg:hidden z-10">
             <button onClick={toggleMenu} className="p-2">
               {isMenuOpen ? (
-                // 닫기 아이콘이 없으면 <span>X</span> 로 대체 가능
                 <IoMdClose className="w-7 h-7 text-gray-700" />
               ) : (
                 <CiMenuBurger className="w-7 h-7 text-gray-700" />
@@ -85,7 +82,6 @@ const Header: React.FC = () => {
           </div>
         </div>
 
-        {/* 5. 모바일 메뉴 드롭다운 (isMenuOpen일 때만 렌더링) */}
         {isMenuOpen && (
           <div className="lg:hidden bg-white border-b shadow-md absolute w-full left-0 top-[80px] flex flex-col p-4 gap-4 text-center animate-in slide-in-from-top-2">
             <ul className="flex flex-col gap-4 text-lg font-medium text-gray-700">

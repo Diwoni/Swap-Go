@@ -4,10 +4,10 @@ import { BiSearch } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 
 import { saveSearchHistoryToLocalStorage } from '../../../shared/utils/saveSearchHistoryToLocalStorage';
-import { CategoryPart } from './CategoryPart';
-import { KeywordPart } from './KeywordPart';
-import { LocationPart } from './LocationPart';
-import { SearchSection } from './SearchSection';
+import { CategoryPart } from './components/CategoryPart';
+import { KeywordPart } from './components/KeywordPart';
+import { LocationPart } from './components/LocationPart';
+import { SearchSection } from './components/SearchSection';
 
 const libraries: ('places' | 'geometry' | 'drawing' | 'visualization')[] = ['places'];
 

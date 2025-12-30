@@ -19,7 +19,7 @@ export const resaleHandlers = [
     const isAvailable = params.get('isAvailable') === 'true';
     const dealType = params.get('dealType');
     const keyword = params.get('keyword');
-    const priceRange = params.get('priceRange'); // "1000-20000"
+    const priceRange = params.get('priceRange'); // "1000-20000" or "1000-" or "-5000"
     const cursor = Number(params.get('cursor')) || 0;
     const PAGE_SIZE = 10;
 
@@ -35,7 +35,6 @@ export const resaleHandlers = [
       }
 
       // 3) 거래 상태 (판매중만 보기: status === true)
-      // 만약 params의 isAvailable이 true면, item.status도 true여야 함
       if (isAvailable && item.status !== true) return false;
 
       // 4) 거래 유형 (SELL / BUY)
@@ -44,13 +43,17 @@ export const resaleHandlers = [
       // 5) 키워드 검색
       if (keyword && !item.title.includes(keyword)) return false;
 
-      // 6) 가격 범위
+      // ✨ 6) 가격 범위 로직 (요청하신 부분)
       if (priceRange) {
         const [minStr, maxStr] = priceRange.split('-');
-        const min = Number(minStr) || 0;
-        // maxStr이 없거나 빈 문자열이면 무한대 처리
+
+        // minStr이 없거나 숫자가 아니면 0으로 처리
+        const min = minStr ? Number(minStr) : 0;
+
+        // maxStr이 없거나(오픈 레인지) 숫자가 아니면 무한대(Infinity)로 처리
         const max = maxStr ? Number(maxStr) : Infinity;
 
+        // 아이템 가격이 범위 밖이면 탈락
         if (item.price < min || item.price > max) return false;
       }
 
@@ -58,13 +61,11 @@ export const resaleHandlers = [
     });
 
     // --- 3. 정렬 (최신순) ---
-    // createdAt 기준 내림차순
     filteredItems.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     // --- 4. 페이지네이션 (Cursor 기반) ---
     let startIndex = 0;
 
-    // cursor가 있다면, 해당 cursor(ID)를 가진 아이템의 *다음 인덱스*부터 시작
     if (cursor) {
       const cursorIndex = filteredItems.findIndex((item) => item.id === cursor);
       if (cursorIndex !== -1) {
@@ -73,14 +74,8 @@ export const resaleHandlers = [
     }
 
     const paginatedItems = filteredItems.slice(startIndex, startIndex + PAGE_SIZE);
-
-    // 다음 페이지 존재 여부
     const hasNext = startIndex + PAGE_SIZE < filteredItems.length;
-
-    // ✨ 수정: 마지막 아이템을 먼저 안전하게 꺼냅니다.
     const lastItem = paginatedItems[paginatedItems.length - 1];
-
-    // ✨ 수정: hasNext가 true이고, 실제로 아이템이 있을 때만 id를 사용
     const nextCursor = hasNext && lastItem ? lastItem.id : null;
 
     // --- 5. 응답 반환 ---
@@ -92,26 +87,18 @@ export const resaleHandlers = [
     });
   }),
 
+  // ... (찜 추가/삭제 핸들러는 기존과 동일) ...
   // ---------------------------------------------------------
-  // 1. 찜 추가 (POST /items/:itemId/favorites)
-  // ---------------------------------------------------------
+  // 1. 찜 추가
   http.post(`${BASE_URL}/items/:itemId/favorites`, async ({ params }) => {
-    await delay(300); // 네트워크 지연 시뮬레이션
-
+    await delay(300);
     const { itemId } = params;
     const id = Number(itemId);
-
-    // Mock 데이터에서 해당 상품 찾기
     const targetItem = MOCK_PRODUCTS.find((item) => item.id === id);
 
-    if (!targetItem) {
-      return new HttpResponse(null, { status: 404 });
-    }
-
-    // 데이터 업데이트 (찜 상태 true)
+    if (!targetItem) return new HttpResponse(null, { status: 404 });
     targetItem.isLiked = true;
 
-    // 응답 반환 (FavoriteResponse 타입에 맞춤)
     return HttpResponse.json({
       success: true,
       isLiked: true,
@@ -120,24 +107,16 @@ export const resaleHandlers = [
   }),
 
   // ---------------------------------------------------------
-  // 2. 찜 해제 (DELETE /items/:itemId/favorites)
-  // ---------------------------------------------------------
+  // 2. 찜 해제
   http.delete(`${BASE_URL}/items/:itemId/favorites`, async ({ params }) => {
     await delay(300);
-
     const { itemId } = params;
     const id = Number(itemId);
-
     const targetItem = MOCK_PRODUCTS.find((item) => item.id === id);
 
-    if (!targetItem) {
-      return new HttpResponse(null, { status: 404 });
-    }
-
-    // 데이터 업데이트 (찜 상태 false)
+    if (!targetItem) return new HttpResponse(null, { status: 404 });
     targetItem.isLiked = false;
 
-    // 응답 반환
     return HttpResponse.json({
       success: true,
       isLiked: false,

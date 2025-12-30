@@ -10,7 +10,6 @@ export const resaleKeys = {
   list: (params: GetResaleListParams) => [...resaleKeys.lists(), params] as const,
 };
 
-// 2. Custom Hook
 export const useGetResaleList = (params: GetResaleListParams) => {
   return useInfiniteQuery<
     ResaleListResponse,
@@ -21,7 +20,7 @@ export const useGetResaleList = (params: GetResaleListParams) => {
   >({
     queryKey: resaleKeys.list(params),
 
-    // pageParam은 useInfiniteQuery가 관리하는 현재 커서 위치입니다.
+    // pageParam은 useInfiniteQuery가 관리하는 현재 커서 위치
     queryFn: ({ pageParam }) =>
       getResaleProductList({
         ...params,

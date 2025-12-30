@@ -1,4 +1,3 @@
-// src/widgets/UnifiedSearchBar/ui/DropdownItem.tsx
 import React from 'react';
 
 type DropdownItemProps = {
