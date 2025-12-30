@@ -9,6 +9,12 @@ export const useFilterSidebar = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState(initialPriceRange[0] ?? '');
   const [maxPrice, setMaxPrice] = useState(initialPriceRange[1] ?? '');
+  const [dealType, setDealType] = useState<string | undefined>(
+    searchParams.get('dealType') ?? undefined
+  );
+  const [isAvailable, setIsAvailable] = useState<boolean>(
+    searchParams.get('isAvailable') === 'true'
+  );
 
   // url과 사이드바 값 동기화
   useEffect(() => {
@@ -24,8 +30,9 @@ export const useFilterSidebar = () => {
       setMinPrice('');
       setMaxPrice('');
     }
-
     setRegion(searchParams.get('region') ?? undefined);
+    setDealType(searchParams.get('dealType') ?? undefined);
+    setIsAvailable(searchParams.get('isAvailable') === 'true');
   }, [searchParams]);
 
   const handleCategoryChange = useCallback((selected: string[]) => {
@@ -37,11 +44,21 @@ export const useFilterSidebar = () => {
     setMaxPrice(max);
   }, []);
 
+  const handleDealTypeChange = useCallback((type: string | undefined) => {
+    setDealType(type);
+  }, []);
+
+  const handleIsAvailableChange = useCallback((checked: boolean) => {
+    setIsAvailable(checked);
+  }, []);
+
   const handleReset = useCallback(() => {
     setRegion(undefined);
     setCategories([]);
     setMinPrice('');
     setMaxPrice('');
+    setDealType(undefined);
+    setIsAvailable(false);
   }, []);
 
   const applyFilters = useCallback(() => {
@@ -52,15 +69,25 @@ export const useFilterSidebar = () => {
     if (minPrice || maxPrice) {
       params.priceRange = `${minPrice}-${maxPrice}`;
     }
+    if (dealType) {
+      params.dealType = dealType;
+    }
+
+    if (isAvailable) {
+      params.isAvailable = 'true';
+    }
+
     setSearchParams(params);
-  }, [region, categories, minPrice, maxPrice, setSearchParams]);
+  }, [region, categories, minPrice, maxPrice, dealType, isAvailable, setSearchParams]);
 
   return {
-    state: { region, categories, minPrice, maxPrice },
+    state: { region, categories, minPrice, maxPrice, dealType, isAvailable },
     actions: {
       setRegion,
       handleCategoryChange,
       handlePriceChange,
+      handleDealTypeChange,
+      handleIsAvailableChange,
       handleReset,
       applyFilters,
     },

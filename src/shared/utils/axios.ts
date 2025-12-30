@@ -17,6 +17,7 @@ const createInstance = (config?: AxiosRequestConfig): AxiosInstance => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      // 'ngrok-skip-browser-warning': '69420', // 이거 추가
     },
     withCredentials: true,
     ...config,

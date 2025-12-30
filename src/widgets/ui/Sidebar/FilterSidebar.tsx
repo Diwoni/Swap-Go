@@ -1,12 +1,14 @@
 import { useJsApiLoader } from '@react-google-maps/api';
 
 import { useFilterSidebar } from '../../hooks';
+import { SidebarAvailable } from './components/SidebarAvailable'; // ✨ 추가
+// 부품들 import
 import { SidebarCategory } from './components/SidebarCategory';
+import { SidebarDealType } from './components/SidebarDealType'; // ✨ 추가
 import { SidebarLocation } from './components/SidebarLocation';
 import { SidebarPrice } from './components/SidebarPrice';
 
 const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
-
 const libraries: ('places' | 'geometry' | 'drawing' | 'visualization')[] = ['places'];
 
 export const FilterSidebar = () => {
@@ -19,9 +21,9 @@ export const FilterSidebar = () => {
   const { state, actions } = useFilterSidebar();
 
   return (
-    <aside className="w-[320px] flex flex-col gap-8 bg-white p-2">
+    <aside className="w-[320px] flex flex-col gap-6 bg-white p-2 pb-10">
       {/* 헤더 */}
-      <div className="flex items-center justify-between pt-2 border-b border-gray-100">
+      <div className="flex items-center justify-between pt-2 border-b border-gray-100 pb-4">
         <h2 className="text-[17px] font-bold text-black-200">필터</h2>
         <button
           onClick={actions.handleReset}
@@ -39,7 +41,7 @@ export const FilterSidebar = () => {
         </button>
       </div>
 
-      {/* 지역 선택 섹션 */}
+      {/* 1. 지역 선택 */}
       <section>
         <h3 className="text-[15px] font-bold text-gray-800 mb-3">지역</h3>
         <SidebarLocation
@@ -49,13 +51,23 @@ export const FilterSidebar = () => {
         />
       </section>
 
-      {/* 카테고리 섹션 */}
+      {/* 2. 거래 가능 여부 (✨ 컴포넌트 교체) */}
+      <section>
+        <SidebarAvailable checked={state.isAvailable} onChange={actions.handleIsAvailableChange} />
+      </section>
+
+      {/* 3. 거래 유형 (✨ 컴포넌트 교체) */}
+      <section>
+        <SidebarDealType value={state.dealType} onChange={actions.handleDealTypeChange} />
+      </section>
+
+      {/* 4. 카테고리 */}
       <section>
         <h3 className="text-[15px] font-bold text-gray-800 mb-3">카테고리</h3>
         <SidebarCategory selected={state.categories} onChange={actions.handleCategoryChange} />
       </section>
 
-      {/* 가격 섹션 */}
+      {/* 5. 가격 */}
       <section>
         <h3 className="text-[15px] font-bold text-gray-800 mb-3">가격</h3>
         <SidebarPrice
@@ -66,12 +78,14 @@ export const FilterSidebar = () => {
       </section>
 
       {/* 검색 버튼 */}
-      <button
-        onClick={actions.applyFilters}
-        className="w-full h-[50px] bg-primary-150 text-white font-bold rounded-xl hover:bg-primary-200 active:scale-[0.98] transition-all shadow-sm"
-      >
-        현재 설정으로 검색
-      </button>
+      <div className="pt-2">
+        <button
+          onClick={actions.applyFilters}
+          className="w-full h-[50px] bg-primary-150 text-white font-bold rounded-xl hover:bg-primary-200 active:scale-[0.98] transition-all shadow-sm"
+        >
+          현재 설정으로 검색
+        </button>
+      </div>
     </aside>
   );
 };

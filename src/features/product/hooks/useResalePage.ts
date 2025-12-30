@@ -11,6 +11,8 @@ export const useResalePage = () => {
   const category = searchParams.get('category') ?? undefined;
   const keyword = searchParams.get('keyword') ?? undefined;
   const priceRange = searchParams.get('priceRange') ?? undefined;
+  const isAvailable = searchParams.get('isAvailable') === 'true';
+  const dealType = searchParams.get('dealType') ?? undefined;
 
   // 데이터 패칭
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetResaleList({
@@ -18,6 +20,8 @@ export const useResalePage = () => {
     category,
     keyword,
     priceRange,
+    isAvailable,
+    dealType,
   });
 
   // 무한 스크롤

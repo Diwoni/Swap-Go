@@ -22,7 +22,7 @@ const ResalePage = () => {
           <ResultHeader region={region} />
 
           {/* 4. 상품 리스트 */}
-          <div className="max-w-[1120px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="max-w-[1120px] justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {products.map((item) => (
               <ProductCard
                 key={item.id}
@@ -55,8 +55,8 @@ const ResalePage = () => {
 };
 
 const ResultHeader = ({ region }: { region?: string }) => (
-  <div className="flex pb-4 text-lg font-medium">
-    <span className="text-primary-200 mr-1">{region ?? '전체'}</span>
+  <div className="flex pb-3 text-lg font-medium">
+    <span className="text-primary-200 ml-2">{region ?? '전체'}</span>
     <span>에서의 검색결과</span>
   </div>
 );

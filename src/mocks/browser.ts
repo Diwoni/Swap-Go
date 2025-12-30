@@ -11,7 +11,7 @@ export const worker = setupWorker(...authHandlers, ...resaleHandlers);
 export const startMockServer = async () => {
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-  // localhost가 아니면 MSW 비활성화 && baseURL?.includes('localhost'
+  // localhost가 아니면 MSW 비활성화 && baseURL?.includes('localhost')
   if (import.meta.env.DEV) {
     await worker.start({
       onUnhandledRequest: 'bypass',
