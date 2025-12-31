@@ -6,6 +6,7 @@ import { LikeButton } from './LikeButton';
 type ProductCardProps = {
   id: number;
   title: string;
+  deposit: number | null;
   imageUrl: string;
   price: number;
   region: string;
@@ -17,6 +18,7 @@ export const ProductCard = ({
   id,
   title,
   imageUrl,
+  deposit,
   price,
   region,
   createdAt,
@@ -33,10 +35,21 @@ export const ProductCard = ({
             <LikeButton isLiked={isLiked} onToggle={toggleLike} />
           </div>
         </div>
-        <div className="flex flex-col px-2 py-2">
-          <span className="font-bold">{title}</span>
-          <span className="font-bold">{price}원</span>
-          <div className="flex justify-between text-sm">
+        <div className="flex flex-col px-1 py-2">
+          <span className="font-bold text-base truncate block" title={title}>
+            {title}
+          </span>
+
+          <div className="flex justify-between items-center">
+            <span className="font-bold text-lg">{price.toLocaleString()}원</span>
+            {deposit !== null && deposit !== undefined && (
+              <span className="text-sm text-gray-500 font-medium">
+                보증금 {deposit.toLocaleString()}원
+              </span>
+            )}
+          </div>
+
+          <div className="flex justify-between text-sm text-black-150 mt-1">
             <span>{region}</span>
             <span>{createdAt}</span>
           </div>

@@ -1,10 +1,9 @@
 import { useJsApiLoader } from '@react-google-maps/api';
 
 import { useFilterSidebar } from '../../hooks';
-import { SidebarAvailable } from './components/SidebarAvailable'; // ✨ 추가
-// 부품들 import
+import { SidebarAvailable } from './components/SidebarAvailable';
 import { SidebarCategory } from './components/SidebarCategory';
-import { SidebarDealType } from './components/SidebarDealType'; // ✨ 추가
+import { SidebarDealType } from './components/SidebarDealType';
 import { SidebarLocation } from './components/SidebarLocation';
 import { SidebarPrice } from './components/SidebarPrice';
 
@@ -21,8 +20,7 @@ export const FilterSidebar = () => {
   const { state, actions } = useFilterSidebar();
 
   return (
-    <aside className="w-[320px] flex flex-col gap-6 bg-white p-2 pb-10">
-      {/* 헤더 */}
+    <aside className="w-[280px] flex flex-col gap-6 bg-white p-2 pb-10">
       <div className="flex items-center justify-between pt-2 border-b border-gray-100 pb-4">
         <h2 className="text-[17px] font-bold text-black-200">필터</h2>
         <button
@@ -41,7 +39,6 @@ export const FilterSidebar = () => {
         </button>
       </div>
 
-      {/* 1. 지역 선택 */}
       <section>
         <h3 className="text-[15px] font-bold text-gray-800 mb-3">지역</h3>
         <SidebarLocation
@@ -51,23 +48,19 @@ export const FilterSidebar = () => {
         />
       </section>
 
-      {/* 2. 거래 가능 여부 (✨ 컴포넌트 교체) */}
       <section>
         <SidebarAvailable checked={state.isAvailable} onChange={actions.handleIsAvailableChange} />
       </section>
 
-      {/* 3. 거래 유형 (✨ 컴포넌트 교체) */}
       <section>
         <SidebarDealType value={state.dealType} onChange={actions.handleDealTypeChange} />
       </section>
 
-      {/* 4. 카테고리 */}
       <section>
         <h3 className="text-[15px] font-bold text-gray-800 mb-3">카테고리</h3>
         <SidebarCategory selected={state.categories} onChange={actions.handleCategoryChange} />
       </section>
 
-      {/* 5. 가격 */}
       <section>
         <h3 className="text-[15px] font-bold text-gray-800 mb-3">가격</h3>
         <SidebarPrice
@@ -77,7 +70,6 @@ export const FilterSidebar = () => {
         />
       </section>
 
-      {/* 검색 버튼 */}
       <div className="pt-2">
         <button
           onClick={actions.applyFilters}

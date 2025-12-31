@@ -2,7 +2,7 @@ export const ROUTE_PATH = {
   HOME: '/',
   SIGNUP: '/signup',
   MYPAGE: '/mypage',
-  TRADE: '/resale',
+  RESALE: '/resale',
   RENTAL: '/rental',
   PRODUCT_DETAIL: '/product/:id',
 } as const;

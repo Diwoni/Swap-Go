@@ -1,9 +1,9 @@
 // mocks/data/resale.ts
 import sampleImg from '../../assets/image.png';
-import { ResaleListResponse } from '../../features/product/types/resale';
+import { ProductListResponse } from '../../features/product/types';
 
 // 타입 정의에서 items 배열의 요소 타입만 추출
-type ResaleItem = ResaleListResponse['items'][0];
+type ResaleItem = ProductListResponse['items'][0];
 
 export const MOCK_PRODUCTS: ResaleItem[] = Array.from({ length: 50 })
   .map((_, index) => {
