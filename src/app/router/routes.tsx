@@ -4,6 +4,8 @@ import { RouteObject } from 'react-router-dom';
 import SignupPage from '@/pages/SignupPage';
 import PageLayout from '@/shared/ui/PageLayout';
 
+import RentalPage from '../../pages/RentalPage';
+import ResalePage from '../../pages/ResalePage';
 import { ROUTE_PATH } from './path';
 
 const HomePage = lazy(() => import('@/pages/HomePage'));
@@ -14,6 +16,8 @@ export const routes: RouteObject[] = [
     children: [
       { path: ROUTE_PATH.HOME, element: <HomePage /> },
       { path: ROUTE_PATH.SIGNUP, element: <SignupPage /> },
+      { path: ROUTE_PATH.RESALE, element: <ResalePage /> },
+      { path: ROUTE_PATH.RENTAL, element: <RentalPage /> },
     ],
   },
 ];

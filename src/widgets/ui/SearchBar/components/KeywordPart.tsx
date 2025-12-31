@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { BiTime } from 'react-icons/bi';
 import { IoMdCloseCircle } from 'react-icons/io';
 
-import { DropdownItem } from '../ui/DropdownItem';
-import { DropdownWrapper } from '../ui/DropdownWrapper';
+import { DropdownItem } from './DropdownItem';
+import { DropdownWrapper } from './DropdownWrapper';
 
 type Props = {
   value: string;
