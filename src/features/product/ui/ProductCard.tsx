@@ -29,7 +29,7 @@ export const ProductCard = ({
   const { isLiked, toggleLike } = useProductLike(liked, id);
 
   return (
-    <Link to={`/products/${productType}/${id}`} className="block">
+    <Link to={`/product/${productType}/${id}`} className="block">
       <article className="w-[300px] h-[400px]">
         <div className="w-full h-[300px] border relative rounded-xl">
           <img src={imageUrl} alt={title} className="w-full h-full object-cover rounded-lg" />

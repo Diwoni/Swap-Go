@@ -4,6 +4,7 @@ import { RouteObject } from 'react-router-dom';
 import SignupPage from '@/pages/SignupPage';
 import PageLayout from '@/shared/ui/PageLayout';
 
+import ProductDetailPage from '../../pages/ProductDetailPage';
 import RentalPage from '../../pages/RentalPage';
 import ResalePage from '../../pages/ResalePage';
 import { ROUTE_PATH } from './path';
@@ -18,6 +19,7 @@ export const routes: RouteObject[] = [
       { path: ROUTE_PATH.SIGNUP, element: <SignupPage /> },
       { path: ROUTE_PATH.RESALE, element: <ResalePage /> },
       { path: ROUTE_PATH.RENTAL, element: <RentalPage /> },
+      { path: ROUTE_PATH.PRODUCT_DETAIL, element: <ProductDetailPage /> },
     ],
   },
 ];

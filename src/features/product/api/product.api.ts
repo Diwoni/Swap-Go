@@ -1,5 +1,6 @@
 import { api, formatCategory } from '@/shared/utils';
 
+import { RentalProductDetail, ResaleProductDetail } from '../types/productDetail';
 import { GetProductListParams, ProductListResponse, ProductType } from '../types/productList';
 
 export const getProductList = async (
@@ -16,5 +17,15 @@ export const getProductList = async (
     },
   });
 
+  return response.data;
+};
+
+export const getResaleProductDetail = async (itemId: number): Promise<ResaleProductDetail> => {
+  const response = await api.get<ResaleProductDetail>(`/resale/items/${itemId}`);
+  return response.data;
+};
+
+export const getRentalProductDetail = async (itemId: number): Promise<RentalProductDetail> => {
+  const response = await api.get<RentalProductDetail>(`/rental/items/${itemId}`);
   return response.data;
 };
