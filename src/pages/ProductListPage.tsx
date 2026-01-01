@@ -34,6 +34,7 @@ export const ProductListPage = ({ type }: Props) => {
             <div className="max-w-[1120px] mx-auto w-full justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 gap-y-4">
               {products.map((item) => (
                 <ProductCard
+                  productType={type}
                   key={item.id}
                   id={item.id}
                   title={item.title}

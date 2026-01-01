@@ -4,6 +4,7 @@ import { useProductLike } from '../hooks/useProductLike';
 import { LikeButton } from './LikeButton';
 
 type ProductCardProps = {
+  productType: string;
   id: number;
   title: string;
   deposit: number | null;
@@ -15,6 +16,7 @@ type ProductCardProps = {
 };
 
 export const ProductCard = ({
+  productType,
   id,
   title,
   imageUrl,
@@ -27,7 +29,7 @@ export const ProductCard = ({
   const { isLiked, toggleLike } = useProductLike(liked, id);
 
   return (
-    <Link to={`/products/${id}`} className="block">
+    <Link to={`/products/${productType}/${id}`} className="block">
       <article className="w-[300px] h-[400px]">
         <div className="w-full h-[300px] border relative rounded-xl">
           <img src={imageUrl} alt={title} className="w-full h-full object-cover rounded-lg" />
