@@ -5,7 +5,7 @@ import { getRentalProductDetail, getResaleProductDetail } from '../api/product.a
 import { RentalProductDetail, ResaleProductDetail } from '../types/productDetail';
 
 export const useProductDetailPage = () => {
-  const { type, itemId } = useParams<{ type: string; itemId: string }>();
+  const { type, itemId } = useParams<{ type: 'rental' | 'resale'; itemId: string }>();
 
   const id = Number(itemId);
   const isResale = type === 'resale';
