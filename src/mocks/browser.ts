@@ -5,13 +5,15 @@ import { exposeUtilsToWindow } from './mocksUtil';
 import { productDetailHandlers } from './productDetail.handlers';
 import { rentalHandlers } from './rental.handlers';
 import { resaleHandlers } from './resale.handlers';
+import { tradeHandlers } from './trade.handlers';
 
 // MSW 워커 생성
 export const worker = setupWorker(
   ...authHandlers,
   ...resaleHandlers,
   ...rentalHandlers,
-  ...productDetailHandlers
+  ...productDetailHandlers,
+  ...tradeHandlers
 );
 
 // 개발 환경에서만 MSW 시작

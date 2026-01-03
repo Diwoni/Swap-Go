@@ -1,4 +1,7 @@
+import { CiLocationOn } from 'react-icons/ci';
+
 import { formatDate, formatPrice } from '../../../shared/utils';
+import { TradeRequestButton } from '../../trade/ui/TradeRequestButton';
 import { useProductLike } from '../hooks/useProductLike';
 import { RentalProductDetail, ResaleProductDetail } from '../types/productDetail';
 import { LikeButton } from './LikeButton';
@@ -26,7 +29,7 @@ export const ProductDetailCard = ({ type, productData }: Props) => {
         </Header>
         <MetaInfo type={type} data={productData} />
         <DetailList type={type} data={productData} />
-        <ActionButtons isMine={isMine} />
+        <ActionButtons isMine={isMine} type={type} itemId={itemId} />
       </div>
     </div>
   );
@@ -68,7 +71,7 @@ const MetaInfo = ({
       </div>
 
       <div className="flex items-center gap-1 text-gray-600 mt-1">
-        <LocationIcon />
+        <CiLocationOn />
         <span className="text-[16px]">{region}</span>
       </div>
     </div>
@@ -86,7 +89,6 @@ const DetailList = ({
     <div className="flex flex-col flex-1 mt-6 overflow-y-auto">
       <InfoRow label="판매자">{data.seller.username}</InfoRow>
 
-      {/* 렌탈일 경우에만 렌더링 (조건부 렌더링 로직 내부 위임) */}
       <RentalInfo type={type} data={data} />
 
       <InfoRow label="물품 관련 내용">
@@ -117,7 +119,15 @@ const RentalInfo = ({
   );
 };
 
-const ActionButtons = ({ isMine }: { isMine: boolean }) => {
+const ActionButtons = ({
+  isMine,
+  type,
+  itemId,
+}: {
+  isMine: boolean;
+  type: 'rental' | 'resale';
+  itemId: number;
+}) => {
   if (isMine) {
     return (
       <div className="flex gap-3 mt-4">
@@ -142,9 +152,7 @@ const ActionButtons = ({ isMine }: { isMine: boolean }) => {
       >
         채팅 보내기
       </button>
-      <button className="btn btn-md btn-primary" onClick={() => alert('거래 요청 보내기')}>
-        거래 요청 보내기
-      </button>
+      <TradeRequestButton type={type} itemId={itemId} />
     </div>
   );
 };
@@ -166,22 +174,4 @@ const ImageSection = ({ src, alt }: { src?: string; alt: string }) => (
       </div>
     )}
   </div>
-);
-
-const LocationIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className="w-5 h-5"
-  >
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-    />
-  </svg>
 );

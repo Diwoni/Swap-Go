@@ -1,7 +1,10 @@
 // mocks/data/productDetail.ts
 import sampleImg from '../../assets/image.png';
 import { ProductType, RecentPostBySeller } from '../../features/product/types';
-import { ResaleProductDetail } from '../../features/product/types/productDetail';
+import {
+  RentalProductDetail,
+  ResaleProductDetail,
+} from '../../features/product/types/productDetail';
 
 // ----------------------------------------------------------------------
 // 1. Helper: 판매자 정보 생성
@@ -86,3 +89,42 @@ export const createMockResaleDetail = (id: number): ResaleProductDetail => {
 };
 
 // ----------------------------------------------------------------------
+// 4. ✨ New: 렌탈(Rental) 상세 데이터 생성 함수
+// ----------------------------------------------------------------------
+export const createMockRentalDetail = (id: number): RentalProductDetail => {
+  const isMine = id % 10 === 0;
+
+  return {
+    itemId: id,
+    title: `[렌탈] 고성능 카메라 대여해드립니다 (${id}번 상품)`,
+    content: `
+      여행용으로 딱 좋은 카메라 렌탈합니다.
+
+      - 기종: Sony A7M4
+      - 렌즈: 24-70 GM II
+      - 상태: S급
+
+      보증금 확인 후 대여 가능합니다.
+      직거래 선호합니다.
+    `,
+    price: id * 1000 + 5000, // 1일 대여료
+    deposit: 500000, // ✨ 보증금 (Resale에는 없음)
+    region: 'Warsaw',
+    category: '전자기기',
+    isMine,
+    isLiked: id % 3 === 0,
+    isAvailable: true,
+    createdAt: new Date().toISOString(),
+    images: [sampleImg, sampleImg], // 렌탈용 이미지
+    seller: getMockSeller(id),
+
+    // ✨ 렌탈 전용 필수 정보 (이게 있어야 ProductDetailCard에서 렌더링됨)
+    rentalInfo: {
+      isCurrentlyRented: id % 2 === 0, // 짝수 ID는 대여중 상태 시뮬레이션
+      rentedFrom: '2024-05-01',
+      rentedUntil: '2024-05-05',
+    },
+
+    recentPostsBySeller: [...getMockRecentPosts(id, 'resale'), ...getMockRecentPosts(id, 'rental')],
+  };
+};
