@@ -34,16 +34,16 @@ export const ProductListPage = ({ type }: Props) => {
             <div className="max-w-[1120px] mx-auto w-full justify-items-center grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 gap-y-4">
               {products.map((item) => (
                 <ProductCard
-                  productType={type}
-                  key={item.id}
-                  id={item.id}
+                  itemType={type}
+                  key={item.itemId}
+                  itemId={item.itemId}
                   title={item.title}
                   price={item.price}
                   deposit={item.deposit}
                   region={item.region}
                   createdAt={item.createdAt}
-                  imageUrl={item.thumbnailUrl}
-                  liked={item.isLiked}
+                  thumbnailUrl={item.thumbnailUrl}
+                  isliked={item.isLiked}
                 />
               ))}
             </div>

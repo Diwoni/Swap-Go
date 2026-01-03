@@ -1,29 +1,58 @@
 // mocks/data/productDetail.ts
-import sampleImg from '../../assets/image.png'; // 기존에 쓰시던 이미지 경로
-import {
-  RentalProductDetail,
-  ResaleProductDetail,
-} from '../../features/product/types/productDetail';
+import sampleImg from '../../assets/image.png';
+import { ProductType, RecentPostBySeller } from '../../features/product/types';
+import { ResaleProductDetail } from '../../features/product/types/productDetail';
 
-// 판매자(Seller) 더미 데이터 생성기
+// ----------------------------------------------------------------------
+// 1. Helper: 판매자 정보 생성
+// ----------------------------------------------------------------------
 const getMockSeller = (id: number) => ({
   sellerId: id + 9000,
-  nickname: `User${id}_판매왕`,
+  username: `User${id}_판매왕`,
 });
 
-// 판매자의 최근 게시글 더미 데이터
-const getMockRecentPosts = (baseId: number, type: 'SELL' | 'RENTAL') => {
-  return Array.from({ length: 4 }).map((_, idx) => ({
-    productId: baseId + idx + 100,
-    thumbnail: sampleImg,
-    price: (baseId + idx) * 1000,
-    isLiked: idx % 2 === 0,
-    itemType: type,
-    createdAt: new Date(Date.now() - idx * 24 * 60 * 60 * 1000).toISOString(),
-  }));
+// ----------------------------------------------------------------------
+// 2. Helper: 판매자의 최근 게시글 목록 생성 (타입별 생성기)
+// ----------------------------------------------------------------------
+const getMockRecentPosts = (baseId: number, type: ProductType): RecentPostBySeller[] => {
+  return Array.from({ length: 4 }).map((_, idx) => {
+    // ID 충돌 방지를 위해 타입별로 ID 범위 분리
+    // resale: 100번대 ~, rental: 2000번대 ~
+    const idOffset = type === 'resale' ? 100 : 2000;
+    const generatedItemId = baseId + idx + idOffset;
+
+    return {
+      // ProductItem 공통 필드
+      itemId: generatedItemId,
+      title:
+        type === 'resale'
+          ? `[판매] 판매자의 다른 물품 ${idx + 1}`
+          : `[렌탈] 판매자의 다른 렌탈 ${idx + 1}`,
+      price: (baseId + idx) * 1000 + 5000,
+
+      // 렌탈일 경우 보증금 필수, 중고는 null
+      deposit: type === 'rental' ? 300000 : null,
+
+      region: 'Warsaw',
+
+      // 상세 페이지 로직에 맞는 거래 유형 설정
+      dealType: 'BUY',
+
+      category: '전자기기',
+      isAvailable: true, // status -> isAvailable
+      isLiked: idx % 2 !== 0,
+      thumbnailUrl: sampleImg,
+      createdAt: new Date(Date.now() - idx * 24 * 60 * 60 * 1000).toISOString(),
+
+      // 식별용 타입 (UI 필터링에 사용됨)
+      itemType: type,
+    };
+  });
 };
 
-// 1. 중고 거래(Resale) 상세 데이터 생성 함수
+// ----------------------------------------------------------------------
+// 3. Main: 중고 거래(Resale) 상세 데이터 생성 함수
+// ----------------------------------------------------------------------
 export const createMockResaleDetail = (id: number): ResaleProductDetail => {
   const isMine = id % 10 === 0; // ID가 10의 배수면 내 글
 
@@ -46,46 +75,14 @@ export const createMockResaleDetail = (id: number): ResaleProductDetail => {
     category: '전자기기',
     isMine,
     isLiked: id % 3 === 0,
-    status: true, // true: 판매중
+    isAvailable: true,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), // 2일 전
-    images: [sampleImg, sampleImg, sampleImg], // 이미지 3장
+    images: [sampleImg, sampleImg, sampleImg],
     seller: getMockSeller(id),
-    recentPostsBySeller: getMockRecentPosts(id, 'SELL'),
+
+    // ✨ 핵심 수정: 중고 물품과 렌탈 물품을 모두 포함시켜 반환
+    recentPostsBySeller: [...getMockRecentPosts(id, 'resale'), ...getMockRecentPosts(id, 'rental')],
   };
 };
 
-// 2. 대여(Rental) 상세 데이터 생성 함수
-export const createMockRentalDetail = (id: number): RentalProductDetail => {
-  const isMine = id % 10 === 0;
-
-  return {
-    itemId: id,
-    title: `[대여] 고성능 게이밍 노트북 빌려드립니다 (${id}번 상품)`,
-    content: `
-      단기 프로젝트나 게임용으로 좋습니다.
-
-      - 모델명: ASUS ROG Zephyrus
-      - 사양: i9-13900H, RTX 4070, 32GB RAM
-      - 대여 기간: 최소 3일부터 가능
-
-      보증금은 반납 시 기기 확인 후 즉시 돌려드립니다.
-      파손 시 수리비 청구될 수 있습니다.
-    `,
-    deposit: 500000, // 보증금
-    price: 30000, // 일일 대여료
-    region: id % 2 === 0 ? 'Warsaw' : 'Wroclaw',
-    category: '전자기기',
-    isMine,
-    isLiked: id % 3 === 0,
-    status: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(), // 5시간 전
-    images: [sampleImg, sampleImg],
-    rentalInfo: {
-      isCurrentlyRented: false, // 현재 대여 가능
-      rentedFrom: '',
-      rentedUntil: '',
-    },
-    seller: getMockSeller(id),
-    recentPostsBySeller: getMockRecentPosts(id, 'RENTAL'),
-  };
-};
+// ----------------------------------------------------------------------

@@ -1,7 +1,8 @@
 // mocks/handlers/rental.ts
 import { delay, http, HttpResponse } from 'msw';
 
-import { BASE_URL } from '../shared/libs/constants';
+import { BASE_URL } from '@/shared/libs/constants'; // 절대 경로(@) 사용 권장
+
 import { MOCK_RENTAL_PRODUCTS } from './data/rental';
 
 export const rentalHandlers = [
@@ -33,8 +34,8 @@ export const rentalHandlers = [
         if (!categories.includes(item.category)) return false;
       }
 
-      // 3) 상태 (대여 가능 여부)
-      if (isAvailable && item.status !== true) return false;
+      // 3) 상태 (✨ status -> isAvailable 변경)
+      if (isAvailable && item.isAvailable !== true) return false;
 
       // 4) 거래 유형 (SHORT / LONG)
       if (dealType && item.dealType !== dealType) return false;
@@ -59,7 +60,8 @@ export const rentalHandlers = [
     // --- 4. 페이지네이션 ---
     let startIndex = 0;
     if (cursor) {
-      const cursorIndex = filteredItems.findIndex((item) => item.id === cursor);
+      // ✨ id -> itemId 변경
+      const cursorIndex = filteredItems.findIndex((item) => item.itemId === cursor);
       if (cursorIndex !== -1) {
         startIndex = cursorIndex + 1;
       }
@@ -68,7 +70,9 @@ export const rentalHandlers = [
     const paginatedItems = filteredItems.slice(startIndex, startIndex + PAGE_SIZE);
     const hasNext = startIndex + PAGE_SIZE < filteredItems.length;
     const lastItem = paginatedItems[paginatedItems.length - 1];
-    const nextCursor = hasNext && lastItem ? lastItem.id : null;
+
+    // ✨ id -> itemId 변경
+    const nextCursor = hasNext && lastItem ? lastItem.itemId : null;
 
     // --- 5. 응답 ---
     return HttpResponse.json({

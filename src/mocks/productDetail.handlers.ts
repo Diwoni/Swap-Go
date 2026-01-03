@@ -3,7 +3,7 @@ import { delay, http, HttpResponse } from 'msw';
 
 import { BASE_URL } from '@/shared/libs/constants';
 
-import { createMockRentalDetail, createMockResaleDetail } from './data/productDetail';
+import { createMockResaleDetail } from './data/productDetail';
 
 export const productDetailHandlers = [
   // 1. Resale 상세 조회 핸들러
@@ -32,7 +32,7 @@ export const productDetailHandlers = [
       return new HttpResponse(null, { status: 404, statusText: 'Not Found' });
     }
 
-    const data = createMockRentalDetail(id);
+    const data = createMockResaleDetail(id);
     return HttpResponse.json(data);
   }),
 ];

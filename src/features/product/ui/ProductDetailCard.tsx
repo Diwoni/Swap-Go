@@ -84,7 +84,7 @@ const DetailList = ({
 }) => {
   return (
     <div className="flex flex-col flex-1 mt-6 overflow-y-auto">
-      <InfoRow label="판매자">{data.seller.nickname}</InfoRow>
+      <InfoRow label="판매자">{data.seller.username}</InfoRow>
 
       {/* 렌탈일 경우에만 렌더링 (조건부 렌더링 로직 내부 위임) */}
       <RentalInfo type={type} data={data} />

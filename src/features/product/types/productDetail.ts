@@ -1,3 +1,5 @@
+import { RecentPostBySeller } from './productList';
+
 export type ResaleProductDetail = {
   itemId: number;
   title: string;
@@ -7,51 +9,21 @@ export type ResaleProductDetail = {
   category: string;
   isMine: boolean;
   isLiked: boolean;
-  status: boolean; // 거래가 가능한 상태인지
+  isAvailable: boolean; // 거래가 가능한 상태인지
   createdAt: string;
   images: string[];
   seller: {
     sellerId: number;
-    nickname: string;
+    username: string;
   };
-  recentPostsBySeller: {
-    productId: number;
-    thumbnail: string;
-    price: number;
-    isLiked: boolean;
-    itemType: string;
-    createdAt: string;
-  }[];
+  recentPostsBySeller: RecentPostBySeller[];
 };
 
-export type RentalProductDetail = {
-  itemId: number;
-  title: string;
-  content: string;
+export type RentalProductDetail = ResaleProductDetail & {
   deposit: number;
-  price: number;
-  region: string;
-  category: string;
-  isMine: boolean;
-  isLiked: boolean;
-  status: boolean; // 거래가 가능한 상태인지
-  createdAt: string;
-  images: string[];
   rentalInfo: {
-    isCurrentlyRented: boolean; // 거래가 가능한 상태인지
+    isCurrentlyRented: boolean;
     rentedFrom: string;
     rentedUntil: string;
   };
-  seller: {
-    sellerId: number;
-    nickname: string;
-  };
-  recentPostsBySeller: {
-    productId: number;
-    thumbnail: string;
-    price: number;
-    isLiked: boolean;
-    itemType: string;
-    createdAt: string;
-  }[];
 };

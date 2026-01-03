@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { getRentalProductDetail, getResaleProductDetail } from '../api/product.api';
@@ -23,10 +24,25 @@ export const useProductDetailPage = () => {
     enabled: isValid,
   });
 
+  const { resaleItems, rentalItems } = useMemo(() => {
+    if (!data || !data.recentPostsBySeller) {
+      return { resaleItems: [], rentalItems: [] };
+    }
+
+    const posts = data.recentPostsBySeller;
+
+    return {
+      resaleItems: posts.filter((item) => item.itemType === 'resale'),
+      rentalItems: posts.filter((item) => item.itemType === 'rental'),
+    };
+  }, [data]);
+
   return {
     type,
     itemId,
-    data, // ResaleProductDetail | RentalProductDetail | undefined
+    data,
+    resaleItems,
+    rentalItems,
     isLoading,
     isError,
     error,

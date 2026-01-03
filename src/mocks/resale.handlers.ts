@@ -1,7 +1,8 @@
 // mocks/handlers/resale.ts
 import { delay, http, HttpResponse } from 'msw';
 
-import { BASE_URL } from '../shared/libs/constants';
+import { BASE_URL } from '@/shared/libs/constants'; // 절대 경로(@) 사용 권장
+
 import { MOCK_PRODUCTS } from './data/resale';
 
 export const resaleHandlers = [
@@ -34,8 +35,8 @@ export const resaleHandlers = [
         if (!categories.includes(item.category)) return false;
       }
 
-      // 3) 거래 상태 (판매중만 보기: status === true)
-      if (isAvailable && item.status !== true) return false;
+      // 3) 거래 상태 (판매중만 보기: ✨ status -> isAvailable)
+      if (isAvailable && item.isAvailable !== true) return false;
 
       // 4) 거래 유형 (SELL / BUY)
       if (dealType && item.dealType !== dealType) return false;
@@ -43,17 +44,11 @@ export const resaleHandlers = [
       // 5) 키워드 검색
       if (keyword && !item.title.includes(keyword)) return false;
 
-      // ✨ 6) 가격 범위 로직 (요청하신 부분)
+      // 6) 가격 범위 로직
       if (priceRange) {
         const [minStr, maxStr] = priceRange.split('-');
-
-        // minStr이 없거나 숫자가 아니면 0으로 처리
         const min = minStr ? Number(minStr) : 0;
-
-        // maxStr이 없거나(오픈 레인지) 숫자가 아니면 무한대(Infinity)로 처리
         const max = maxStr ? Number(maxStr) : Infinity;
-
-        // 아이템 가격이 범위 밖이면 탈락
         if (item.price < min || item.price > max) return false;
       }
 
@@ -67,7 +62,8 @@ export const resaleHandlers = [
     let startIndex = 0;
 
     if (cursor) {
-      const cursorIndex = filteredItems.findIndex((item) => item.id === cursor);
+      // ✨ id -> itemId 변경
+      const cursorIndex = filteredItems.findIndex((item) => item.itemId === cursor);
       if (cursorIndex !== -1) {
         startIndex = cursorIndex + 1;
       }
@@ -76,7 +72,9 @@ export const resaleHandlers = [
     const paginatedItems = filteredItems.slice(startIndex, startIndex + PAGE_SIZE);
     const hasNext = startIndex + PAGE_SIZE < filteredItems.length;
     const lastItem = paginatedItems[paginatedItems.length - 1];
-    const nextCursor = hasNext && lastItem ? lastItem.id : null;
+
+    // ✨ id -> itemId 변경
+    const nextCursor = hasNext && lastItem ? lastItem.itemId : null;
 
     // --- 5. 응답 반환 ---
     return HttpResponse.json({
@@ -87,14 +85,15 @@ export const resaleHandlers = [
     });
   }),
 
-  // ... (찜 추가/삭제 핸들러는 기존과 동일) ...
   // ---------------------------------------------------------
   // 1. 찜 추가
   http.post(`${BASE_URL}/items/:itemId/favorites`, async ({ params }) => {
     await delay(300);
     const { itemId } = params;
     const id = Number(itemId);
-    const targetItem = MOCK_PRODUCTS.find((item) => item.id === id);
+
+    // ✨ id -> itemId 변경
+    const targetItem = MOCK_PRODUCTS.find((item) => item.itemId === id);
 
     if (!targetItem) return new HttpResponse(null, { status: 404 });
     targetItem.isLiked = true;
@@ -112,7 +111,9 @@ export const resaleHandlers = [
     await delay(300);
     const { itemId } = params;
     const id = Number(itemId);
-    const targetItem = MOCK_PRODUCTS.find((item) => item.id === id);
+
+    // ✨ id -> itemId 변경
+    const targetItem = MOCK_PRODUCTS.find((item) => item.itemId === id);
 
     if (!targetItem) return new HttpResponse(null, { status: 404 });
     targetItem.isLiked = false;
