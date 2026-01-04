@@ -11,14 +11,14 @@ export type GetProductListParams = {
 };
 
 export type ProductItem = {
-  id: number;
+  itemId: number;
   title: string;
   price: number;
   deposit: number | null;
   region: string;
   dealType: string;
   category: string;
-  status: boolean;
+  isAvailable: boolean;
   isLiked: boolean;
   thumbnailUrl: string;
   createdAt: string;
@@ -30,3 +30,5 @@ export type ProductListResponse = {
   hasNext: boolean;
   items: ProductItem[];
 };
+
+export type RecentPostBySeller = ProductItem & { itemType: ProductType };

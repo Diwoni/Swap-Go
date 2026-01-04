@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 import { addFavorite, deleteFavorite } from '../api/favorites.api';
 
-export const useProductLike = (initialState: boolean, productId: number) => {
+export const useProductLike = (initialState: boolean, itemId: number) => {
   const [isLiked, setIsLiked] = useState(initialState);
 
   // 리스트가 새로고침되어 props 가 바뀌면 state 도 동기화
@@ -14,7 +14,7 @@ export const useProductLike = (initialState: boolean, productId: number) => {
 
   const { mutate } = useMutation({
     mutationFn: async (isLikedState: boolean) => {
-      return isLikedState ? await deleteFavorite(productId) : await addFavorite(productId);
+      return isLikedState ? await deleteFavorite(itemId) : await addFavorite(itemId);
     },
 
     onError: () => {

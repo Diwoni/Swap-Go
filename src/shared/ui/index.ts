@@ -1,3 +1,4 @@
+export * from './DateRangeCalendar';
 export * from './Header';
 export * from './Modal';
 export * from './ModalPortal';
