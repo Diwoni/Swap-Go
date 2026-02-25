@@ -113,6 +113,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError as Error, null);
         tokenManager.clearAccessToken();
+        window.dispatchEvent(new Event('auth-expired'));
 
         return Promise.reject(
           refreshError instanceof Error
