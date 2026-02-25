@@ -8,30 +8,23 @@ import { startMockServer } from './mocks/browser';
 
 const root = createRoot(document.getElementById('root')!);
 
-startMockServer().then(() => {
+const bootstrap = () => {
   root.render(
     <React.StrictMode>
       <Providers />
     </React.StrictMode>
   );
-});
+};
 
-// ⭐ 자동 로그인 함수
-// async function initAuth() {
-//   try {
-//     console.log('🔄 자동 로그인 시도 중...');
+const isDev = import.meta.env.DEV;
+const useMsw = isDev && import.meta.env.VITE_USE_MSW !== 'false';
 
-//     // refreshToken으로 accessToken 재발급
-//     const { accessToken } = await authService.refreshToken();
-//     // → POST /auth/refresh
-//     // → Cookie: refreshToken=abc123... (자동 첨부)
+if (isDev && !import.meta.env.VITE_API_BASE_URL) {
+  console.warn('[Swap-Go] VITE_API_BASE_URL is not set.');
+}
 
-//     // 새 토큰 저장
-//     tokenManager.setAccessToken(accessToken);
-
-//     console.log('✅ 자동 로그인 성공!');
-//   } catch (error) {
-//     console.log('❌ 자동 로그인 실패 (refreshToken 없거나 만료)');
-//     tokenManager.clearAccessToken();
-//   }
-// }
+if (useMsw) {
+  startMockServer().then(bootstrap);
+} else {
+  bootstrap();
+}
