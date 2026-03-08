@@ -35,6 +35,13 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
+    if (import.meta.env.DEV && typeof window !== 'undefined') {
+      const mockError = (window as { __MSW_ERROR__?: number | null }).__MSW_ERROR__;
+      if (mockError) {
+        config.headers['x-mock-error'] = String(mockError);
+      }
+    }
+
     // 파일 업로드 시 Content-Type 자동 설정
     if (config.data instanceof FormData) {
       delete config.headers['Content-Type'];

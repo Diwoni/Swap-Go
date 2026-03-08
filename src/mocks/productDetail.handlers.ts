@@ -3,6 +3,7 @@ import { delay, http, HttpResponse } from 'msw';
 import { BASE_URL } from '@/shared/libs/constants';
 
 // ✨ createMockRentalDetail import 추가
+import { getCreatedDetail } from './data/createdListings';
 import { createMockRentalDetail, createMockResaleDetail } from './data/productDetail';
 
 export const productDetailHandlers = [
@@ -15,7 +16,8 @@ export const productDetailHandlers = [
       return new HttpResponse(null, { status: 404, statusText: 'Not Found' });
     }
 
-    const data = createMockResaleDetail(id);
+    const createdDetail = getCreatedDetail('resale', id);
+    const data = createdDetail ?? createMockResaleDetail(id);
     return HttpResponse.json(data);
   }),
 
@@ -29,7 +31,8 @@ export const productDetailHandlers = [
     }
 
     // ✨ 여기를 수정했습니다! (Resale -> Rental 생성 함수로 변경)
-    const data = createMockRentalDetail(id);
+    const createdDetail = getCreatedDetail('rental', id);
+    const data = createdDetail ?? createMockRentalDetail(id);
     return HttpResponse.json(data);
   }),
 ];
