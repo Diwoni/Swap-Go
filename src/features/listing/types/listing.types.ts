@@ -10,6 +10,8 @@ export type ListingRequest = {
   images: string[];
 };
 
+export type CreateListingRequest = Omit<ListingRequest, 'images'>;
+
 export type ListingResponse = {
   itemId: number;
   message: string;
