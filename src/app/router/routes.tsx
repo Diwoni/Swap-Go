@@ -4,6 +4,7 @@ import { RouteObject } from 'react-router-dom';
 import SignupPage from '@/pages/SignupPage';
 import PageLayout from '@/shared/ui/PageLayout';
 
+import ListingCreatePage from '../../pages/ListingCreatePage';
 import ProductDetailPage from '../../pages/ProductDetailPage';
 import RentalPage from '../../pages/RentalPage';
 import ResalePage from '../../pages/ResalePage';
@@ -17,6 +18,7 @@ export const routes: RouteObject[] = [
     children: [
       { path: ROUTE_PATH.HOME, element: <HomePage /> },
       { path: ROUTE_PATH.SIGNUP, element: <SignupPage /> },
+      { path: ROUTE_PATH.LISTING_NEW, element: <ListingCreatePage /> },
       { path: ROUTE_PATH.RESALE, element: <ResalePage /> },
       { path: ROUTE_PATH.RENTAL, element: <RentalPage /> },
       { path: ROUTE_PATH.PRODUCT_DETAIL, element: <ProductDetailPage /> },
