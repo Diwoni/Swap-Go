@@ -23,11 +23,14 @@ export const useAuthInit = () => {
         }
 
         tokenManager.setAccessToken(accessToken);
+        const user = await authService.getMe();
+        queryClient.setQueryData(['auth', 'user'], user);
         console.log('✅ 자동 로그인 성공');
       } catch (error) {
         console.log('❌ 자동 로그인 실패 (로그아웃 상태)');
         console.error(error);
         tokenManager.clearAccessToken();
+        queryClient.setQueryData(['auth', 'user'], null);
       } finally {
         setIsInitialized(true);
       }
