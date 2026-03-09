@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
 import SignupPage from '@/pages/SignupPage';
+import { ProtectedRoute } from '@/shared/router/ProtectedRoute';
 import PageLayout from '@/shared/ui/PageLayout';
 
 import ListingCreatePage from '../../pages/ListingCreatePage';
@@ -18,10 +19,13 @@ export const routes: RouteObject[] = [
     children: [
       { path: ROUTE_PATH.HOME, element: <HomePage /> },
       { path: ROUTE_PATH.SIGNUP, element: <SignupPage /> },
-      { path: ROUTE_PATH.LISTING_NEW, element: <ListingCreatePage /> },
       { path: ROUTE_PATH.RESALE, element: <ResalePage /> },
       { path: ROUTE_PATH.RENTAL, element: <RentalPage /> },
       { path: ROUTE_PATH.PRODUCT_DETAIL, element: <ProductDetailPage /> },
+      {
+        element: <ProtectedRoute />,
+        children: [{ path: ROUTE_PATH.LISTING_NEW, element: <ListingCreatePage /> }],
+      },
     ],
   },
 ];
