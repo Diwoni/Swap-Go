@@ -3,6 +3,7 @@ import { delay, http, HttpResponse } from 'msw';
 
 import { BASE_URL } from '@/shared/libs/constants'; // 절대 경로(@) 사용 권장
 
+import { getCreatedListItems } from './data/createdListings';
 import { MOCK_RENTAL_PRODUCTS } from './data/rental';
 
 export const rentalHandlers = [
@@ -24,7 +25,8 @@ export const rentalHandlers = [
     const PAGE_SIZE = 10;
 
     // --- 2. 필터링 로직 (Rental 데이터 대상) ---
-    const filteredItems = MOCK_RENTAL_PRODUCTS.filter((item) => {
+    const allItems = [...getCreatedListItems('rental'), ...MOCK_RENTAL_PRODUCTS];
+    const filteredItems = allItems.filter((item) => {
       // 1) 지역
       if (region && item.region !== region) return false;
 

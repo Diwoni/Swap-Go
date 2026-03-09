@@ -153,6 +153,18 @@ export class MockServerUtils {
   }
 
   /**
+   * API 에러 시뮬레이션 설정 (401/403/500)
+   */
+  setApiError(status: 401 | 403 | 500 | null): void {
+    (globalThis as { __MSW_ERROR__?: number | null }).__MSW_ERROR__ = status;
+    if (status) {
+      console.log(`⚠️ MSW 에러 시뮬레이션 ON: ${status}`);
+    } else {
+      console.log('✅ MSW 에러 시뮬레이션 OFF');
+    }
+  }
+
+  /**
    * 사용자 정보 업데이트
    */
   updateUser(email: string, updates: Partial<Omit<StoredUser, 'email'>>): boolean {
@@ -186,6 +198,7 @@ export const exposeUtilsToWindow = (
     console.log('- mockUtils.getAllUsers()        // 모든 사용자 조회');
     console.log('- mockUtils.clearRefreshTokens() // 모든 토큰 무효화');
     console.log('- mockUtils.seedUsers(10)        // 10명의 테스트 사용자 생성');
+    console.log('- mockUtils.setApiError(401|403|500|null) // 에러 시뮬레이션');
   }
 };
 
@@ -193,5 +206,6 @@ export const exposeUtilsToWindow = (
 declare global {
   interface Window {
     mockUtils?: MockServerUtils;
+    __MSW_ERROR__?: number | null;
   }
 }

@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { CiLocationOn } from 'react-icons/ci';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 import { useModal } from '../../../shared/hooks';
 import { formatDate, formatPrice } from '../../../shared/utils';
@@ -19,6 +21,8 @@ type Props = {
 const isRentalProduct = (
   data: ResaleProductDetail | RentalProductDetail
 ): data is RentalProductDetail => 'rentalInfo' in data;
+
+const IMAGE_FALLBACK_TEXT = '이미지 없음';
 
 export const ProductDetailCard = ({ type, productData }: Props) => {
   const { itemId, title, images, isLiked, isMine } = productData;
@@ -46,7 +50,7 @@ export const ProductDetailCard = ({ type, productData }: Props) => {
 
   return (
     <div className="flex w-full justify-center items-start p-10">
-      <ImageSection src={images[0]} alt={title} />
+      <ImageSection images={images} alt={title} />
 
       <div className="flex h-[500px] w-[650px] flex-col px-10">
         <Header title={title}>
@@ -204,14 +208,107 @@ const InfoRow = ({ label, children }: { label: string; children: React.ReactNode
   </div>
 );
 
-const ImageSection = ({ src, alt }: { src?: string; alt: string }) => (
-  <div className="w-[500px] h-[500px] rounded-2xl overflow-hidden bg-gray-100 shadow-sm shrink-0 border border-gray-100">
-    {src ? (
-      <img src={src} alt={alt} className="w-full h-full object-cover" />
-    ) : (
-      <div className="flex w-full h-full items-center justify-center text-gray-400">
-        이미지 없음
+const ImageSection = ({ images, alt }: { images: string[]; alt: string }) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [images]);
+
+  if (images.length === 0) {
+    return (
+      <div className="w-[500px] h-[500px] rounded-2xl overflow-hidden bg-gray-100 shadow-sm shrink-0 border border-gray-100">
+        <div className="flex w-full h-full items-center justify-center text-gray-400">
+          {IMAGE_FALLBACK_TEXT}
+        </div>
       </div>
-    )}
-  </div>
-);
+    );
+  }
+
+  const currentImage = images[selectedIndex] ?? images[0];
+  const hasMultipleImages = images.length > 1;
+
+  const moveToPrevious = () => {
+    setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const moveToNext = () => {
+    setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <div className="w-[500px] shrink-0">
+      <div className="relative h-[500px] rounded-2xl overflow-hidden bg-gray-100 shadow-sm border border-gray-100">
+        <img
+          src={currentImage}
+          alt={`${alt} 이미지 ${selectedIndex + 1}`}
+          className="w-full h-full object-cover"
+        />
+
+        {hasMultipleImages && (
+          <>
+            <CarouselButton direction="left" onClick={moveToPrevious} label="이전 이미지 보기" />
+            <CarouselButton direction="right" onClick={moveToNext} label="다음 이미지 보기" />
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/55 px-3 py-1 text-xs font-medium text-white">
+              {selectedIndex + 1} / {images.length}
+            </div>
+          </>
+        )}
+      </div>
+
+      {hasMultipleImages && (
+        <div className="mt-3 grid grid-cols-5 gap-2">
+          {images.map((image, index) => {
+            const isSelected = index === selectedIndex;
+
+            return (
+              <button
+                key={`${image}-${index}`}
+                type="button"
+                onClick={() => setSelectedIndex(index)}
+                className={`h-20 overflow-hidden rounded-xl border transition-all ${
+                  isSelected
+                    ? 'border-primary-200 ring-2 ring-primary-100'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+                aria-label={`${index + 1}번째 이미지 보기`}
+              >
+                <img
+                  src={image}
+                  alt={`${alt} 썸네일 ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const CarouselButton = ({
+  direction,
+  onClick,
+  label,
+}: {
+  direction: 'left' | 'right';
+  onClick: () => void;
+  label: string;
+}) => {
+  const isLeft = direction === 'left';
+  const Icon = isLeft ? IoIosArrowBack : IoIosArrowForward;
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={`absolute top-1/2 -translate-y-1/2 rounded-full bg-black/45 p-3 text-white transition-colors hover:bg-black/60 ${
+        isLeft ? 'left-4' : 'right-4'
+      }`}
+    >
+      <Icon className="h-5 w-5" />
+    </button>
+  );
+};

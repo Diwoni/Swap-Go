@@ -1,7 +1,17 @@
-export const ResultHeader = ({ region }: { region?: string }) => (
-  <div className="flex pb-3 text-lg font-medium">
-    <span className="text-primary-200 ml-2">{region ?? '전체'}</span>
-    <span>에서의 검색결과</span>
+import { ReactNode } from 'react';
+
+type ResultHeaderProps = {
+  region?: string;
+  action?: ReactNode;
+};
+
+export const ResultHeader = ({ region, action }: ResultHeaderProps) => (
+  <div className="flex items-center justify-between gap-4 pb-3">
+    <div className="flex text-lg font-medium">
+      <span className="text-primary-200 ml-2">{region ?? '전체'}</span>
+      <span>에서의 검색결과</span>
+    </div>
+    {action}
   </div>
 );
 

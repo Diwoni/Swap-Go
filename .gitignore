@@ -30,8 +30,9 @@ coverage
 .env.production.local
 
 # local notes (not for GitHub)
-docs/private/
+docs
 *.local
+AGENTS.md
 
 # TypeScript
 *.tsbuildinfo
@@ -58,4 +59,3 @@ tsconfig.tsbuildinfo
 
 # OS
 Thumbs.db
-.docs
