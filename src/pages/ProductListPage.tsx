@@ -1,7 +1,10 @@
+import { ROUTE_PATH } from '@/app/router/path';
+
 import { useProductListPage } from '../features/product/hooks/useProductListPage';
 import { ProductType } from '../features/product/types/productList';
 import { EmptyState, ResultHeader } from '../features/product/ui';
 import { ProductCard } from '../features/product/ui/ProductCard';
+import { ProtectedNavButton } from '../shared/ui';
 import { ScrollToTopButton } from '../widgets/ui/ScrollToTopButton/ScrollToTopButton';
 import { FilterSidebar } from '../widgets/ui/Sidebar';
 
@@ -18,7 +21,17 @@ export const ProductListPage = ({ type }: Props) => {
       <FilterSidebar />
 
       <section className="flex-1 flex flex-col p-2 min-w-0">
-        <ResultHeader region={region} />
+        <ResultHeader
+          region={region}
+          action={
+            <ProtectedNavButton
+              path={ROUTE_PATH.LISTING_NEW}
+              className="inline-flex h-11 items-center rounded-lg bg-primary-200 px-5 text-sm font-semibold text-white transition-colors hover:bg-primary-300"
+            >
+              게시글 작성
+            </ProtectedNavButton>
+          }
+        />
 
         {isLoading ? (
           <div className="flex-1 flex flex-col items-center justify-center py-20 w-full">
