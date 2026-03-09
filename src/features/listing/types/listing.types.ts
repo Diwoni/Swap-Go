@@ -1,3 +1,5 @@
+export const MAX_LISTING_IMAGE_COUNT = 5;
+
 export type ListingRequest = {
   title: string;
   itemType: 'resale' | 'rental';

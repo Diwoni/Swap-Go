@@ -54,6 +54,7 @@ const ListingCreatePage = () => {
               previews={imagePreviews}
               onAddImages={addImages}
               onRemoveImage={removeImage}
+              error={errors.images?.message}
             />
           </div>
         </div>
