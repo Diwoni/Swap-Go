@@ -13,7 +13,7 @@ const REFRESH_TOKEN_EXPIRY = 7 * 24 * 60 * 60 * 1000; // 7일
 const EMAIL_CODE_EXPIRY = 5 * 60 * 1000; // 5분
 
 // ==================== 타입 정의 ====================
-type StoredUser = {
+export type StoredUser = {
   email: string;
   password: string;
   username: string;
@@ -119,12 +119,27 @@ const isCodeExpired = (expiresAt: number): boolean => {
 /**
  * User 객체 생성 (password 제외)
  */
-const createUserResponse = (storedUser: StoredUser): User => {
+export const createUserResponse = (storedUser: StoredUser): User => {
   return {
     email: storedUser.email,
     username: storedUser.username,
     address: storedUser.address,
   };
+};
+
+export const getUserFromAuthHeader = (authHeader: string | null): StoredUser | null => {
+  const token = extractTokenFromHeader(authHeader);
+
+  if (!token) {
+    return null;
+  }
+
+  const payload = verifyToken(token);
+  if (!payload) {
+    return null;
+  }
+
+  return users.get(payload.email) ?? null;
 };
 
 /**
@@ -407,24 +422,11 @@ export const authHandlers = [
    * GET /users/me
    */
   http.get(`${BASE_URL}/users/me`, ({ request }) => {
-    const authHeader = request.headers.get('authorization');
-    const token = extractTokenFromHeader(authHeader);
+    const user = getUserFromAuthHeader(request.headers.get('authorization'));
 
-    if (!token) {
+    if (!user) {
       console.error('❌ [MSW /users/me] 토큰 없음');
       return HttpResponse.json({ message: '인증 토큰이 필요합니다.' }, { status: 401 });
-    }
-
-    const payload = verifyToken(token);
-    if (!payload) {
-      console.error('❌ [MSW /users/me] 토큰 검증 실패');
-      return HttpResponse.json({ message: '유효하지 않거나 만료된 토큰입니다.' }, { status: 401 });
-    }
-
-    const user = users.get(payload.email);
-    if (!user) {
-      console.error('❌ [MSW /users/me] 사용자 없음:', payload.email);
-      return HttpResponse.json({ message: '사용자를 찾을 수 없습니다.' }, { status: 404 });
     }
 
     console.log(`✅ [MSW /users/me] 사용자 정보 조회 성공: ${user.email}`);

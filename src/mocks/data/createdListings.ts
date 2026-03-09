@@ -5,12 +5,15 @@ import {
   RentalProductDetail,
   ResaleProductDetail,
 } from '../../features/product/types/productDetail';
+import { StoredUser } from '../auth.handlers';
 
 type CreatedListing = {
   itemId: number;
   itemType: 'resale' | 'rental';
-  detail: ResaleProductDetail | RentalProductDetail;
-  listItem: ProductItem;
+  createdAt: string;
+  imageUrls: string[];
+  data: CreateListingRequest;
+  seller: StoredUser;
 };
 
 const createdListings: CreatedListing[] = [];
@@ -20,7 +23,13 @@ const getNextItemId = () => {
   return maxId + 1;
 };
 
-const buildListItem = (data: CreateListingRequest, itemId: number): ProductItem => {
+const getSellerId = (email: string) => {
+  return Array.from(email).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+};
+
+const buildListItem = (listing: CreatedListing): ProductItem => {
+  const { itemId, createdAt, imageUrls, data } = listing;
+
   return {
     itemId,
     title: data.title,
@@ -31,12 +40,23 @@ const buildListItem = (data: CreateListingRequest, itemId: number): ProductItem 
     category: data.category,
     isAvailable: true,
     isLiked: false,
-    thumbnailUrl: sampleImg,
-    createdAt: new Date().toISOString(),
+    thumbnailUrl: imageUrls[0] ?? sampleImg,
+    createdAt,
   };
 };
 
-const buildDetail = (data: CreateListingRequest, itemId: number) => {
+const getRecentPostsBySeller = (sellerEmail: string, currentItemId: number) => {
+  return createdListings
+    .filter((listing) => listing.seller.email === sellerEmail && listing.itemId !== currentItemId)
+    .slice(0, 10)
+    .map((listing) => ({
+      ...buildListItem(listing),
+      itemType: listing.itemType,
+    }));
+};
+
+const buildDetail = (listing: CreatedListing) => {
+  const { itemId, imageUrls, data, seller, createdAt } = listing;
   const base: ResaleProductDetail = {
     itemId,
     title: data.title,
@@ -47,13 +67,13 @@ const buildDetail = (data: CreateListingRequest, itemId: number) => {
     isMine: true,
     isLiked: false,
     isAvailable: true,
-    createdAt: new Date().toISOString(),
-    images: [sampleImg, sampleImg],
+    createdAt,
+    images: imageUrls.length > 0 ? imageUrls : [sampleImg],
     seller: {
-      sellerId: 1,
-      username: '내 계정',
+      sellerId: getSellerId(seller.email),
+      username: seller.username,
     },
-    recentPostsBySeller: [],
+    recentPostsBySeller: getRecentPostsBySeller(seller.email, itemId),
   };
 
   if (data.itemType === 'rental') {
@@ -72,16 +92,25 @@ const buildDetail = (data: CreateListingRequest, itemId: number) => {
   return base;
 };
 
-export const addCreatedListing = (data: CreateListingRequest) => {
+export const addCreatedListing = ({
+  data,
+  imageUrls,
+  seller,
+}: {
+  data: CreateListingRequest;
+  imageUrls: string[];
+  seller: StoredUser;
+}) => {
   const itemId = getNextItemId();
-  const detail = buildDetail(data, itemId);
-  const listItem = buildListItem(data, itemId);
+  const createdAt = new Date().toISOString();
 
   createdListings.unshift({
     itemId,
     itemType: data.itemType,
-    detail,
-    listItem,
+    createdAt,
+    imageUrls,
+    data,
+    seller,
   });
 
   return { itemId };
@@ -90,10 +119,21 @@ export const addCreatedListing = (data: CreateListingRequest) => {
 export const getCreatedListItems = (type: 'resale' | 'rental') => {
   return createdListings
     .filter((listing) => listing.itemType === type)
-    .map((listing) => listing.listItem);
+    .map((listing) => buildListItem(listing));
 };
 
 export const getCreatedDetail = (type: 'resale' | 'rental', itemId: number) => {
-  return createdListings.find((listing) => listing.itemType === type && listing.itemId === itemId)
-    ?.detail;
+  const listing = createdListings.find(
+    (createdListing) => createdListing.itemType === type && createdListing.itemId === itemId
+  );
+
+  if (!listing) {
+    return undefined;
+  }
+
+  return buildDetail(listing);
+};
+
+export const clearCreatedListings = () => {
+  createdListings.length = 0;
 };

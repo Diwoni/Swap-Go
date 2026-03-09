@@ -3,6 +3,7 @@ import { delay, http, HttpResponse } from 'msw';
 import type { CreateListingRequest } from '@/features/listing/types/listing.types';
 import { BASE_URL } from '@/shared/libs/constants';
 
+import { getUserFromAuthHeader } from './auth.handlers';
 import { addCreatedListing } from './data/createdListings';
 
 export const listingHandlers = [
@@ -37,7 +38,24 @@ export const listingHandlers = [
       return HttpResponse.json({ error: '요청 데이터 파싱 실패' }, { status: 400 });
     }
 
-    const { itemId } = addCreatedListing(payload);
+    const seller = getUserFromAuthHeader(request.headers.get('authorization'));
+    if (!seller) {
+      return HttpResponse.json({ error: '로그인이 필요합니다.' }, { status: 401 });
+    }
+
+    const images = formData
+      .getAll('images')
+      .filter((image): image is File => image instanceof File && image.size > 0);
+
+    const imageUrls = images.map((image) => {
+      if (typeof URL.createObjectURL === 'function') {
+        return URL.createObjectURL(image);
+      }
+
+      return `mock-file://${image.name}`;
+    });
+
+    const { itemId } = addCreatedListing({ data: payload, imageUrls, seller });
 
     return HttpResponse.json({
       itemId,
