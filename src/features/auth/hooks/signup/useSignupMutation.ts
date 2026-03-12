@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+
+import { handleAPIError } from '@/shared/utils';
 
 import { authService } from '../../api';
 import { SignupResponse } from '../../types';
@@ -14,8 +15,8 @@ export const useSignupMutation = () => {
       toast.success(data?.message ?? '회원가입이 완료되었습니다.');
       navigate('/');
     },
-    onError: (err: AxiosError) => {
-      toast.error(err?.message ?? '회원가입에 실패하였습니다.');
+    onError: (error) => {
+      toast.error(handleAPIError(error));
     },
   });
 };

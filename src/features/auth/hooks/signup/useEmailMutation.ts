@@ -19,7 +19,7 @@ export const useSendEmailCodeMutation = () => {
       toast.success(data?.message ?? '인증번호가 발송되었습니다.\n이메일을 확인해주세요.');
     },
     onError: (error: AxiosError) => {
-      handleAPIError(error);
+      toast.error(handleAPIError(error));
     },
   });
 };
@@ -31,7 +31,7 @@ export const useVerifyEmailCode = () => {
       toast.success(data?.message ?? '이메일 인증이 완료되었습니다.');
     },
     onError: (error: AxiosError) => {
-      handleAPIError(error);
+      toast.error(handleAPIError(error));
     },
   });
 };
