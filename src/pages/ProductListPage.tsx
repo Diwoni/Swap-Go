@@ -2,7 +2,7 @@ import { ROUTE_PATH } from '@/app/router/path';
 
 import { useProductListPage } from '../features/product/hooks/useProductListPage';
 import { ProductType } from '../features/product/types/productList';
-import { EmptyState, ResultHeader } from '../features/product/ui';
+import { EmptyState, ErrorState, ResultHeader } from '../features/product/ui';
 import { ProductCard } from '../features/product/ui/ProductCard';
 import { ProtectedNavButton } from '../shared/ui';
 import { ScrollToTopButton } from '../widgets/ui/ScrollToTopButton/ScrollToTopButton';
@@ -13,8 +13,16 @@ interface Props {
 }
 
 export const ProductListPage = ({ type }: Props) => {
-  const { products, region, isLoading, isFetchingNextPage, isEmpty, loadMoreRef } =
-    useProductListPage(type);
+  const {
+    products,
+    region,
+    isLoading,
+    isError,
+    isFetchingNextPage,
+    isEmpty,
+    loadMoreRef,
+    refetch,
+  } = useProductListPage(type);
 
   return (
     <div className="flex mt-[60px]">
@@ -37,6 +45,14 @@ export const ProductListPage = ({ type }: Props) => {
           <div className="flex-1 flex flex-col items-center justify-center py-20 w-full">
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-primary-500 mb-4" />
             <p className="text-gray-500 font-medium">상품을 불러오는 중입니다...</p>
+          </div>
+        ) : isError ? (
+          <div className="flex-1 flex flex-col w-full">
+            <ErrorState
+              onRetry={() => {
+                void refetch();
+              }}
+            />
           </div>
         ) : isEmpty ? (
           <div className="flex-1 flex flex-col w-full">
