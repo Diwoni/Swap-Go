@@ -6,6 +6,7 @@ import { BrowserRouter, useRoutes } from 'react-router-dom';
 import { useAuthInit } from '@/features/auth/hooks/useAuthInit';
 import { LoginModal } from '@/features/auth/ui';
 import { ModalProvider } from '@/shared/context/ModalProvider';
+import { ErrorBoundary } from '@/shared/ui';
 
 import { routes } from './router/routes';
 
@@ -64,7 +65,9 @@ export function Providers() {
       <QueryClientProvider client={queryClient}>
         <ModalProvider>
           <Toaster />
-          <AppContent />
+          <ErrorBoundary>
+            <AppContent />
+          </ErrorBoundary>
         </ModalProvider>
       </QueryClientProvider>
     </BrowserRouter>

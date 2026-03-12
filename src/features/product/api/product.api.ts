@@ -1,7 +1,28 @@
 import { api, formatCategory } from '@/shared/utils';
 
 import { RentalProductDetail, ResaleProductDetail } from '../types/productDetail';
-import { GetProductListParams, ProductListResponse, ProductType } from '../types/productList';
+import {
+  GetProductListParams,
+  ProductItem,
+  ProductListResponse,
+  ProductType,
+} from '../types/productList';
+
+const isValidProductItem = (item: unknown): item is ProductItem => {
+  return item != null && typeof (item as ProductItem).itemId === 'number';
+};
+
+const normalizeProductListResponse = (raw: unknown): ProductListResponse => {
+  const data = raw as Partial<ProductListResponse>;
+  const items = Array.isArray(data?.items) ? data.items.filter(isValidProductItem) : [];
+
+  return {
+    count: data?.count ?? 0,
+    nextCursor: data?.nextCursor ?? null,
+    hasNext: data?.hasNext ?? false,
+    items,
+  };
+};
 
 export const getProductList = async (
   type: ProductType,
@@ -10,14 +31,14 @@ export const getProductList = async (
   const { category, ...rest } = params;
   const endpoint = `/${type}/items/search`;
 
-  const response = await api.get<ProductListResponse>(endpoint, {
+  const response = await api.get<unknown>(endpoint, {
     params: {
       ...rest,
       category: formatCategory(category),
     },
   });
 
-  return response.data;
+  return normalizeProductListResponse(response.data);
 };
 
 export const getResaleProductDetail = async (itemId: number): Promise<ResaleProductDetail> => {
