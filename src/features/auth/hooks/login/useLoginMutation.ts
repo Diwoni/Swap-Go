@@ -18,9 +18,7 @@ export const useLoginMutation = () => {
       toast.success('로그인에 성공하였습니다.');
     },
     onError: (error) => {
-      const message = handleAPIError(error);
-      toast.error('로그인에 실패하였습니다.');
-      console.error('에러 메세지 : ' + message);
+      toast.error(handleAPIError(error));
     },
   });
 };
