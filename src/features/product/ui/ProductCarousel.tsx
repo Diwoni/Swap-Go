@@ -39,7 +39,7 @@ export const ProductCarousel = ({ title, products }: Props) => {
                   thumbnailUrl={item.thumbnailUrl}
                   price={item.price}
                   deposit={item.deposit ?? null}
-                  region={item.region || '정보 없음'}
+                  region={item.region !== '' ? item.region : '정보 없음'}
                   createdAt={item.createdAt}
                   isliked={item.isLiked}
                 />

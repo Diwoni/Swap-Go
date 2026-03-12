@@ -193,10 +193,14 @@ const RentalInfo = ({
   const { rentedFrom, rentedUntil, isCurrentlyRented } = data.rentalInfo;
   return (
     <InfoRow label="현재 상품 대여 상태">
-      <span>
-        {rentedFrom} ~ {rentedUntil}
-      </span>
-      {isCurrentlyRented && <span className="ml-2 font-medium text-gray-500">(대여중)</span>}
+      {isCurrentlyRented && rentedFrom && rentedUntil ? (
+        <span>
+          {rentedFrom} ~ {rentedUntil}
+          <span className="ml-2 font-medium text-gray-500">(대여중)</span>
+        </span>
+      ) : (
+        <span>대여 가능</span>
+      )}
     </InfoRow>
   );
 };

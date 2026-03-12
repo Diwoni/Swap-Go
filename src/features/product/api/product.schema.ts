@@ -60,13 +60,17 @@ const ResaleProductDetailSchema = z.object({
 
 const RentalInfoSchema = z.object({
   isCurrentlyRented: z.boolean().catch(false),
-  rentedFrom: z.string().catch(''),
-  rentedUntil: z.string().catch(''),
+  rentedFrom: z.string().nullable().catch(null),
+  rentedUntil: z.string().nullable().catch(null),
 });
 
 const RentalProductDetailSchema = ResaleProductDetailSchema.extend({
   deposit: z.number().catch(0),
-  rentalInfo: RentalInfoSchema.catch({ isCurrentlyRented: false, rentedFrom: '', rentedUntil: '' }),
+  rentalInfo: RentalInfoSchema.catch({
+    isCurrentlyRented: false,
+    rentedFrom: null,
+    rentedUntil: null,
+  }),
 });
 
 const ProductListResponseSchema = z.object({

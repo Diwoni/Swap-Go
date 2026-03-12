@@ -23,7 +23,7 @@ export type RentalProductDetail = ResaleProductDetail & {
   deposit: number;
   rentalInfo: {
     isCurrentlyRented: boolean;
-    rentedFrom: string;
-    rentedUntil: string;
+    rentedFrom: string | null;
+    rentedUntil: string | null;
   };
 };
