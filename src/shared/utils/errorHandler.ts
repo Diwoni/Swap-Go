@@ -1,5 +1,6 @@
-// src/shared/utils/errorHandler.ts
 import { AxiosError } from 'axios';
+
+import { captureException } from './sentry';
 
 export interface APIError {
   code: string;
@@ -12,12 +13,10 @@ export function handleAPIError(error: unknown): string {
     const apiError = error.response?.data as APIError | undefined;
     const statusCode = error.response?.status;
 
-    // 네트워크 에러
     if (!error.response) {
       return '네트워크 연결을 확인해주세요.';
     }
 
-    // 상태 코드별 처리
     switch (statusCode) {
       case 401:
         return apiError?.message ?? '로그인이 필요합니다.';
@@ -29,13 +28,11 @@ export function handleAPIError(error: unknown): string {
         return apiError?.message ?? '입력값을 확인해주세요.';
       case 500:
       default:
+        captureException(error, { statusCode, apiError });
         return apiError?.message ?? '서버 오류가 발생했습니다.';
     }
   }
 
-  if (error instanceof Error) {
-    return error.message;
-  }
-
+  captureException(error);
   return '알 수 없는 오류가 발생했습니다.';
 }
