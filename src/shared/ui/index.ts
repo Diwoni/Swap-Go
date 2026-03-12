@@ -1,4 +1,5 @@
 export * from './DateRangeCalendar';
+export * from './ErrorBoundary';
 export * from './Header';
 export * from './Modal';
 export * from './ModalPortal';
