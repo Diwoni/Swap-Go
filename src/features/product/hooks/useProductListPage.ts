@@ -21,10 +21,8 @@ export const useProductListPage = (type: ProductType) => {
     [searchParams, region]
   );
 
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetProductList(
-    type,
-    params
-  );
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useGetProductList(type, params);
 
   const { ref: loadMoreRef, inView } = useInView();
 
@@ -38,14 +36,16 @@ export const useProductListPage = (type: ProductType) => {
     return data?.pages.flatMap((page) => page.items) ?? [];
   }, [data]);
 
-  const isEmpty = !isLoading && products.length === 0;
+  const isEmpty = !isLoading && !isError && products.length === 0;
 
   return {
     products,
     region,
     isLoading,
+    isError,
     isFetchingNextPage,
     isEmpty,
     loadMoreRef,
+    refetch,
   };
 };
