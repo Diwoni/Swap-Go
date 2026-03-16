@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { getRentalProductDetail, getResaleProductDetail } from '../api/product.api';
+import { productKeys } from '../queryKeys';
 import { RentalProductDetail, ResaleProductDetail } from '../types/productDetail';
 
 export const useProductDetailPage = () => {
@@ -15,7 +16,7 @@ export const useProductDetailPage = () => {
   const isValid = !!itemId && (isResale || isRental);
 
   const { data, isLoading, isError, error } = useQuery<ResaleProductDetail | RentalProductDetail>({
-    queryKey: ['product', type, id],
+    queryKey: productKeys.detail(type!, id),
     queryFn: () => {
       if (isResale) return getResaleProductDetail(id);
       if (isRental) return getRentalProductDetail(id);
