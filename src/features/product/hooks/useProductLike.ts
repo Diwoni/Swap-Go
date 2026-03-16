@@ -1,10 +1,12 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { addFavorite, deleteFavorite } from '../api/favorites.api';
+import { productKeys } from '../queryKeys';
 
 export const useProductLike = (initialState: boolean, itemId: number) => {
+  const queryClient = useQueryClient();
   const [isLiked, setIsLiked] = useState(initialState);
 
   // 리스트가 새로고침되어 props 가 바뀌면 state 도 동기화
@@ -15,6 +17,10 @@ export const useProductLike = (initialState: boolean, itemId: number) => {
   const { mutate } = useMutation({
     mutationFn: async (isLikedState: boolean) => {
       return isLikedState ? await deleteFavorite(itemId) : await addFavorite(itemId);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: productKeys.lists() });
     },
 
     onError: () => {
