@@ -1,14 +1,8 @@
 import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query';
 
 import { getProductList } from '../api/product.api';
+import { productKeys } from '../queryKeys';
 import { GetProductListParams, ProductListResponse, ProductType } from '../types';
-
-export const productKeys = {
-  all: ['products'] as const,
-  lists: () => [...productKeys.all, 'list'] as const,
-  list: (type: ProductType, params: GetProductListParams) =>
-    [...productKeys.lists(), type, params] as const,
-};
 
 export const useGetProductList = (type: ProductType, params: GetProductListParams) => {
   return useInfiniteQuery<
