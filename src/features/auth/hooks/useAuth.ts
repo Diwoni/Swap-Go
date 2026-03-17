@@ -3,11 +3,12 @@ import { useQuery } from '@tanstack/react-query';
 import { tokenManager } from '@/shared/libs/auth/tokenManager';
 
 import { authService } from '../api';
+import { authKeys } from '../queryKeys';
 import { User } from '../types';
 
 export const useAuth = () => {
   const { data: user = null, isLoading } = useQuery<User>({
-    queryKey: ['auth', 'user'],
+    queryKey: authKeys.user(),
     queryFn: authService.getMe,
     enabled: tokenManager.hasAccessToken(),
     retry: false,

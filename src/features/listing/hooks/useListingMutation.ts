@@ -3,6 +3,7 @@ import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 
 import { handleAPIError } from '../../../shared/utils';
+import { productKeys } from '../../product/queryKeys';
 import { deleteListing, updateListing } from '../api/listing.api';
 import { ListingRequest, ListingResponse } from '../types/listing.types';
 
@@ -25,8 +26,9 @@ export const useUpdateListing = () => {
       const payload = formatListingPayload(data);
       return updateListing(itemId, payload);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['listings'] });
+    onSuccess: (_, { itemId, data }) => {
+      queryClient.invalidateQueries({ queryKey: productKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: productKeys.detail(data.itemType, itemId) });
     },
     onError: (error) => {
       toast.error(handleAPIError(error));
@@ -40,7 +42,8 @@ export const useDeleteListing = () => {
   return useMutation<ListingResponse, AxiosError, number>({
     mutationFn: (itemId: number) => deleteListing(itemId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['listings'] });
+      queryClient.invalidateQueries({ queryKey: productKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: productKeys.details() });
     },
     onError: (error) => {
       toast.error(handleAPIError(error));

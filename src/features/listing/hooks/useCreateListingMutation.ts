@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 import { handleAPIError } from '@/shared/utils';
 
-import { productKeys } from '../../product/hooks/useGetProductList';
+import { productKeys } from '../../product/queryKeys';
 import { createListing } from '../api/listing.api';
 import { CreateListingRequest, ListingResponse } from '../types/listing.types';
 
