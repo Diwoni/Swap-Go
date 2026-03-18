@@ -1,19 +1,26 @@
 import { Navigate } from 'react-router-dom';
 
 import { useProductDetailPage } from '../features/product/hooks/useProductDetailPage';
-import { ProductCarousel } from '../features/product/ui/ProductCarousel'; // ✨ Carousel 직접 import
+import { ProductCarousel } from '../features/product/ui/ProductCarousel';
 import { ProductDetailCard } from '../features/product/ui/ProductDetailCard';
 
 const ProductDetailPage = () => {
-  const { type, data, resaleItems, rentalItems, isLoading, isError } = useProductDetailPage();
+  const { type, data, resaleItems, rentalItems, isLoading } = useProductDetailPage();
 
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-primary-500" />
+      </div>
+    );
+  }
 
   const isValidType = type === 'resale' || type === 'rental';
 
-  if (isError || !data || !type || !isValidType) {
+  if (!data || !type || !isValidType) {
     return <Navigate to="/" replace />;
   }
+
   const sellerName = data.seller.username;
 
   return (

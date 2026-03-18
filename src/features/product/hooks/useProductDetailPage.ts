@@ -23,6 +23,7 @@ export const useProductDetailPage = () => {
       return Promise.reject(new Error('잘못된 접근입니다.'));
     },
     enabled: isValid,
+    throwOnError: true,
   });
 
   const { resaleItems, rentalItems } = useMemo(() => {
