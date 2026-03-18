@@ -28,9 +28,6 @@ export const TradeRequestButton = ({ type, itemId }: Props) => {
           toast.success('거래 요청을 보냈어요.');
           closeModal();
         },
-        onError: () => {
-          toast.error('요청 전송에 실패했어요. 잠시 후 다시 시도해주세요.');
-        },
       }
     );
   };

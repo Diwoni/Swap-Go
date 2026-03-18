@@ -1,8 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import toast from 'react-hot-toast';
 
-import { handleAPIError } from '../../../shared/utils';
 import { productKeys } from '../../product/queryKeys';
 import { deleteListing, updateListing } from '../api/listing.api';
 import { ListingRequest, ListingResponse } from '../types/listing.types';
@@ -30,9 +28,6 @@ export const useUpdateListing = () => {
       queryClient.invalidateQueries({ queryKey: productKeys.lists() });
       queryClient.invalidateQueries({ queryKey: productKeys.detail(data.itemType, itemId) });
     },
-    onError: (error) => {
-      toast.error(handleAPIError(error));
-    },
   });
 };
 
@@ -44,9 +39,6 @@ export const useDeleteListing = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: productKeys.lists() });
       queryClient.invalidateQueries({ queryKey: productKeys.details() });
-    },
-    onError: (error) => {
-      toast.error(handleAPIError(error));
     },
   });
 };
