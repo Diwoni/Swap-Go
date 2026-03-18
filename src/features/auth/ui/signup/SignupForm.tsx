@@ -76,11 +76,16 @@ export const SignupForm = () => {
             }`}
           />
           {isCodeSent ? (
-            <button onClick={resendCode} className="btn btn-primary btn-sm rounded-[10px]">
+            <button
+              type="button"
+              onClick={resendCode}
+              className="btn btn-primary btn-sm rounded-[10px]"
+            >
               재발송
             </button>
           ) : (
             <button
+              type="button"
               onClick={sendCode}
               className="btn btn-primary btn-sm rounded-[10px] disabled:bg-gray-300"
             >
@@ -108,7 +113,11 @@ export const SignupForm = () => {
               </span>
             )}
           </div>
-          <button onClick={verifyCode} className="btn btn-primary btn-sm rounded-[10px]">
+          <button
+            type="button"
+            onClick={verifyCode}
+            className="btn btn-primary btn-sm rounded-[10px]"
+          >
             인증확인
           </button>
         </div>

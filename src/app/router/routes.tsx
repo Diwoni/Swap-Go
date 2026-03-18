@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
+import { MyPage } from '@/pages';
 import SignupPage from '@/pages/SignupPage';
 import { ProtectedRoute } from '@/shared/router/ProtectedRoute';
 import { ErrorBoundary, QueryErrorBoundary } from '@/shared/ui';
@@ -60,6 +61,14 @@ export const routes: RouteObject[] = [
               <ErrorBoundary>
                 <ListingCreatePage />
               </ErrorBoundary>
+            ),
+          },
+          {
+            path: ROUTE_PATH.MYPAGE,
+            element: (
+              <QueryErrorBoundary>
+                <MyPage />
+              </QueryErrorBoundary>
             ),
           },
         ],
