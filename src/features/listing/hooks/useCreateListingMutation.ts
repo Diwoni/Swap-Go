@@ -2,8 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 
-import { handleAPIError } from '@/shared/utils';
-
 import { productKeys } from '../../product/queryKeys';
 import { createListing } from '../api/listing.api';
 import { CreateListingRequest, ListingResponse } from '../types/listing.types';
@@ -21,10 +19,6 @@ export const useCreateListingMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: productKeys.lists() });
       toast.success('게시물이 등록되었습니다.');
-    },
-    onError: (error) => {
-      const message = handleAPIError(error);
-      toast.error(message);
     },
   });
 };

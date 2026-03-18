@@ -1,8 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
-
-import { handleAPIError } from '@/shared/utils/errorHandler';
 
 import { sendEmailVerificationCode, verifyEmailCode } from '../../api/email.api';
 import {
@@ -18,9 +15,6 @@ export const useSendEmailCodeMutation = () => {
     onSuccess: (data: SendEmailCodeResponse) => {
       toast.success(data?.message ?? '인증번호가 발송되었습니다.\n이메일을 확인해주세요.');
     },
-    onError: (error: AxiosError) => {
-      toast.error(handleAPIError(error));
-    },
   });
 };
 
@@ -29,9 +23,6 @@ export const useVerifyEmailCode = () => {
     mutationFn: (data: VerifyEmailCodeRequest) => verifyEmailCode(data),
     onSuccess: (data: VerifyEmailCodeResponse) => {
       toast.success(data?.message ?? '이메일 인증이 완료되었습니다.');
-    },
-    onError: (error: AxiosError) => {
-      toast.error(handleAPIError(error));
     },
   });
 };

@@ -2,8 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
-import { handleAPIError } from '@/shared/utils';
-
 import { authService } from '../../api';
 import { SignupResponse } from '../../types';
 
@@ -14,9 +12,6 @@ export const useSignupMutation = () => {
     onSuccess: (data: SignupResponse) => {
       toast.success(data?.message ?? '회원가입이 완료되었습니다.');
       navigate('/');
-    },
-    onError: (error) => {
-      toast.error(handleAPIError(error));
     },
   });
 };

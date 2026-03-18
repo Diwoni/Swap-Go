@@ -5,6 +5,7 @@ import { captureException } from '@/shared/utils/sentry';
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
+  onReset?: () => void;
 }
 
 interface State {
@@ -23,6 +24,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   handleReset = () => {
+    this.props.onReset?.();
     this.setState({ hasError: false });
   };
 
