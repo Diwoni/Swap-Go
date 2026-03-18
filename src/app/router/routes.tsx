@@ -3,7 +3,7 @@ import { RouteObject } from 'react-router-dom';
 
 import SignupPage from '@/pages/SignupPage';
 import { ProtectedRoute } from '@/shared/router/ProtectedRoute';
-import { ErrorBoundary } from '@/shared/ui';
+import { ErrorBoundary, QueryErrorBoundary } from '@/shared/ui';
 import PageLayout from '@/shared/ui/PageLayout';
 
 import ListingCreatePage from '../../pages/ListingCreatePage';
@@ -19,7 +19,14 @@ export const routes: RouteObject[] = [
     element: <PageLayout />,
     children: [
       { path: ROUTE_PATH.HOME, element: <HomePage /> },
-      { path: ROUTE_PATH.SIGNUP, element: <SignupPage /> },
+      {
+        path: ROUTE_PATH.SIGNUP,
+        element: (
+          <ErrorBoundary>
+            <SignupPage />
+          </ErrorBoundary>
+        ),
+      },
       {
         path: ROUTE_PATH.RESALE,
         element: (
@@ -39,14 +46,23 @@ export const routes: RouteObject[] = [
       {
         path: ROUTE_PATH.PRODUCT_DETAIL,
         element: (
-          <ErrorBoundary>
+          <QueryErrorBoundary>
             <ProductDetailPage />
-          </ErrorBoundary>
+          </QueryErrorBoundary>
         ),
       },
       {
         element: <ProtectedRoute />,
-        children: [{ path: ROUTE_PATH.LISTING_NEW, element: <ListingCreatePage /> }],
+        children: [
+          {
+            path: ROUTE_PATH.LISTING_NEW,
+            element: (
+              <ErrorBoundary>
+                <ListingCreatePage />
+              </ErrorBoundary>
+            ),
+          },
+        ],
       },
     ],
   },
