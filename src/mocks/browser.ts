@@ -3,6 +3,7 @@ import { setupWorker } from 'msw/browser';
 import { authHandlers, refreshTokens, users } from './auth.handlers';
 import { listingHandlers } from './listing.handlers';
 import { exposeUtilsToWindow } from './mocksUtil';
+import { mypageHandlers } from './mypage.handlers';
 import { productDetailHandlers } from './productDetail.handlers';
 import { rentalHandlers } from './rental.handlers';
 import { resaleHandlers } from './resale.handlers';
@@ -15,7 +16,8 @@ export const worker = setupWorker(
   ...resaleHandlers,
   ...rentalHandlers,
   ...productDetailHandlers,
-  ...tradeHandlers
+  ...tradeHandlers,
+  ...mypageHandlers
 );
 
 // 개발 환경에서만 MSW 시작

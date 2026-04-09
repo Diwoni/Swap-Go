@@ -8,11 +8,11 @@ import {
 } from '../types/trade';
 
 export const requestResaleTrade = async (itemId: ResaleTradeRequest) => {
-  const response = await api.post<ResaleTradeResponse>('/trades/resale', itemId);
+  const response = await api.post<ResaleTradeResponse>('/tradeoffers/resale', itemId);
   return response.data;
 };
 
 export const requestRentalTrade = async (data: RentalTradeRequest) => {
-  const response = await api.post<RentalTradeResponse>('/trades/rental', data);
+  const response = await api.post<RentalTradeResponse>('/tradeoffers/rental', data);
   return response.data;
 };
