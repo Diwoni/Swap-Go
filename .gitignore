@@ -33,6 +33,7 @@ coverage
 docs
 *.local
 AGENTS.md
+CLAUDE.md
 
 # TypeScript
 *.tsbuildinfo

@@ -5,8 +5,8 @@ import { RentalTradeRequest, ResaleTradeRequest } from '@/features/trade/types/t
 import { BASE_URL } from '../shared/libs/constants';
 
 export const tradeHandlers = [
-  // 1. 중고거래 요청 (POST /trades/resale)
-  http.post(`${BASE_URL}/trades/resale`, async ({ request }) => {
+  // 1. 중고거래 요청 (POST /tradeoffers/resale)
+  http.post(`${BASE_URL}/tradeoffers/resale`, async ({ request }) => {
     const body = (await request.json()) as ResaleTradeRequest;
 
     // 네트워크 지연 시뮬레이션 (0.5초)
@@ -31,8 +31,8 @@ export const tradeHandlers = [
     // );
   }),
 
-  // 2. 단기렌탈 요청 (POST /trades/rental)
-  http.post(`${BASE_URL}/trades/rental`, async ({ request }) => {
+  // 2. 단기렌탈 요청 (POST /tradeoffers/rental)
+  http.post(`${BASE_URL}/tradeoffers/rental`, async ({ request }) => {
     const body = (await request.json()) as RentalTradeRequest;
 
     await delay(500);
