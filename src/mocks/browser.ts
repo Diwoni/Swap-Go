@@ -1,6 +1,7 @@
 import { setupWorker } from 'msw/browser';
 
 import { authHandlers, refreshTokens, users } from './auth.handlers';
+import { chatHandlers } from './chat.handlers';
 import { listingHandlers } from './listing.handlers';
 import { exposeUtilsToWindow } from './mocksUtil';
 import { mypageHandlers } from './mypage.handlers';
@@ -16,6 +17,7 @@ export const worker = setupWorker(
   ...resaleHandlers,
   ...rentalHandlers,
   ...productDetailHandlers,
+  ...chatHandlers,
   ...tradeHandlers,
   ...mypageHandlers
 );

@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
 import { MyPage } from '@/pages';
+import ChatPage from '@/pages/ChatPage';
 import SignupPage from '@/pages/SignupPage';
 import { ProtectedRoute } from '@/shared/router/ProtectedRoute';
 import { ErrorBoundary, QueryErrorBoundary } from '@/shared/ui';
@@ -55,6 +56,14 @@ export const routes: RouteObject[] = [
       {
         element: <ProtectedRoute />,
         children: [
+          {
+            path: ROUTE_PATH.CHAT,
+            element: (
+              <ErrorBoundary>
+                <ChatPage />
+              </ErrorBoundary>
+            ),
+          },
           {
             path: ROUTE_PATH.LISTING_NEW,
             element: (
