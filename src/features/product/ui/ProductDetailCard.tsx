@@ -3,6 +3,9 @@ import toast from 'react-hot-toast';
 import { CiLocationOn } from 'react-icons/ci';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
+import { useCreateChatRoomNavigation } from '@/features/chat/hooks/useCreateChatRoom';
+import { useProtectedAction } from '@/shared/hooks/useProtectedAction';
+
 import { useModal } from '../../../shared/hooks';
 import { formatDate, formatPrice } from '../../../shared/utils';
 import { useDeleteListing, useUpdateListing } from '../../listing/hooks/useListingMutation';
@@ -111,19 +114,36 @@ const OwnerActions = ({
 );
 
 const ViewerActions = ({ type, itemId }: { type: 'resale' | 'rental'; itemId: number }) => (
-  <div className="flex gap-3">
-    <button
-      type="button"
-      onClick={() => alert('채팅 기능 준비 중입니다.')}
-      className="flex-1 h-[50px] rounded-lg bg-[#2C2C35] text-white font-medium hover:bg-[#1a1a1f] transition-colors"
-    >
-      채팅 보내기
-    </button>
-    <div className="flex-1 h-[50px]">
-      <TradeRequestButton type={type} itemId={itemId} />
-    </div>
-  </div>
+  <ViewerActionButtons type={type} itemId={itemId} />
 );
+
+const ViewerActionButtons = ({ type, itemId }: { type: 'resale' | 'rental'; itemId: number }) => {
+  const { createChatRoom, isPending } = useCreateChatRoomNavigation();
+  const { withAuth } = useProtectedAction();
+
+  const handleOpenChatRoom = async () => {
+    await createChatRoom({
+      itemId,
+      itemType: type,
+    });
+  };
+
+  return (
+    <div className="flex gap-3">
+      <button
+        type="button"
+        onClick={() => withAuth(handleOpenChatRoom)}
+        disabled={isPending}
+        className="flex-1 h-[50px] rounded-lg bg-[#2C2C35] text-white font-medium hover:bg-[#1a1a1f] transition-colors disabled:opacity-60"
+      >
+        {isPending ? '채팅방 준비 중...' : '채팅 보내기'}
+      </button>
+      <div className="flex-1 h-[50px]">
+        <TradeRequestButton type={type} itemId={itemId} />
+      </div>
+    </div>
+  );
+};
 
 // ... (Header, MetaInfo, DetailList, RentalInfo, InfoRow, ImageSection 등 나머지 컴포넌트는 UI 변경사항 없으므로 유지) ...
 const Header = ({ title, children }: { title: string; children: React.ReactNode }) => (
